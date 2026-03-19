@@ -36,6 +36,16 @@
                     <span class="button-text">Start Listening</span>
                 </button>
 
+                <div class="octave-offset-control">
+                    <label for="octave-offset">Octave Offset:</label>
+                    <div class="offset-buttons">
+                        <button id="offset-minus" class="offset-btn">−1</button>
+                        <span id="offset-display" class="offset-display">0</span>
+                        <button id="offset-plus" class="offset-btn">+1</button>
+                    </div>
+                    <div class="offset-hint">Adjust if your instrument is detected one octave off</div>
+                </div>
+
                 <div id="status-text" class="status-text"></div>
             </div>
 
@@ -325,6 +335,7 @@
         let noteHistory = [];
         let currentNote = null;
         let noteStartTime = null;
+        let octaveOffset = 0;
 
         function init() {
             console.log('Initializing UI...');
@@ -341,6 +352,9 @@
             const noteHint = document.getElementById('note-hint');
             const noteHistorySection = document.getElementById('note-history-section');
             const clearHistoryButton = document.getElementById('clear-history');
+            const offsetMinusBtn = document.getElementById('offset-minus');
+            const offsetPlusBtn = document.getElementById('offset-plus');
+            const offsetDisplay = document.getElementById('offset-display');
 
             canvas = document.getElementById('waveform');
             ctx = canvas.getContext('2d');
@@ -351,6 +365,17 @@
                 currentNote = null;
                 noteStartTime = null;
                 updateNoteHistory();
+            });
+
+            // Octave offset controls
+            offsetMinusBtn.addEventListener('click', () => {
+                octaveOffset--;
+                offsetDisplay.textContent = octaveOffset > 0 ? `+${octaveOffset}` : octaveOffset;
+            });
+
+            offsetPlusBtn.addEventListener('click', () => {
+                octaveOffset++;
+                offsetDisplay.textContent = octaveOffset > 0 ? `+${octaveOffset}` : octaveOffset;
             });
 
             // Check browser support
@@ -380,7 +405,10 @@
                 }
 
                 const { frequency, note, octave, confidence } = result;
-                const fullNote = `${note}${octave}`;
+
+                // Apply octave offset
+                const adjustedOctave = octave + octaveOffset;
+                const fullNote = `${note}${adjustedOctave}`;
 
                 // Track note changes
                 if (!currentNote || currentNote.note !== fullNote) {
@@ -392,7 +420,7 @@
                     currentNote = {
                         note: fullNote,
                         noteName: note,
-                        octave: octave,
+                        octave: adjustedOctave,
                         frequency: frequency,
                         confidence: confidence,
                         confidenceSum: confidence,
@@ -415,13 +443,13 @@
                 }
 
                 frequencyDisplay.textContent = `${frequency} Hz`;
-                octaveDisplay.textContent = `Octave ${octave}`;
+                octaveDisplay.textContent = `Octave ${adjustedOctave}`;
 
                 const confidencePercent = Math.round(confidence * 100);
                 confidenceBar.style.width = `${confidencePercent}%`;
                 confidenceText.textContent = `${confidencePercent}%`;
 
-                noteHint.textContent = `${note}${octave} - Perfect for ${note} major or ${note} minor!`;
+                noteHint.textContent = `${note}${adjustedOctave} - Perfect for ${note} major or ${note} minor!`;
             };
 
             pitchButton.addEventListener('click', async () => {
