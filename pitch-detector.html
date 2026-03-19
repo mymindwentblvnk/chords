@@ -501,6 +501,43 @@
                 }
             });
 
+            // Handle page visibility changes (tab switch, app close on mobile)
+            document.addEventListener('visibilitychange', () => {
+                if (document.hidden && detector && detector.isRunning) {
+                    console.log('Page hidden, stopping detector');
+                    if (currentNote) {
+                        endCurrentNote();
+                    }
+                    detector.stop();
+                    pitchButton.innerHTML = '<span class="button-icon">🎵</span><span class="button-text">Start Listening</span>';
+                    pitchButton.classList.remove('listening');
+                    pitchDisplay.style.display = 'none';
+                    statusText.textContent = '';
+                }
+            });
+
+            // Handle page unload (iOS Safari)
+            window.addEventListener('pagehide', () => {
+                if (detector && detector.isRunning) {
+                    console.log('Page unloading, stopping detector');
+                    if (currentNote) {
+                        endCurrentNote();
+                    }
+                    detector.stop();
+                }
+            });
+
+            // Handle before unload
+            window.addEventListener('beforeunload', () => {
+                if (detector && detector.isRunning) {
+                    console.log('Page closing, stopping detector');
+                    if (currentNote) {
+                        endCurrentNote();
+                    }
+                    detector.stop();
+                }
+            });
+
             console.log('UI initialized');
         }
 
