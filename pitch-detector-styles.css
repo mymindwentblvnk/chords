@@ -198,75 +198,6 @@ h1 {
     font-size: 1.5rem;
 }
 
-.octave-offset-control {
-    margin: 20px 0;
-    padding: 16px;
-    background: var(--surface-light);
-    border-radius: 10px;
-    border: 1px solid rgba(99, 102, 241, 0.2);
-}
-
-.octave-offset-control label {
-    display: block;
-    font-size: 0.9rem;
-    color: var(--text-secondary);
-    margin-bottom: 10px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-
-.offset-buttons {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 16px;
-}
-
-.offset-btn {
-    width: 50px;
-    height: 50px;
-    background: var(--primary-color);
-    color: white;
-    border: none;
-    border-radius: 8px;
-    font-size: 1.3rem;
-    font-weight: 700;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-}
-
-.offset-btn:hover {
-    background: var(--secondary-color);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-}
-
-.offset-btn:active {
-    transform: translateY(0);
-}
-
-.offset-display {
-    font-size: 1.8rem;
-    font-weight: 700;
-    font-family: 'Courier New', monospace;
-    color: var(--text-primary);
-    min-width: 60px;
-    text-align: center;
-    padding: 8px 16px;
-    background: var(--background);
-    border-radius: 8px;
-}
-
-.offset-hint {
-    margin-top: 10px;
-    font-size: 0.85rem;
-    color: var(--text-secondary);
-    font-style: italic;
-    text-align: center;
-}
-
 .status-text {
     margin-top: 16px;
     font-size: 1.1rem;
@@ -748,21 +679,6 @@ h1 {
         font-size: 1.1rem;
     }
 
-    .octave-offset-control {
-        padding: 12px;
-    }
-
-    .offset-btn {
-        width: 45px;
-        height: 45px;
-        font-size: 1.2rem;
-    }
-
-    .offset-display {
-        font-size: 1.5rem;
-        min-width: 50px;
-    }
-
     .note-name {
         font-size: 4rem;
     }
@@ -819,30 +735,6 @@ h1 {
         width: 100%;
         padding: 14px 24px;
         font-size: 1rem;
-    }
-
-    .octave-offset-control {
-        padding: 12px;
-    }
-
-    .offset-buttons {
-        gap: 12px;
-    }
-
-    .offset-btn {
-        width: 40px;
-        height: 40px;
-        font-size: 1.1rem;
-    }
-
-    .offset-display {
-        font-size: 1.3rem;
-        min-width: 45px;
-        padding: 6px 12px;
-    }
-
-    .offset-hint {
-        font-size: 0.8rem;
     }
 
     .note-container {
