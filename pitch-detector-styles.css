@@ -573,6 +573,19 @@ h1 {
     font-family: 'Courier New', monospace;
 }
 
+.note-link {
+    text-decoration: none;
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+}
+
+.note-link:hover {
+    background: rgba(99, 102, 241, 0.2);
+    transform: scale(1.05);
+}
+
 .note-name-cell {
     font-size: 1.3rem;
     color: var(--text-primary);

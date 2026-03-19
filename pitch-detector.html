@@ -630,7 +630,9 @@
                     <tr class="${rowClass}">
                         <td class="rank-cell">#${index + 1}</td>
                         <td class="note-cell">
-                            <span class="note-name-cell">${item.noteName}</span>
+                            <a href="index.html?note=${encodeURIComponent(item.noteName)}" class="note-link">
+                                <span class="note-name-cell">${item.noteName}</span>
+                            </a>
                         </td>
                         <td class="octave-cell">${item.octave}</td>
                         <td class="duration-cell">${durationSec}s</td>

@@ -23,6 +23,20 @@ function init() {
         filter.addEventListener('click', handleMoodFilterClick);
     });
 
+    // Check for URL parameter to pre-select note
+    const urlParams = new URLSearchParams(window.location.search);
+    const noteParam = urlParams.get('note');
+    if (noteParam) {
+        // Try to find and select the note
+        const option = Array.from(noteSelector.options).find(
+            opt => opt.value === noteParam
+        );
+        if (option) {
+            noteSelector.value = noteParam;
+            currentNote = noteParam;
+        }
+    }
+
     // Initial render
     renderProgressions();
 }
