@@ -434,6 +434,10 @@ h1 {
     .chord-notes {
         font-size: 0.85rem;
     }
+
+    .builder-controls-grid {
+        grid-template-columns: 1fr !important;
+    }
 }
 
 @media (max-width: 480px) {
@@ -475,6 +479,10 @@ h1 {
 
     .chord-notes-section {
         padding: 10px 12px;
+    }
+
+    .builder-controls-grid {
+        grid-template-columns: 1fr !important;
     }
 }
 
