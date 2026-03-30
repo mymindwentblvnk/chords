@@ -47,6 +47,7 @@ header {
     text-align: center;
     margin-bottom: 40px;
     padding: 20px 0;
+    animation: fadeInDown 0.6s ease;
 }
 
 .header-icon {
@@ -443,6 +444,17 @@ h1 {
     }
     50% {
         transform: translateY(-10px);
+    }
+}
+
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
     }
 }
 
