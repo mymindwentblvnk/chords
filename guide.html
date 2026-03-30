@@ -167,6 +167,7 @@
     <div class="guide-container">
         <nav class="back-nav">
             <a href="index.html" class="back-link">← Back to Chord Generator</a>
+            <a href="chord-builder.html" class="back-link">🎹 Interactive Chord Builder</a>
         </nav>
 
         <header style="text-align: center; margin-bottom: 40px;">
@@ -318,15 +319,19 @@
 
         <!-- Section 4: Building Chords -->
         <div class="guide-section">
-            <h2>4. The Simple Truth About Chords</h2>
-            <p><strong>Here's the key insight:</strong> You build ALL chords (major and minor) using the SAME method - just stack every other note from your scale!</p>
+            <h2>4. Building Natural Chords from Your Scale</h2>
+            <p><strong>Here's the key insight:</strong> For chords that are natural to the major scale (like I, ii, iii, IV, V, vi, vii°), you use the SAME simple method - just stack every other note from your scale!</p>
 
-            <h3>The Universal Formula:</h3>
+            <h3>The Skip-Pick Formula:</h3>
             <div class="chord-formula">
                 Pick a note → Skip one → Pick a note → Skip one → Pick a note
             </div>
 
-            <p>The chord quality (major or minor) happens automatically based on which scale note you start from!</p>
+            <p>The chord quality (major or minor) happens automatically based on which scale degree you start from!</p>
+
+            <div class="tip-box">
+                <strong>💡 Note:</strong> This skip-pick method works for all the natural chords in the key. If you want a chord that's NOT natural to the scale (like VI major instead of vi minor), you'll need to use interval formulas instead - but the interactive tool in Section 5 handles that for you!
+            </div>
 
             <h3>Building Major Chords (I, IV, V)</h3>
 
@@ -392,91 +397,32 @@
             </div>
         </div>
 
-        <!-- Section 5: THE BIG CONNECTION -->
-        <div class="guide-section" style="background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(236, 72, 153, 0.1)); border: 3px solid var(--primary-color);">
-            <h2 style="font-size: 2rem; color: var(--primary-color);">5. Putting It All Together: Scale → Roman Numerals → Chords → Keys!</h2>
-            <p style="font-size: 1.1rem;">Here's the complete journey from start to finish. Let's play <strong>I - V - vi - IV</strong> in the key of <strong>G</strong>:</p>
+        <!-- Section 5: INTERACTIVE CHORD BUILDER -->
+        <div class="guide-section" style="background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(236, 72, 153, 0.1)); border: 3px solid var(--primary-color); text-align: center;">
+            <h2 style="font-size: 2rem; color: var(--primary-color);">5. Putting It All Together!</h2>
+            <p style="font-size: 1.1rem; margin-bottom: 30px;">Now that you understand the pattern and the method, use our interactive tool to see it in action:</p>
 
-            <h3 style="color: var(--accent-happy);">Step 1: Build Your Scale Using the Pattern</h3>
-            <div style="background: var(--background); padding: 20px; border-radius: 8px; margin: 15px 0;">
-                <p><strong>Start:</strong> G (our root note)</p>
-                <p><strong>Apply W-W-H-W-W-W-H:</strong></p>
-                <div style="font-family: 'Courier New', monospace; font-size: 1.1rem; color: var(--accent-happy); margin: 10px 0;">
-                    G → A → B → C → D → E → F# → G
+            <div style="background: var(--background); padding: 40px; border-radius: 12px; margin: 20px 0;">
+                <div style="font-size: 1.3rem; color: var(--text-primary); margin-bottom: 20px;">
+                    <strong>🎹 Interactive Chord Builder</strong>
                 </div>
-                <p style="margin-top: 15px;"><strong>Result:</strong> G major scale = <strong>G - A - B - C - D - E - F#</strong></p>
+                <p style="color: var(--text-secondary); margin-bottom: 30px;">
+                    Choose any root note and chord progression to see the complete breakdown:<br>
+                    Scale → Roman Numerals → Chords → Keyboard Keys
+                </p>
+                <a href="chord-builder.html" style="display: inline-block; padding: 16px 40px; background: var(--primary-color); color: white; text-decoration: none; border-radius: 10px; font-size: 1.1rem; font-weight: 600; transition: all 0.3s ease;" onmouseover="this.style.background='var(--secondary-color)'; this.style.transform='scale(1.05)'" onmouseout="this.style.background='var(--primary-color)'; this.style.transform='scale(1)'">
+                    Open Interactive Chord Builder →
+                </a>
             </div>
 
-            <h3 style="color: var(--accent-happy);">Step 2: Number Your Scale Notes</h3>
-            <div style="background: var(--background); padding: 20px; border-radius: 8px; margin: 15px 0;">
-                <table style="margin: 0;">
-                    <tr style="background: none;">
-                        <td style="border: none; padding: 10px; font-weight: bold; color: var(--primary-color);">Position:</td>
-                        <td style="border: none; padding: 10px;">1st</td>
-                        <td style="border: none; padding: 10px;">2nd</td>
-                        <td style="border: none; padding: 10px;">3rd</td>
-                        <td style="border: none; padding: 10px;">4th</td>
-                        <td style="border: none; padding: 10px;">5th</td>
-                        <td style="border: none; padding: 10px;">6th</td>
-                        <td style="border: none; padding: 10px;">7th</td>
-                    </tr>
-                    <tr style="background: none;">
-                        <td style="border: none; padding: 10px; font-weight: bold; color: var(--primary-color);">Note:</td>
-                        <td style="border: none; padding: 10px; font-family: 'Courier New', monospace; color: var(--accent-happy);">G</td>
-                        <td style="border: none; padding: 10px; font-family: 'Courier New', monospace; color: var(--accent-happy);">A</td>
-                        <td style="border: none; padding: 10px; font-family: 'Courier New', monospace; color: var(--accent-happy);">B</td>
-                        <td style="border: none; padding: 10px; font-family: 'Courier New', monospace; color: var(--accent-happy);">C</td>
-                        <td style="border: none; padding: 10px; font-family: 'Courier New', monospace; color: var(--accent-happy);">D</td>
-                        <td style="border: none; padding: 10px; font-family: 'Courier New', monospace; color: var(--accent-happy);">E</td>
-                        <td style="border: none; padding: 10px; font-family: 'Courier New', monospace; color: var(--accent-happy);">F#</td>
-                    </tr>
-                </table>
-            </div>
-
-            <h3 style="color: var(--accent-happy);">Step 3: Decode the Roman Numerals</h3>
-            <p><strong>Roman numerals tell you which position to start from!</strong></p>
-
-            <div style="background: var(--background); padding: 20px; border-radius: 8px; margin: 15px 0;">
-                <div style="margin-bottom: 20px; padding: 15px; background: var(--surface-light); border-radius: 6px;">
-                    <strong style="color: var(--primary-color); font-size: 1.2rem;">I (Capital = Major)</strong><br>
-                    → Start at position <strong>1</strong> = <strong>G</strong><br>
-                    → Skip-pick-skip-pick from G scale: G - (skip A) - B - (skip C) - D<br>
-                    → <strong style="color: var(--accent-happy);">Play: G + B + D</strong>
-                </div>
-
-                <div style="margin-bottom: 20px; padding: 15px; background: var(--surface-light); border-radius: 6px;">
-                    <strong style="color: var(--primary-color); font-size: 1.2rem;">V (Capital = Major)</strong><br>
-                    → Start at position <strong>5</strong> = <strong>D</strong><br>
-                    → Skip-pick-skip-pick from D: D - (skip E) - F# - (skip G) - A<br>
-                    → <strong style="color: var(--accent-happy);">Play: D + F# + A</strong>
-                </div>
-
-                <div style="margin-bottom: 20px; padding: 15px; background: var(--surface-light); border-radius: 6px;">
-                    <strong style="color: var(--accent-sad); font-size: 1.2rem;">vi (Lowercase = Minor)</strong><br>
-                    → Start at position <strong>6</strong> = <strong>E</strong><br>
-                    → Skip-pick-skip-pick from E: E - (skip F#) - G - (skip A) - B<br>
-                    → <strong style="color: var(--accent-happy);">Play: E + G + B</strong>
-                </div>
-
-                <div style="padding: 15px; background: var(--surface-light); border-radius: 6px;">
-                    <strong style="color: var(--primary-color); font-size: 1.2rem;">IV (Capital = Major)</strong><br>
-                    → Start at position <strong>4</strong> = <strong>C</strong><br>
-                    → Skip-pick-skip-pick from C: C - (skip D) - E - (skip F#) - G<br>
-                    → <strong style="color: var(--accent-happy);">Play: C + E + G</strong>
-                </div>
-            </div>
-
-            <h3 style="color: var(--accent-happy);">Step 4: Play on Keyboard!</h3>
-            <div class="tip-box" style="font-size: 1.1rem;">
-                <strong>Your complete progression I - V - vi - IV in G major:</strong><br><br>
-                <div style="font-family: 'Courier New', monospace; font-size: 1.2rem; line-height: 2;">
-                    🎹 G + B + D<br>
-                    🎹 D + F# + A<br>
-                    🎹 E + G + B<br>
-                    🎹 C + E + G
-                </div>
-                <br>
-                Press all three notes of each chord at the same time, then move to the next chord!
+            <div class="tip-box" style="text-align: left; margin-top: 30px;">
+                <strong>💡 What you'll get:</strong><br>
+                • Step-by-step breakdown of how to build your scale using W-W-H-W-W-W-H<br>
+                • Visual table showing each scale position<br>
+                • Detailed explanation of how to decode each Roman numeral<br>
+                • Exact keyboard keys to press for each chord<br>
+                • Automatic detection of borrowed chords<br>
+                • Works with any root note and any progression!
             </div>
         </div>
 
@@ -572,8 +518,11 @@
         </div>
 
         <div style="text-align: center; margin: 40px 0;">
-            <a href="index.html" class="pitch-button" style="display: inline-block; padding: 14px 32px; background: var(--primary-color); color: white; text-decoration: none; border-radius: 8px; font-weight: 600;">
-                Try the Chord Generator →
+            <a href="chord-builder.html" style="display: inline-block; padding: 14px 32px; background: var(--primary-color); color: white; text-decoration: none; border-radius: 8px; font-weight: 600; margin-right: 10px;">
+                🎹 Try the Interactive Chord Builder
+            </a>
+            <a href="index.html" style="display: inline-block; padding: 14px 32px; background: var(--secondary-color); color: white; text-decoration: none; border-radius: 8px; font-weight: 600;">
+                Back to Chord Generator →
             </a>
         </div>
     </div>

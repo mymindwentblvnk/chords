@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Chord Builder - Learn to Play</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .builder-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .builder-section {
+            background: var(--surface);
+            border-radius: var(--border-radius);
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: var(--shadow);
+        }
+
+        .builder-section h2 {
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+        }
+
+        .builder-section h3 {
+            color: var(--text-primary);
+            margin-top: 25px;
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+        }
+
+        .builder-section p {
+            color: var(--text-secondary);
+            line-height: 1.8;
+            margin-bottom: 15px;
+        }
+
+        .tip-box {
+            background: rgba(16, 185, 129, 0.1);
+            border: 2px solid var(--accent-happy);
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+
+        .tip-box strong {
+            color: var(--accent-happy);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        table th,
+        table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid var(--surface-light);
+        }
+
+        table th {
+            background: var(--surface-light);
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        table td {
+            color: var(--text-secondary);
+        }
+
+        .back-nav {
+            margin-bottom: 30px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .back-link {
+            display: inline-block;
+            padding: 10px 20px;
+            background: var(--surface);
+            color: var(--text-secondary);
+            text-decoration: none;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .back-link:hover {
+            background: var(--primary-color);
+            color: white;
+            transform: translateX(-4px);
+        }
+    </style>
+</head>
+<body>
+    <div class="builder-container">
+        <nav class="back-nav">
+            <a href="index.html" class="back-link">← Back to Chord Generator</a>
+            <a href="guide.html" class="back-link">📖 Full Guide</a>
+        </nav>
+
+        <header style="text-align: center; margin-bottom: 40px;">
+            <h1 style="background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">Interactive Chord Builder</h1>
+            <p class="subtitle">From Scale to Keyboard: Step-by-Step Breakdown</p>
+        </header>
+
+        <!-- INTERACTIVE BUILDER -->
+        <div class="builder-section" style="background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(236, 72, 153, 0.1)); border: 3px solid var(--primary-color);">
+            <h2 style="font-size: 2rem; color: var(--primary-color);">Scale → Roman Numerals → Chords → Keys!</h2>
+            <p style="font-size: 1.1rem;">Choose your root note and chord progression to see the complete breakdown:</p>
+
+            <!-- Interactive Controls -->
+            <div style="background: var(--surface-light); padding: 25px; border-radius: 12px; margin: 25px 0;">
+                <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 20px; align-items: start;">
+                    <div>
+                        <label for="interactive-root" style="display: block; margin-bottom: 10px; font-weight: 600; color: var(--text-primary);">Root Note:</label>
+                        <select id="interactive-root" style="width: 100%; padding: 12px; font-size: 1rem; background: var(--background); color: var(--text-primary); border: 2px solid var(--primary-color); border-radius: 8px; cursor: pointer;">
+                            <option value="C">C</option>
+                            <option value="C#">C# / Db</option>
+                            <option value="D">D</option>
+                            <option value="D#">D# / Eb</option>
+                            <option value="E">E</option>
+                            <option value="F">F</option>
+                            <option value="F#">F# / Gb</option>
+                            <option value="G" selected>G</option>
+                            <option value="G#">G# / Ab</option>
+                            <option value="A">A</option>
+                            <option value="A#">A# / Bb</option>
+                            <option value="B">B</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="interactive-progression" style="display: block; margin-bottom: 10px; font-weight: 600; color: var(--text-primary);">Chord Progression (Roman Numerals):</label>
+                        <input type="text" id="interactive-progression" value="I-V-vi-IV" placeholder="e.g., I-V-vi-IV or I IV V" style="width: 100%; padding: 12px; font-size: 1rem; background: var(--background); color: var(--text-primary); border: 2px solid var(--primary-color); border-radius: 8px; font-family: 'Courier New', monospace;">
+                        <p style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 8px;">Separate with dashes or spaces. Examples: I-IV-V, vi-IV-I-V, I ii iii IV</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dynamic Content Container -->
+            <div id="interactive-output">
+                <!-- Will be populated by JavaScript -->
+            </div>
+        </div>
+
+        <!-- Quick Tips -->
+        <div class="builder-section">
+            <h2>💡 Quick Tips</h2>
+            <ul style="color: var(--text-secondary); line-height: 1.8; margin-left: 20px;">
+                <li><strong>Natural chords</strong> (I, ii, iii, IV, V, vi, vii°) use skip-pick-skip-pick from your scale</li>
+                <li><strong>Borrowed chords</strong> (like VI instead of vi) use interval formulas and will be highlighted in orange</li>
+                <li><strong>Start simple:</strong> Try C major - it's all white keys!</li>
+                <li><strong>Experiment:</strong> Change the root note to see how the same progression works in different keys</li>
+                <li><strong>Common progressions:</strong> I-V-vi-IV, I-IV-V, vi-IV-I-V, I-vi-IV-V</li>
+            </ul>
+        </div>
+
+        <div style="text-align: center; margin: 40px 0;">
+            <a href="index.html" style="display: inline-block; padding: 14px 32px; background: var(--primary-color); color: white; text-decoration: none; border-radius: 8px; font-weight: 600; margin-right: 10px;">
+                ← Back to Chord Generator
+            </a>
+            <a href="guide.html" style="display: inline-block; padding: 14px 32px; background: var(--secondary-color); color: white; text-decoration: none; border-radius: 8px; font-weight: 600;">
+                📖 Read Full Guide
+            </a>
+        </div>
+    </div>
+
+    <script src="music-theory.js"></script>
+    <script>
+        // Interactive Chord Builder Logic
+        const CHROMATIC = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
+        const MAJOR_INTERVALS = [0, 2, 4, 5, 7, 9, 11]; // W-W-H-W-W-W-H pattern in semitones
+
+        // Get note at interval
+        function getNoteAt(root, semitones) {
+            const rootIndex = CHROMATIC.indexOf(root);
+            return CHROMATIC[(rootIndex + semitones) % 12];
+        }
+
+        // Build major scale from root
+        function buildMajorScale(root) {
+            return MAJOR_INTERVALS.map(interval => getNoteAt(root, interval));
+        }
+
+        // Parse Roman numeral
+        function parseRoman(numeral) {
+            const romanMap = {
+                'I': 0, 'II': 1, 'III': 2, 'IV': 3, 'V': 4, 'VI': 5, 'VII': 6,
+                'i': 0, 'ii': 1, 'iii': 2, 'iv': 3, 'v': 4, 'vi': 5, 'vii': 6
+            };
+
+            const clean = numeral.replace('°', '');
+            const isMajor = clean === clean.toUpperCase();
+            const degree = romanMap[clean];
+
+            return {
+                degree,
+                isMajor,
+                isDiminished: numeral.includes('°'),
+                original: numeral
+            };
+        }
+
+        // Build chord from scale degree with proper quality
+        function buildChord(scale, degree, isMajor, isDiminished) {
+            const root = scale[degree];
+
+            if (isDiminished) {
+                // Diminished: minor third + diminished fifth
+                const third = getNoteAt(root, 3);
+                const fifth = getNoteAt(root, 6);
+                return [root, third, fifth];
+            } else if (isMajor) {
+                // Major: major third (4 semitones) + perfect fifth (7 semitones)
+                const third = getNoteAt(root, 4);
+                const fifth = getNoteAt(root, 7);
+                return [root, third, fifth];
+            } else {
+                // Minor: minor third (3 semitones) + perfect fifth (7 semitones)
+                const third = getNoteAt(root, 3);
+                const fifth = getNoteAt(root, 7);
+                return [root, third, fifth];
+            }
+        }
+
+        // Get step description (W or H)
+        function getStepDescription(fromNote, toNote) {
+            const fromIndex = CHROMATIC.indexOf(fromNote);
+            const toIndex = CHROMATIC.indexOf(toNote);
+            const distance = (toIndex - fromIndex + 12) % 12;
+            return distance === 2 ? 'W' : 'H';
+        }
+
+        // Update the interactive display
+        function updateInteractive() {
+            const root = document.getElementById('interactive-root').value;
+            const progressionInput = document.getElementById('interactive-progression').value;
+
+            // Parse progression (split by dash or space)
+            const progression = progressionInput.split(/[-\s]+/).map(s => s.trim()).filter(s => s);
+
+            if (progression.length === 0) {
+                document.getElementById('interactive-output').innerHTML = '<p style="color: var(--text-secondary); text-align: center; padding: 20px;">Enter a chord progression to see the breakdown!</p>';
+                return;
+            }
+
+            // Build the major scale
+            const scale = buildMajorScale(root);
+
+            // Build scale with steps
+            let scaleSteps = [];
+            for (let i = 0; i < scale.length - 1; i++) {
+                scaleSteps.push(scale[i]);
+                scaleSteps.push('→');
+                scaleSteps.push(getStepDescription(scale[i], scale[i + 1]));
+                scaleSteps.push('→');
+            }
+            scaleSteps.push(scale[scale.length - 1]);
+
+            let html = '';
+
+            // Step 1: Build Scale
+            html += `
+                <h3 style="color: var(--accent-happy);">Step 1: Build Your Scale Using the Pattern</h3>
+                <div style="background: var(--background); padding: 20px; border-radius: 8px; margin: 15px 0;">
+                    <p><strong>Start:</strong> ${root} (our root note)</p>
+                    <p><strong>Apply W-W-H-W-W-W-H:</strong></p>
+                    <div style="font-family: 'Courier New', monospace; font-size: 1.1rem; color: var(--accent-happy); margin: 10px 0;">
+                        ${scaleSteps.join(' ')}
+                    </div>
+                    <p style="margin-top: 15px;"><strong>Result:</strong> ${root} major scale = <strong>${scale.join(' - ')}</strong></p>
+                </div>
+            `;
+
+            // Step 2: Number Scale
+            html += `
+                <h3 style="color: var(--accent-happy);">Step 2: Number Your Scale Notes</h3>
+                <div style="background: var(--background); padding: 20px; border-radius: 8px; margin: 15px 0;">
+                    <table style="margin: 0; width: 100%;">
+                        <tr style="background: none;">
+                            <td style="border: none; padding: 10px; font-weight: bold; color: var(--primary-color);">Position:</td>
+                            ${scale.map((_, i) => `<td style="border: none; padding: 10px;">${i + 1}${['st', 'nd', 'rd', 'th', 'th', 'th', 'th'][i]}</td>`).join('')}
+                        </tr>
+                        <tr style="background: none;">
+                            <td style="border: none; padding: 10px; font-weight: bold; color: var(--primary-color);">Note:</td>
+                            ${scale.map(note => `<td style="border: none; padding: 10px; font-family: 'Courier New', monospace; color: var(--accent-happy);">${note}</td>`).join('')}
+                        </tr>
+                    </table>
+                </div>
+            `;
+
+            // Step 3: Decode Roman Numerals
+            html += `
+                <h3 style="color: var(--accent-happy);">Step 3: Decode the Roman Numerals</h3>
+                <p><strong>Roman numerals tell you which position to start from!</strong></p>
+                <div style="background: var(--background); padding: 20px; border-radius: 8px; margin: 15px 0;">
+            `;
+
+            const chordResults = [];
+
+            progression.forEach(romanNumeral => {
+                try {
+                    const parsed = parseRoman(romanNumeral);
+                    const chordNotes = buildChord(scale, parsed.degree, parsed.isMajor, parsed.isDiminished);
+                    const startNote = scale[parsed.degree];
+                    const position = parsed.degree + 1;
+
+                    // Determine if this is a natural (diatonic) chord or borrowed
+                    const naturalQualities = ['major', 'minor', 'minor', 'major', 'major', 'minor', 'diminished'];
+                    const naturalQuality = naturalQualities[parsed.degree];
+                    const requestedQuality = parsed.isDiminished ? 'diminished' : (parsed.isMajor ? 'major' : 'minor');
+                    const isBorrowed = naturalQuality !== requestedQuality;
+
+                    let explanation;
+                    if (isBorrowed) {
+                        explanation = `→ <strong style="color: var(--accent-energetic);">⚠️ Borrowed chord!</strong> Natural chord at position ${position} is ${naturalQuality}, but you want ${requestedQuality}<br>`;
+                        if (parsed.isDiminished) {
+                            explanation += `→ Build diminished chord: minor 3rd (3 semitones) + diminished 5th (6 semitones)<br>`;
+                        } else if (parsed.isMajor) {
+                            explanation += `→ Build major chord: major 3rd (4 semitones) + perfect 5th (7 semitones)<br>`;
+                        } else {
+                            explanation += `→ Build minor chord: minor 3rd (3 semitones) + perfect 5th (7 semitones)<br>`;
+                        }
+                    } else {
+                        // Show skip-pick breakdown for natural chords
+                        const skipPickSteps = [
+                            `${chordNotes[0]} (start)`,
+                            `(skip ${scale[(parsed.degree + 1) % 7]})`,
+                            `${chordNotes[1]} (pick)`,
+                            `(skip ${scale[(parsed.degree + 3) % 7]})`,
+                            `${chordNotes[2]} (pick)`
+                        ];
+                        explanation = `→ Skip-pick-skip-pick from ${startNote} in the scale: ${skipPickSteps.join(' - ')}<br>`;
+                    }
+
+                    const color = parsed.isMajor ? 'var(--primary-color)' : 'var(--accent-sad)';
+                    const quality = parsed.isDiminished ? 'Diminished' : (parsed.isMajor ? 'Major' : 'Minor');
+
+                    html += `
+                        <div style="margin-bottom: 20px; padding: 15px; background: var(--surface-light); border-radius: 6px; ${isBorrowed ? 'border: 2px solid var(--accent-energetic);' : ''}">
+                            <strong style="color: ${color}; font-size: 1.2rem;">${romanNumeral} (${quality})</strong><br>
+                            → Start at position <strong>${position}</strong> = <strong>${startNote}</strong><br>
+                            ${explanation}
+                            → <strong style="color: var(--accent-happy);">Play: ${chordNotes.join(' + ')}</strong>
+                        </div>
+                    `;
+
+                    chordResults.push(`🎹 ${chordNotes.join(' + ')}`);
+                } catch (e) {
+                    html += `
+                        <div style="margin-bottom: 20px; padding: 15px; background: rgba(239, 68, 68, 0.1); border-radius: 6px; border: 2px solid var(--accent-tense);">
+                            <strong style="color: var(--accent-tense);">Error: Invalid Roman numeral "${romanNumeral}"</strong>
+                        </div>
+                    `;
+                }
+            });
+
+            html += `</div>`;
+
+            // Step 4: Play on Keyboard
+            html += `
+                <h3 style="color: var(--accent-happy);">Step 4: Play on Keyboard!</h3>
+                <div class="tip-box" style="font-size: 1.1rem;">
+                    <strong>Your complete progression ${progression.join(' - ')} in ${root} major:</strong><br><br>
+                    <div style="font-family: 'Courier New', monospace; font-size: 1.2rem; line-height: 2;">
+                        ${chordResults.join('<br>')}
+                    </div>
+                    <br>
+                    Press all three notes of each chord at the same time, then move to the next chord!
+                </div>
+            `;
+
+            document.getElementById('interactive-output').innerHTML = html;
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            const rootSelect = document.getElementById('interactive-root');
+            const progressionInput = document.getElementById('interactive-progression');
+
+            rootSelect.addEventListener('change', updateInteractive);
+            progressionInput.addEventListener('input', updateInteractive);
+
+            // Check for URL parameters
+            const urlParams = new URLSearchParams(window.location.search);
+            const noteParam = urlParams.get('note');
+            const progressionParam = urlParams.get('progression');
+
+            // Populate controls from URL parameters if provided
+            if (noteParam) {
+                rootSelect.value = noteParam;
+            }
+
+            if (progressionParam) {
+                progressionInput.value = progressionParam;
+            }
+
+            // Initial render
+            updateInteractive();
+        });
+    </script>
+</body>
+</html>

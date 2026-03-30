@@ -151,6 +151,21 @@ function createProgressionCard(progression) {
         `;
     }
 
+    // Create chord builder link - always show, but only pass note if specific key is selected
+    const builderUrl = isSpecificKey
+        ? `chord-builder.html?note=${encodeURIComponent(currentNote)}&progression=${encodeURIComponent(progression.progression.join('-'))}`
+        : `chord-builder.html?progression=${encodeURIComponent(progression.progression.join('-'))}`;
+
+    const builderLink = `
+        <a href="${builderUrl}"
+           class="builder-link"
+           style="display: inline-block; margin-top: 12px; padding: 8px 16px; background: var(--primary-color); color: white; text-decoration: none; border-radius: 6px; font-size: 0.9rem; transition: all 0.2s ease;"
+           onmouseover="this.style.background='var(--secondary-color)'; this.style.transform='translateY(-2px)'"
+           onmouseout="this.style.background='var(--primary-color)'; this.style.transform='translateY(0)'">
+            📖 Learn to Play This
+        </a>
+    `;
+
     return `
         <div class="progression-card">
             <h3 class="progression-name">${progression.name}</h3>
@@ -159,6 +174,7 @@ function createProgressionCard(progression) {
             ${chordNotesSection}
             <p class="progression-description">${progression.description}</p>
             ${isSpecificKey ? `<div class="roman-numerals">${progression.progression.join(' - ')}</div>` : ''}
+            ${builderLink}
         </div>
     `;
 }

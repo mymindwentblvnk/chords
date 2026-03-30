@@ -631,6 +631,29 @@ h1 {
     text-align: right;
 }
 
+.action-cell {
+    text-align: center;
+}
+
+.action-button {
+    display: inline-block;
+    padding: 8px 16px;
+    background: var(--primary-color);
+    color: white;
+    text-decoration: none;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+}
+
+.action-button:hover {
+    background: var(--secondary-color);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(99, 102, 241, 0.3);
+}
+
 /* Browser Support */
 .browser-support {
     background: var(--surface-light);
@@ -868,5 +891,10 @@ h1 {
 
     .score-cell {
         font-size: 0.95rem;
+    }
+
+    .action-button {
+        padding: 6px 12px;
+        font-size: 0.8rem;
     }
 }

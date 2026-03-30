@@ -659,9 +659,7 @@
                         <tr class="${rowClass}">
                             <td class="rank-cell">${index + 1}</td>
                             <td class="note-cell">
-                                <a href="index.html?note=${encodeURIComponent(item.noteName)}" class="note-link">
-                                    <span class="note-name-cell">${item.noteName}</span>
-                                </a>
+                                <span class="note-name-cell">${item.noteName}</span>
                             </td>
                             <td class="octave-cell">${octavesDisplay}</td>
                             <td class="duration-cell">${durationSec}s</td>
@@ -671,6 +669,11 @@
                                     <span class="confidence-text">${confidencePercent}%</span>
                                 </div>
                             </td>
+                            <td class="action-cell">
+                                <a href="index.html?note=${encodeURIComponent(item.noteName)}" class="action-button">
+                                    Find Chords →
+                                </a>
+                            </td>
                         </tr>
                     `;
                 } else {
@@ -679,9 +682,7 @@
                         <tr class="${rowClass}">
                             <td class="rank-cell">#${index + 1}</td>
                             <td class="note-cell">
-                                <a href="index.html?note=${encodeURIComponent(item.noteName)}" class="note-link">
-                                    <span class="note-name-cell">${item.noteName}</span>
-                                </a>
+                                <span class="note-name-cell">${item.noteName}</span>
                             </td>
                             <td class="octave-cell">${octavesDisplay}</td>
                             <td class="duration-cell">${durationSec}s</td>
@@ -693,6 +694,11 @@
                             </td>
                             <td class="count-cell">${item.count}×</td>
                             <td class="score-cell">${score}</td>
+                            <td class="action-cell">
+                                <a href="index.html?note=${encodeURIComponent(item.noteName)}" class="action-button">
+                                    Find Chords →
+                                </a>
+                            </td>
                         </tr>
                     `;
                 }
@@ -700,8 +706,8 @@
 
             // Generate table headers based on sort mode
             const headers = sortMode === 'order'
-                ? `<th>Order</th><th>Note</th><th>Octave</th><th>Duration</th><th>Confidence</th>`
-                : `<th>Rank</th><th>Note</th><th>Octave(s)</th><th>Total Duration</th><th>Avg Confidence</th><th>Times Played</th><th>Score</th>`;
+                ? `<th>Order</th><th>Note</th><th>Octave</th><th>Duration</th><th>Confidence</th><th>Action</th>`
+                : `<th>Rank</th><th>Note</th><th>Octave(s)</th><th>Total Duration</th><th>Avg Confidence</th><th>Times Played</th><th>Score</th><th>Action</th>`;
 
             historyContainer.innerHTML = `
                 <table class="history-table">
