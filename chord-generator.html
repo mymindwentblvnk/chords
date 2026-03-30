@@ -8,17 +8,17 @@
 </head>
 <body>
     <div class="container">
-        <nav style="margin-bottom: 20px;">
-            <a href="index.html" style="color: var(--primary-color); text-decoration: none; font-weight: 600;">← Back to Pitch Detector</a>
+        <nav class="main-nav" style="display: flex; gap: 10px; justify-content: center; padding: 20px 0; margin-bottom: 20px; border-bottom: 2px solid var(--surface-light);">
+            <a href="index.html" class="nav-link" style="padding: 10px 20px; background: var(--surface-light); color: var(--text-primary); text-decoration: none; border-radius: 8px; font-weight: 600; transition: all 0.2s ease;">🎤 Pitch Detector</a>
+            <a href="chord-generator.html" class="nav-link active" style="padding: 10px 20px; background: var(--primary-color); color: white; text-decoration: none; border-radius: 8px; font-weight: 600; transition: all 0.2s ease;">🎵 Chord Generator</a>
+            <a href="chord-builder.html" class="nav-link" style="padding: 10px 20px; background: var(--surface-light); color: var(--text-primary); text-decoration: none; border-radius: 8px; font-weight: 600; transition: all 0.2s ease;">🎹 Chord Builder</a>
+            <a href="guide.html" class="nav-link" style="padding: 10px 20px; background: var(--surface-light); color: var(--text-primary); text-decoration: none; border-radius: 8px; font-weight: 600; transition: all 0.2s ease;">📖 Guide</a>
         </nav>
 
         <header>
-            <h1>🎵 Chord Progression Generator</h1>
+            <div class="header-icon">🎵</div>
+            <h1>Chord Progression Generator</h1>
             <p class="subtitle">Generate beautiful chord progressions in any key</p>
-            <div class="header-links">
-                <a href="chord-builder.html" class="header-link">🎹 Interactive Chord Builder</a>
-                <a href="guide.html" class="header-link">📖 How to Play Guide</a>
-            </div>
         </header>
 
         <div class="controls">

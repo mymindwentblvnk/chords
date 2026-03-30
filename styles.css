@@ -49,6 +49,12 @@ header {
     padding: 20px 0;
 }
 
+.header-icon {
+    font-size: 4rem;
+    margin-bottom: 16px;
+    animation: float 3s ease-in-out infinite;
+}
+
 h1 {
     font-size: 2.5rem;
     font-weight: 700;
@@ -429,6 +435,15 @@ h1 {
     to {
         opacity: 1;
         transform: translateY(0);
+    }
+}
+
+@keyframes float {
+    0%, 100% {
+        transform: translateY(0px);
+    }
+    50% {
+        transform: translateY(-10px);
     }
 }
 
