@@ -174,6 +174,34 @@
             <p class="subtitle">From Roman Numerals to Keyboard Keys</p>
         </header>
 
+        <!-- THE MOST IMPORTANT PATTERN -->
+        <div class="guide-section" style="background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(139, 92, 246, 0.1)); border: 3px solid var(--primary-color);">
+            <h2 style="font-size: 2.2rem; text-align: center; color: var(--primary-color);">🎹 THE MASTER PATTERN</h2>
+            <p style="text-align: center; font-size: 1.2rem; color: var(--text-primary); margin-bottom: 30px;">This is all you need to memorize to play in ANY key:</p>
+
+            <div style="background: var(--background); padding: 30px; border-radius: 12px; margin: 20px 0; text-align: center;">
+                <div style="font-size: 2rem; font-weight: 900; color: var(--accent-happy); font-family: 'Courier New', monospace; letter-spacing: 4px; margin-bottom: 15px;">
+                    W - W - H - W - W - W - H
+                </div>
+                <div style="font-size: 1.3rem; color: var(--text-secondary);">
+                    Whole - Whole - Half - Whole - Whole - Whole - Half
+                </div>
+            </div>
+
+            <div class="tip-box" style="font-size: 1.1rem;">
+                <strong>💡 This pattern builds a major scale from ANY starting note!</strong><br>
+                Once you know this pattern, you can play in any key. Everything else on this page just explains how to use this pattern.
+            </div>
+
+            <div style="margin-top: 25px; padding: 20px; background: var(--surface-light); border-radius: 8px;">
+                <strong style="color: var(--text-primary); font-size: 1.1rem;">Quick Definition:</strong><br>
+                <span style="color: var(--text-secondary);">
+                    • <strong>Whole step (W)</strong> = Skip one key (e.g., C → D skips C#)<br>
+                    • <strong>Half step (H)</strong> = Next key (e.g., E → F, no key between)
+                </span>
+            </div>
+        </div>
+
         <!-- Section 1: Understanding Roman Numerals -->
         <div class="guide-section">
             <h2>1. Understanding Roman Numerals</h2>
@@ -237,33 +265,54 @@
 
         <!-- Section 3: Building a Major Scale -->
         <div class="guide-section">
-            <h2>3. Building a Major Scale from Your Root Note</h2>
-            <p>A major scale uses specific notes from the chromatic scale following this pattern:</p>
+            <h2>3. Using the W-W-H-W-W-W-H Pattern</h2>
+            <p>Now let's use THE PATTERN to build a major scale from any root note:</p>
 
-            <div class="chord-formula">
-                Pattern: Whole - Whole - Half - Whole - Whole - Whole - Half
+            <div style="background: var(--background); padding: 25px; border-radius: 12px; margin: 25px 0; border-left: 5px solid var(--accent-happy);">
+                <div style="font-size: 1.5rem; font-weight: 700; color: var(--accent-happy); font-family: 'Courier New', monospace; margin-bottom: 10px;">
+                    W - W - H - W - W - W - H
+                </div>
+                <p style="color: var(--text-secondary); margin: 0;">Start on any note and follow this pattern to get your major scale!</p>
             </div>
 
             <h3>Example: C Major Scale</h3>
+            <p>Starting from <strong>C</strong> and applying W-W-H-W-W-W-H:</p>
             <ol class="step-list">
-                <li><strong>I</strong> (Root): C</li>
-                <li><strong>II</strong> (Whole step up): D</li>
-                <li><strong>III</strong> (Whole step up): E</li>
-                <li><strong>IV</strong> (Half step up): F</li>
-                <li><strong>V</strong> (Whole step up): G</li>
-                <li><strong>VI</strong> (Whole step up): A</li>
-                <li><strong>VII</strong> (Whole step up): B</li>
+                <li><strong>Start:</strong> C</li>
+                <li><strong>W (Whole):</strong> C → D (skip C#)</li>
+                <li><strong>W (Whole):</strong> D → E (skip D#)</li>
+                <li><strong>H (Half):</strong> E → F (no key to skip)</li>
+                <li><strong>W (Whole):</strong> F → G (skip F#)</li>
+                <li><strong>W (Whole):</strong> G → A (skip G#)</li>
+                <li><strong>W (Whole):</strong> A → B (skip A#)</li>
+                <li><strong>H (Half):</strong> B → C (no key to skip)</li>
             </ol>
 
             <div class="example-box">
-                <strong>C Major Scale:</strong> C - D - E - F - G - A - B - C
+                <strong>C Major Scale:</strong> C - D - E - F - G - A - B - C<br>
+                ✓ All white keys! Perfect for beginners!
             </div>
 
             <h3>Example: G Major Scale</h3>
-            <p>Starting from G and following the same pattern:</p>
+            <p>Starting from <strong>G</strong> and applying the SAME pattern W-W-H-W-W-W-H:</p>
+            <ol class="step-list">
+                <li><strong>Start:</strong> G</li>
+                <li><strong>W:</strong> G → A</li>
+                <li><strong>W:</strong> A → B</li>
+                <li><strong>H:</strong> B → C</li>
+                <li><strong>W:</strong> C → D</li>
+                <li><strong>W:</strong> D → E</li>
+                <li><strong>W:</strong> E → F# (need the black key to maintain the pattern!)</li>
+                <li><strong>H:</strong> F# → G</li>
+            </ol>
+
             <div class="example-box">
                 <strong>G Major Scale:</strong> G - A - B - C - D - E - F# - G<br>
-                (Note: F# is needed to maintain the pattern)
+                Note: F# is needed because the pattern requires a whole step from E
+            </div>
+
+            <div class="tip-box">
+                <strong>💡 Master This:</strong> The W-W-H-W-W-W-H pattern works from ANY starting note. Try it from D, F, A, or any key on the keyboard!
             </div>
         </div>
 
@@ -441,10 +490,13 @@
             <div class="example-box">
                 <strong>Option 2: Manual Method</strong><br>
                 If you see a progression starting with lowercase "i", you're in a minor key.<br><br>
-                <strong>Quick trick:</strong> Build a minor scale instead of a major scale:<br>
-                Pattern: W - H - W - W - H - W - W<br><br>
+                <strong>Minor scale pattern (different from major!):</strong><br>
+                <div style="font-size: 1.3rem; font-weight: 700; color: var(--accent-sad); font-family: 'Courier New', monospace; margin: 15px 0;">
+                    W - H - W - W - H - W - W
+                </div>
                 <strong>Example: A minor scale</strong><br>
-                A - B - C - D - E - F - G - A<br>
+                A → B (W) → C (H) → D (W) → E (W) → F (H) → G (W) → A (W)<br>
+                Result: A - B - C - D - E - F - G - A<br>
                 (All white keys - easiest minor key!)<br><br>
                 Then use the same skip-pick-skip-pick method as before!
             </div>
@@ -469,6 +521,24 @@
                 <li><strong>Use Inversions:</strong> You don't always need to play the root note on bottom. Try different voicings.</li>
                 <li><strong>Play Along:</strong> Use the pitch detector to verify you're playing the right notes.</li>
             </ol>
+        </div>
+
+        <!-- REMEMBER THIS! -->
+        <div class="guide-section" style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(99, 102, 241, 0.1)); border: 3px solid var(--accent-happy);">
+            <h2 style="text-align: center; color: var(--accent-happy);">🎯 Remember This!</h2>
+            <div style="background: var(--background); padding: 30px; border-radius: 12px; text-align: center;">
+                <p style="font-size: 1.2rem; color: var(--text-primary); margin-bottom: 20px;">
+                    <strong>The only thing you need to memorize:</strong>
+                </p>
+                <div style="font-size: 2.5rem; font-weight: 900; color: var(--accent-happy); font-family: 'Courier New', monospace; letter-spacing: 6px; margin: 20px 0;">
+                    W-W-H-W-W-W-H
+                </div>
+                <p style="font-size: 1.1rem; color: var(--text-secondary); margin-top: 20px;">
+                    This pattern unlocks every major scale.<br>
+                    Once you have the scale, use skip-pick-skip-pick to build chords.<br>
+                    That's it!
+                </p>
+            </div>
         </div>
 
         <div style="text-align: center; margin: 40px 0;">
