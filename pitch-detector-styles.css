@@ -284,7 +284,15 @@ h1 {
     min-height: 24px;
 }
 
-/* Metrics Grid */
+.metrics-status {
+    margin-top: 12px;
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    font-family: 'Courier New', monospace;
+    text-align: center;
+}
+
+/* Metrics Grid (DEPRECATED - keeping for backwards compatibility) */
 .metrics-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);

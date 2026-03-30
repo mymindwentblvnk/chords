@@ -35,31 +35,7 @@
                     <div class="note-label">Detected Note</div>
                     <div id="note-name" class="note-name">—</div>
                     <div id="note-hint" class="note-hint-text"></div>
-                </div>
-
-                <div class="metrics-grid">
-                    <div class="metric-card">
-                        <div class="metric-icon">📊</div>
-                        <div class="metric-label">Frequency</div>
-                        <div id="frequency-display" class="metric-value">— Hz</div>
-                    </div>
-
-                    <div class="metric-card">
-                        <div class="metric-icon">🎯</div>
-                        <div class="metric-label">Confidence</div>
-                        <div class="confidence-container">
-                            <div class="confidence-bar-bg">
-                                <div id="confidence-bar" class="confidence-bar" style="width: 0%"></div>
-                            </div>
-                            <div id="confidence-text" class="metric-value">0%</div>
-                        </div>
-                    </div>
-
-                    <div class="metric-card">
-                        <div class="metric-icon">🎼</div>
-                        <div class="metric-label">Octave</div>
-                        <div id="octave-display" class="metric-value">—</div>
-                    </div>
+                    <div id="metrics-status" class="metrics-status"></div>
                 </div>
 
                 <div class="visual-indicator">
@@ -329,10 +305,7 @@
             const pitchError = document.getElementById('pitch-error');
             const statusText = document.getElementById('status-text');
             const noteName = document.getElementById('note-name');
-            const frequencyDisplay = document.getElementById('frequency-display');
-            const confidenceBar = document.getElementById('confidence-bar');
-            const confidenceText = document.getElementById('confidence-text');
-            const octaveDisplay = document.getElementById('octave-display');
+            const metricsStatus = document.getElementById('metrics-status');
             const noteHint = document.getElementById('note-hint');
             const noteHistorySection = document.getElementById('note-history-section');
             const clearHistoryButton = document.getElementById('clear-history');
@@ -375,10 +348,7 @@
                         endCurrentNote();
                     }
                     noteName.textContent = '—';
-                    frequencyDisplay.textContent = '— Hz';
-                    confidenceBar.style.width = '0%';
-                    confidenceText.textContent = '0%';
-                    octaveDisplay.textContent = '—';
+                    metricsStatus.textContent = '';
                     noteHint.textContent = 'Play a note...';
                     return;
                 }
@@ -418,12 +388,8 @@
                     }, 150);
                 }
 
-                frequencyDisplay.textContent = `${frequency} Hz`;
-                octaveDisplay.textContent = `Octave ${octave}`;
-
                 const confidencePercent = Math.round(confidence * 100);
-                confidenceBar.style.width = `${confidencePercent}%`;
-                confidenceText.textContent = `${confidencePercent}%`;
+                metricsStatus.textContent = `${frequency} Hz • ${confidencePercent}% • Octave ${octave}`;
 
                 noteHint.textContent = `${note}${octave} - Perfect for ${note} major or ${note} minor!`;
             };
