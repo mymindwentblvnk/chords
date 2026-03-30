@@ -72,8 +72,17 @@
                 <div class="history-header">
                     <h3>📝 Detected Notes History</h3>
                     <div class="history-controls">
+                        <div class="sort-toggle">
+                            <label class="sort-option">
+                                <input type="radio" name="sort-mode" value="score" checked>
+                                <span>By Score</span>
+                            </label>
+                            <label class="sort-option">
+                                <input type="radio" name="sort-mode" value="order">
+                                <span>By Order Played</span>
+                            </label>
+                        </div>
                         <button id="clear-history" class="clear-button">Clear History</button>
-                        <div class="sort-info">↓ Grouped by note • Sorted by score</div>
                     </div>
                 </div>
                 <div id="note-history" class="note-history">
@@ -327,6 +336,7 @@
         let noteHistory = [];
         let currentNote = null;
         let noteStartTime = null;
+        let sortMode = 'score'; // 'score' or 'order'
 
         function init() {
             console.log('Initializing UI...');
@@ -343,6 +353,7 @@
             const noteHint = document.getElementById('note-hint');
             const noteHistorySection = document.getElementById('note-history-section');
             const clearHistoryButton = document.getElementById('clear-history');
+            const sortModeRadios = document.querySelectorAll('input[name="sort-mode"]');
 
             canvas = document.getElementById('waveform');
             ctx = canvas.getContext('2d');
@@ -353,6 +364,14 @@
                 currentNote = null;
                 noteStartTime = null;
                 updateNoteHistory();
+            });
+
+            // Sort mode change handler
+            sortModeRadios.forEach(radio => {
+                radio.addEventListener('change', (e) => {
+                    sortMode = e.target.value;
+                    updateNoteHistory();
+                });
             });
 
             // Check browser support
@@ -530,7 +549,8 @@
                     frequency: Math.round(currentNote.frequency * 10) / 10,
                     duration: duration,
                     confidence: Math.round(avgConfidence * 100) / 100,
-                    timestamp: Date.now()
+                    timestamp: Date.now(),
+                    order: noteHistory.length // Track order of detection
                 });
 
                 updateNoteHistory();
@@ -551,49 +571,68 @@
 
             historySection.style.display = 'block';
 
-            // Group by note only (ignore octave)
-            const grouped = {};
-            noteHistory.forEach(item => {
-                const key = item.noteName;
-                if (!grouped[key]) {
-                    grouped[key] = {
-                        noteName: item.noteName,
-                        octaves: new Set(),
-                        totalDuration: 0,
-                        totalConfidence: 0,
-                        count: 0,
-                        frequencies: []
+            let sorted;
+
+            if (sortMode === 'order') {
+                // Show individual notes in chronological order
+                sorted = [...noteHistory].map(item => ({
+                    noteName: item.noteName,
+                    octaves: [item.octave],
+                    duration: item.duration,
+                    confidence: item.confidence,
+                    count: 1,
+                    order: item.order
+                }));
+                // Sort by order (chronological)
+                sorted.sort((a, b) => a.order - b.order);
+            } else {
+                // Group by note only (ignore octave)
+                const grouped = {};
+                noteHistory.forEach(item => {
+                    const key = item.noteName;
+                    if (!grouped[key]) {
+                        grouped[key] = {
+                            noteName: item.noteName,
+                            octaves: new Set(),
+                            totalDuration: 0,
+                            totalConfidence: 0,
+                            count: 0,
+                            frequencies: [],
+                            firstOrder: item.order // Track first occurrence
+                        };
+                    }
+                    grouped[key].octaves.add(item.octave);
+                    grouped[key].totalDuration += item.duration;
+                    grouped[key].totalConfidence += item.confidence;
+                    grouped[key].count += 1;
+                    grouped[key].frequencies.push(item.frequency);
+                    grouped[key].firstOrder = Math.min(grouped[key].firstOrder, item.order);
+                });
+
+                // Convert to array and calculate averages
+                const aggregated = Object.values(grouped).map(group => {
+                    // Calculate average confidence and clamp to 0-1
+                    const avgConfidence = group.totalConfidence / group.count;
+                    const clampedConfidence = Math.min(1.0, Math.max(0.0, avgConfidence));
+
+                    return {
+                        noteName: group.noteName,
+                        octaves: Array.from(group.octaves).sort((a, b) => a - b),
+                        duration: group.totalDuration,
+                        confidence: clampedConfidence,
+                        avgFrequency: group.frequencies.reduce((a, b) => a + b, 0) / group.frequencies.length,
+                        count: group.count,
+                        firstOrder: group.firstOrder
                     };
-                }
-                grouped[key].octaves.add(item.octave);
-                grouped[key].totalDuration += item.duration;
-                grouped[key].totalConfidence += item.confidence;
-                grouped[key].count += 1;
-                grouped[key].frequencies.push(item.frequency);
-            });
+                });
 
-            // Convert to array and calculate averages
-            const aggregated = Object.values(grouped).map(group => {
-                // Calculate average confidence and clamp to 0-1
-                const avgConfidence = group.totalConfidence / group.count;
-                const clampedConfidence = Math.min(1.0, Math.max(0.0, avgConfidence));
-
-                return {
-                    noteName: group.noteName,
-                    octaves: Array.from(group.octaves).sort((a, b) => a - b),
-                    duration: group.totalDuration,
-                    confidence: clampedConfidence,
-                    avgFrequency: group.frequencies.reduce((a, b) => a + b, 0) / group.frequencies.length,
-                    count: group.count
-                };
-            });
-
-            // Sort by confidence * duration (higher = better)
-            const sorted = aggregated.sort((a, b) => {
-                const scoreA = a.confidence * a.duration;
-                const scoreB = b.confidence * b.duration;
-                return scoreB - scoreA;
-            });
+                // Sort by confidence * duration (higher = better)
+                sorted = aggregated.sort((a, b) => {
+                    const scoreA = a.confidence * a.duration;
+                    const scoreB = b.confidence * b.duration;
+                    return scoreB - scoreA;
+                });
+            }
 
             // Generate table HTML
             const tableRows = sorted.map((item, index) => {
@@ -606,45 +645,69 @@
                     ? item.octaves[0]
                     : item.octaves.join(', ');
 
-                // Add special class for top 3
+                // Add special class for top 3 (only in score mode)
                 let rowClass = 'history-row';
-                if (index === 0) rowClass += ' top-1';
-                else if (index === 1) rowClass += ' top-2';
-                else if (index === 2) rowClass += ' top-3';
+                if (sortMode === 'score') {
+                    if (index === 0) rowClass += ' top-1';
+                    else if (index === 1) rowClass += ' top-2';
+                    else if (index === 2) rowClass += ' top-3';
+                }
 
-                return `
-                    <tr class="${rowClass}">
-                        <td class="rank-cell">#${index + 1}</td>
-                        <td class="note-cell">
-                            <a href="index.html?note=${encodeURIComponent(item.noteName)}" class="note-link">
-                                <span class="note-name-cell">${item.noteName}</span>
-                            </a>
-                        </td>
-                        <td class="octave-cell">${octavesDisplay}</td>
-                        <td class="duration-cell">${durationSec}s</td>
-                        <td class="confidence-cell">
-                            <div class="confidence-bar-cell">
-                                <div class="confidence-fill" style="width: ${confidencePercent}%"></div>
-                                <span class="confidence-text">${confidencePercent}%</span>
-                            </div>
-                        </td>
-                        <td class="count-cell">${item.count}×</td>
-                        <td class="score-cell">${score}</td>
-                    </tr>
-                `;
+                if (sortMode === 'order') {
+                    // Simplified view for chronological order
+                    return `
+                        <tr class="${rowClass}">
+                            <td class="rank-cell">${index + 1}</td>
+                            <td class="note-cell">
+                                <a href="index.html?note=${encodeURIComponent(item.noteName)}" class="note-link">
+                                    <span class="note-name-cell">${item.noteName}</span>
+                                </a>
+                            </td>
+                            <td class="octave-cell">${octavesDisplay}</td>
+                            <td class="duration-cell">${durationSec}s</td>
+                            <td class="confidence-cell">
+                                <div class="confidence-bar-cell">
+                                    <div class="confidence-fill" style="width: ${confidencePercent}%"></div>
+                                    <span class="confidence-text">${confidencePercent}%</span>
+                                </div>
+                            </td>
+                        </tr>
+                    `;
+                } else {
+                    // Full view for score-based sorting
+                    return `
+                        <tr class="${rowClass}">
+                            <td class="rank-cell">#${index + 1}</td>
+                            <td class="note-cell">
+                                <a href="index.html?note=${encodeURIComponent(item.noteName)}" class="note-link">
+                                    <span class="note-name-cell">${item.noteName}</span>
+                                </a>
+                            </td>
+                            <td class="octave-cell">${octavesDisplay}</td>
+                            <td class="duration-cell">${durationSec}s</td>
+                            <td class="confidence-cell">
+                                <div class="confidence-bar-cell">
+                                    <div class="confidence-fill" style="width: ${confidencePercent}%"></div>
+                                    <span class="confidence-text">${confidencePercent}%</span>
+                                </div>
+                            </td>
+                            <td class="count-cell">${item.count}×</td>
+                            <td class="score-cell">${score}</td>
+                        </tr>
+                    `;
+                }
             }).join('');
+
+            // Generate table headers based on sort mode
+            const headers = sortMode === 'order'
+                ? `<th>Order</th><th>Note</th><th>Octave</th><th>Duration</th><th>Confidence</th>`
+                : `<th>Rank</th><th>Note</th><th>Octave(s)</th><th>Total Duration</th><th>Avg Confidence</th><th>Times Played</th><th>Score</th>`;
 
             historyContainer.innerHTML = `
                 <table class="history-table">
                     <thead>
                         <tr>
-                            <th>Rank</th>
-                            <th>Note</th>
-                            <th>Octave(s)</th>
-                            <th>Total Duration</th>
-                            <th>Avg Confidence</th>
-                            <th>Times Played</th>
-                            <th>Score</th>
+                            ${headers}
                         </tr>
                     </thead>
                     <tbody>
