@@ -2,9 +2,9 @@
 
 A complete web application for discovering and learning chord progressions. Find your root note, search for progressions by mood, and learn exactly which keys to play!
 
-## 🚀 [Try it Live](https://mymindwentblvnk.github.io/chords/)
+## 🚀 [Try it Live](https://mymindwentblvnk.github.io/chordz/)
 
-**[→ Open the App](https://mymindwentblvnk.github.io/chords/)**
+**[→ Open the App](https://mymindwentblvnk.github.io/chordz/)**
 
 ## Features
 
