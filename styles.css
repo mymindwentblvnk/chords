@@ -23,6 +23,10 @@
     --accent-energetic: #f59e0b;
     --accent-dreamy: #ec4899;
     --accent-tense: #ef4444;
+    --accent-unsettling: #eab308;
+    --accent-dissonant: #dc2626;
+    --accent-weird: #a855f7;
+    --accent-eerie: #22c55e;
     --border-radius: 12px;
     --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
     --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.2);
@@ -239,6 +243,29 @@ h1 {
 .mood-tense {
     background: rgba(239, 68, 68, 0.2);
     color: var(--accent-tense);
+}
+
+.mood-unsettling,
+.mood-uncomfortable {
+    background: rgba(234, 179, 8, 0.2);
+    color: var(--accent-unsettling);
+}
+
+.mood-dissonant,
+.mood-chaotic {
+    background: rgba(220, 38, 38, 0.2);
+    color: var(--accent-dissonant);
+}
+
+.mood-weird,
+.mood-experimental {
+    background: rgba(168, 85, 247, 0.2);
+    color: var(--accent-weird);
+}
+
+.mood-eerie {
+    background: rgba(34, 197, 94, 0.2);
+    color: var(--accent-eerie);
 }
 
 /* Chords Display */

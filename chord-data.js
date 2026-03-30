@@ -129,5 +129,110 @@ const CHORD_PROGRESSIONS = [
         mood: ["dreamy", "melancholic"],
         keyMode: "major",
         description: "A progression that balances light and shadow, moving from major to minor territories. Creates a bittersweet, reflective mood with gentle sophistication."
+    },
+    {
+        name: "Chromatic Descent",
+        progression: ["I", "VII", "VI", "V"],
+        mood: ["unsettling", "dark"],
+        keyMode: "major",
+        description: "A chromatic walkdown from the tonic. The VII (major) is borrowed from the parallel minor, creating an uneasy, descending feeling that defies expectations."
+    },
+    {
+        name: "Diminished Chaos",
+        progression: ["i", "vii°", "VI", "vii°"],
+        mood: ["dissonant", "chaotic"],
+        keyMode: "minor",
+        description: "Heavy use of the unstable diminished chord creates tension and unease. The lack of resolution and repeated dissonance creates an anxious, uncomfortable atmosphere."
+    },
+    {
+        name: "Tritone Substitution",
+        progression: ["I", "II", "I", "II"],
+        mood: ["weird", "experimental"],
+        keyMode: "major",
+        description: "The II major chord (borrowed from modal mixture) creates a jarring tritone relationship. This oscillation between stable and unstable feels wrong and unsettling."
+    },
+    {
+        name: "Chromatic Mediant Shift",
+        progression: ["I", "III", "I", "III"],
+        mood: ["unsettling", "mysterious"],
+        keyMode: "major",
+        description: "The major III chord (not iii) creates a chromatic mediant relationship - a dramatic, film-score-like shift that sounds alien and unexpected."
+    },
+    {
+        name: "Parallel Minor Invasion",
+        progression: ["I", "iv", "I", "iv"],
+        mood: ["eerie", "uncomfortable"],
+        keyMode: "major",
+        description: "The minor iv borrowed from parallel minor creates modal mixture. This major-minor oscillation feels unstable and psychologically unsettling."
+    },
+    {
+        name: "Augmented Terror",
+        progression: ["I", "III", "VI", "ii"],
+        mood: ["dissonant", "tense"],
+        keyMode: "major",
+        description: "All major chords create augmented relationships (4 semitones apart). This symmetrical division sounds dreamlike yet disturbing, like a Salvador Dalí painting."
+    },
+    {
+        name: "Whole Tone Wandering",
+        progression: ["I", "II", "III", "IV"],
+        mood: ["weird", "dreamy"],
+        keyMode: "major",
+        description: "All major chords moving in whole tones. Destroys the sense of key center - sounds floating, directionless, and surreal. Very experimental."
+    },
+    {
+        name: "Phrygian Nightmare",
+        progression: ["i", "II", "i", "II"],
+        mood: ["dark", "unsettling"],
+        keyMode: "minor",
+        description: "The Phrygian II (major chord on the flattened second) creates an exotic, menacing quality. Common in metal and horror soundtracks."
+    },
+    {
+        name: "Deceptive Loop",
+        progression: ["I", "vi", "VII", "III"],
+        mood: ["mysterious", "uncomfortable"],
+        keyMode: "major",
+        description: "Expected resolutions are constantly denied. The VII and major III are borrowed chords that create a cycle that never truly resolves - musically frustrating."
+    },
+    {
+        name: "Chromatic Nightmare",
+        progression: ["i", "II", "III", "iv"],
+        mood: ["chaotic", "dissonant"],
+        keyMode: "minor",
+        description: "Chromatic ascent mixing major and minor chords. Each chord contradicts the last, creating harmonic chaos and maximum instability."
+    },
+    {
+        name: "Lydian Strangeness",
+        progression: ["I", "II", "I", "vii°"],
+        mood: ["weird", "eerie"],
+        keyMode: "major",
+        description: "Uses the raised fourth (Lydian mode). The II major and vii° create floating, otherworldly quality. Sounds futuristic and alien."
+    },
+    {
+        name: "Non-Functional Drift",
+        progression: ["I", "VII", "IV", "III"],
+        mood: ["experimental", "unsettling"],
+        keyMode: "major",
+        description: "Completely abandons functional harmony. Chords don't follow any traditional pattern - they just drift. Sounds avant-garde and unpredictable."
+    },
+    {
+        name: "Locrian Madness",
+        progression: ["i°", "II", "III", "iv"],
+        mood: ["dissonant", "chaotic"],
+        keyMode: "minor",
+        description: "Built on the unstable Locrian mode with a diminished tonic. Every chord feels wrong because there's no stable home. Pure harmonic anxiety."
+    },
+    {
+        name: "Chromatic Parallelism",
+        progression: ["I", "i", "VII", "vii°"],
+        mood: ["eerie", "dark"],
+        keyMode: "major",
+        description: "Parallel major/minor shifts combined with chromatic movement. Creates a shadowy, doppelgänger effect - familiar yet disturbing."
+    },
+    {
+        name: "Borrowed Chord Assault",
+        progression: ["I", "IV", "iv", "I"],
+        mood: ["uncomfortable", "tense"],
+        keyMode: "major",
+        description: "The sudden shift from IV to iv (major to minor) creates harmonic whiplash. The brightness crashes into darkness abruptly."
     }
 ];
