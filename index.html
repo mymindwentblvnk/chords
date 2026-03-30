@@ -10,8 +10,8 @@
     <div class="container">
         <nav class="main-nav" style="display: flex; gap: 10px; justify-content: center; padding: 20px 0; margin-bottom: 20px; border-bottom: 2px solid var(--surface-light);">
             <a href="index.html" class="nav-link active" style="padding: 10px 20px; background: var(--primary-color); color: white; text-decoration: none; border-radius: 8px; font-weight: 600; transition: all 0.2s ease;">🎤 Pitch Detector</a>
-            <a href="chord-generator.html" class="nav-link" style="padding: 10px 20px; background: var(--surface-light); color: var(--text-primary); text-decoration: none; border-radius: 8px; font-weight: 600; transition: all 0.2s ease;">🎵 Chord Generator</a>
-            <a href="chord-builder.html" class="nav-link" style="padding: 10px 20px; background: var(--surface-light); color: var(--text-primary); text-decoration: none; border-radius: 8px; font-weight: 600; transition: all 0.2s ease;">🎹 Chord Builder</a>
+            <a href="chord-generator.html" class="nav-link" style="padding: 10px 20px; background: var(--surface-light); color: var(--text-primary); text-decoration: none; border-radius: 8px; font-weight: 600; transition: all 0.2s ease;">🎵 Chord Progressions</a>
+            <a href="chord-builder.html" class="nav-link" style="padding: 10px 20px; background: var(--surface-light); color: var(--text-primary); text-decoration: none; border-radius: 8px; font-weight: 600; transition: all 0.2s ease;">🎹 Play Chords</a>
             <a href="guide.html" class="nav-link" style="padding: 10px 20px; background: var(--surface-light); color: var(--text-primary); text-decoration: none; border-radius: 8px; font-weight: 600; transition: all 0.2s ease;">📖 Guide</a>
         </nav>
 
@@ -21,17 +21,15 @@
             <p class="subtitle">Find your root note, then explore chord progressions</p>
         </header>
 
-        <div class="main-card">
-            <div class="controls-section">
-                <button id="pitch-button" class="pitch-button">
-                    <span class="button-icon">🎵</span>
-                    <span class="button-text">Start Listening</span>
-                </button>
+        <div style="text-align: center; margin-bottom: 40px;">
+            <button id="pitch-button" class="pitch-button">
+                <span class="button-icon">🎵</span>
+                <span class="button-text">Start Listening</span>
+            </button>
+            <div id="status-text" class="status-text"></div>
+        </div>
 
-                <div id="status-text" class="status-text"></div>
-            </div>
-
-            <div id="pitch-display" class="pitch-display" style="display: none;">
+        <div id="pitch-display" class="pitch-display" style="display: none;">
                 <div class="note-container">
                     <div class="note-label">Detected Note</div>
                     <div id="note-name" class="note-name">—</div>
@@ -70,45 +68,26 @@
 
             <div id="pitch-error" class="pitch-error" style="display: none;"></div>
 
-            <!-- Note History Section -->
-            <div id="note-history-section" class="note-history-section" style="display: none;">
-                <div class="history-header">
-                    <h3>📝 Detected Notes History</h3>
-                    <div class="history-controls">
-                        <div class="sort-toggle">
-                            <label class="sort-option">
-                                <input type="radio" name="sort-mode" value="score" checked>
-                                <span>By Score</span>
-                            </label>
-                            <label class="sort-option">
-                                <input type="radio" name="sort-mode" value="order">
-                                <span>By Order Played</span>
-                            </label>
-                        </div>
-                        <button id="clear-history" class="clear-button">Clear History</button>
+        <!-- Note History Section -->
+        <div id="note-history-section" class="note-history-section" style="display: none;">
+            <div class="history-header">
+                <h3>📝 Detected Notes History</h3>
+                <div class="history-controls">
+                    <div class="sort-toggle">
+                        <label class="sort-option">
+                            <input type="radio" name="sort-mode" value="score" checked>
+                            <span>By Score</span>
+                        </label>
+                        <label class="sort-option">
+                            <input type="radio" name="sort-mode" value="order">
+                            <span>By Order Played</span>
+                        </label>
                     </div>
-                </div>
-                <div id="note-history" class="note-history">
-                    <!-- History items will be added here -->
+                    <button id="clear-history" class="clear-button">Clear History</button>
                 </div>
             </div>
-
-            <div class="instructions">
-                <h3>How it works</h3>
-                <ol>
-                    <li>Click the "Start Listening" button above</li>
-                    <li>Allow microphone access when prompted</li>
-                    <li>Play a note on your instrument or sing</li>
-                    <li>See the detected note, frequency, and confidence level</li>
-                </ol>
-                <p class="note-hint">💡 Works best with clear, sustained notes. Try playing single notes on a guitar, piano, or singing.</p>
-            </div>
-
-            <div class="browser-support">
-                <h4>Browser Support</h4>
-                <p>✅ Chrome, Edge, Firefox (full support)</p>
-                <p>⚠️ Safari requires HTTPS or localhost</p>
-                <p>📱 Mobile browsers require HTTPS</p>
+            <div id="note-history" class="note-history">
+                <!-- History items will be added here -->
             </div>
         </div>
     </div>

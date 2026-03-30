@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Interactive Chord Builder - Learn to Play</title>
+    <title>Play Chords</title>
     <link rel="stylesheet" href="styles.css">
     <style>
         .builder-container {
@@ -102,28 +102,27 @@
     <div class="builder-container">
         <nav class="main-nav" style="display: flex; gap: 10px; justify-content: center; padding: 20px 0; margin-bottom: 20px; border-bottom: 2px solid var(--surface-light);">
             <a href="index.html" class="nav-link" style="padding: 10px 20px; background: var(--surface-light); color: var(--text-primary); text-decoration: none; border-radius: 8px; font-weight: 600; transition: all 0.2s ease;">🎤 Pitch Detector</a>
-            <a href="chord-generator.html" class="nav-link" style="padding: 10px 20px; background: var(--surface-light); color: var(--text-primary); text-decoration: none; border-radius: 8px; font-weight: 600; transition: all 0.2s ease;">🎵 Chord Generator</a>
-            <a href="chord-builder.html" class="nav-link active" style="padding: 10px 20px; background: var(--primary-color); color: white; text-decoration: none; border-radius: 8px; font-weight: 600; transition: all 0.2s ease;">🎹 Chord Builder</a>
+            <a href="chord-generator.html" class="nav-link" style="padding: 10px 20px; background: var(--surface-light); color: var(--text-primary); text-decoration: none; border-radius: 8px; font-weight: 600; transition: all 0.2s ease;">🎵 Chord Progressions</a>
+            <a href="chord-builder.html" class="nav-link active" style="padding: 10px 20px; background: var(--primary-color); color: white; text-decoration: none; border-radius: 8px; font-weight: 600; transition: all 0.2s ease;">🎹 Play Chords</a>
             <a href="guide.html" class="nav-link" style="padding: 10px 20px; background: var(--surface-light); color: var(--text-primary); text-decoration: none; border-radius: 8px; font-weight: 600; transition: all 0.2s ease;">📖 Guide</a>
         </nav>
 
         <header style="text-align: center; margin-bottom: 40px;">
             <div class="header-icon">🎹</div>
-            <h1 style="background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">Interactive Chord Builder</h1>
+            <h1 style="background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">Play Chords</h1>
             <p class="subtitle">From Scale to Keyboard: Step-by-Step Breakdown</p>
         </header>
 
         <!-- INTERACTIVE BUILDER -->
-        <div class="builder-section" style="background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(236, 72, 153, 0.1)); border: 3px solid var(--primary-color);">
-            <h2 style="font-size: 2rem; color: var(--primary-color);">Scale → Roman Numerals → Chords → Keys!</h2>
-            <p style="font-size: 1.1rem;">Choose your root note and chord progression to see the complete breakdown:</p>
+        <div class="builder-section" style="background: var(--surface); border-radius: var(--border-radius); box-shadow: var(--shadow);">
+            <p style="font-size: 1.1rem; margin-bottom: 25px;">Choose your root note and chord progression to see the complete breakdown:</p>
 
             <!-- Interactive Controls -->
             <div style="background: var(--surface-light); padding: 25px; border-radius: 12px; margin: 25px 0;">
-                <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 20px; align-items: start;">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; align-items: start;">
                     <div>
                         <label for="interactive-root" style="display: block; margin-bottom: 10px; font-weight: 600; color: var(--text-primary);">Root Note:</label>
-                        <select id="interactive-root" style="width: 100%; padding: 12px; font-size: 1rem; background: var(--background); color: var(--text-primary); border: 2px solid var(--primary-color); border-radius: 8px; cursor: pointer;">
+                        <select id="interactive-root" style="width: 100%; padding: 12px; font-size: 1rem; background: var(--background); color: var(--text-primary); border: 2px solid var(--primary-color); border-radius: 8px; cursor: pointer; height: 48px; box-sizing: border-box;">
                             <option value="C">C</option>
                             <option value="C#">C# / Db</option>
                             <option value="D">D</option>
@@ -140,7 +139,7 @@
                     </div>
                     <div>
                         <label for="interactive-progression" style="display: block; margin-bottom: 10px; font-weight: 600; color: var(--text-primary);">Chord Progression (Roman Numerals):</label>
-                        <input type="text" id="interactive-progression" value="I-V-vi-IV" placeholder="e.g., I-V-vi-IV or I IV V" style="width: 100%; padding: 12px; font-size: 1rem; background: var(--background); color: var(--text-primary); border: 2px solid var(--primary-color); border-radius: 8px; font-family: 'Courier New', monospace;">
+                        <input type="text" id="interactive-progression" value="I-V-vi-IV" placeholder="e.g., I-V-vi-IV or I IV V" style="width: 100%; padding: 12px; font-size: 1rem; background: var(--background); color: var(--text-primary); border: 2px solid var(--primary-color); border-radius: 8px; font-family: 'Courier New', monospace; height: 48px; box-sizing: border-box;">
                         <p style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 8px;">Separate with dashes or spaces. Examples: I-IV-V, vi-IV-I-V, I ii iii IV</p>
                     </div>
                 </div>
@@ -176,7 +175,7 @@
 
     <script src="music-theory.js"></script>
     <script>
-        // Interactive Chord Builder Logic
+        // Play Chords Logic
         const CHROMATIC = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
         const MAJOR_INTERVALS = [0, 2, 4, 5, 7, 9, 11]; // W-W-H-W-W-W-H pattern in semitones
 

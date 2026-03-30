@@ -3,27 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chord Progression Generator</title>
+    <title>Chord Progressions</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="container">
         <nav class="main-nav" style="display: flex; gap: 10px; justify-content: center; padding: 20px 0; margin-bottom: 20px; border-bottom: 2px solid var(--surface-light);">
             <a href="index.html" class="nav-link" style="padding: 10px 20px; background: var(--surface-light); color: var(--text-primary); text-decoration: none; border-radius: 8px; font-weight: 600; transition: all 0.2s ease;">🎤 Pitch Detector</a>
-            <a href="chord-generator.html" class="nav-link active" style="padding: 10px 20px; background: var(--primary-color); color: white; text-decoration: none; border-radius: 8px; font-weight: 600; transition: all 0.2s ease;">🎵 Chord Generator</a>
-            <a href="chord-builder.html" class="nav-link" style="padding: 10px 20px; background: var(--surface-light); color: var(--text-primary); text-decoration: none; border-radius: 8px; font-weight: 600; transition: all 0.2s ease;">🎹 Chord Builder</a>
+            <a href="chord-generator.html" class="nav-link active" style="padding: 10px 20px; background: var(--primary-color); color: white; text-decoration: none; border-radius: 8px; font-weight: 600; transition: all 0.2s ease;">🎵 Chord Progressions</a>
+            <a href="chord-builder.html" class="nav-link" style="padding: 10px 20px; background: var(--surface-light); color: var(--text-primary); text-decoration: none; border-radius: 8px; font-weight: 600; transition: all 0.2s ease;">🎹 Play Chords</a>
             <a href="guide.html" class="nav-link" style="padding: 10px 20px; background: var(--surface-light); color: var(--text-primary); text-decoration: none; border-radius: 8px; font-weight: 600; transition: all 0.2s ease;">📖 Guide</a>
         </nav>
 
         <header>
             <div class="header-icon">🎵</div>
-            <h1>Chord Progression Generator</h1>
+            <h1>Chord Progressions</h1>
             <p class="subtitle">Generate beautiful chord progressions in any key</p>
         </header>
 
         <div class="controls">
             <div class="input-section">
-                <label for="note-selector">Select Root Note (optional):</label>
+                <label for="note-selector" style="display: block; margin-bottom: 10px; font-weight: 600; color: var(--text-primary);">Root Note:</label>
                 <select id="note-selector">
                     <option value="all">All Keys</option>
                     <option value="C">C</option>
@@ -42,7 +42,7 @@
             </div>
 
             <div class="filter-section">
-                <label>Filter by Mood:</label>
+                <label style="display: block; margin-bottom: 10px; font-weight: 600; color: var(--text-primary);">Filter by Mood:</label>
                 <div class="mood-filters">
                     <button class="mood-filter active" data-mood="all">All</button>
                     <button class="mood-filter" data-mood="happy">Happy</button>
