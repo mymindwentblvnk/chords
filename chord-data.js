@@ -9,63 +9,63 @@ const CHORD_PROGRESSIONS = [
         progression: ["I", "V", "vi", "IV"],
         mood: ["happy", "uplifting"],
         keyMode: "major",
-        description: "The most popular chord progression in modern pop music. Used in countless hits like 'Let It Be', 'Don't Stop Believin'', and 'Someone Like You'. Bright and memorable."
+        description: "The most popular chord progression in modern pop music. Used in countless hits like 'Let It Be', 'Don't Stop Believin'', and 'Someone Like You'. Hip hop: 'See You Again' by Wiz Khalifa ft. Charlie Puth, 'Love the Way You Lie' by Eminem ft. Rihanna. Bright and memorable."
     },
     {
         name: "Emotional Ballad",
         progression: ["vi", "IV", "I", "V"],
         mood: ["sad", "melancholic"],
         keyMode: "major",
-        description: "A touching progression that starts on the minor vi chord, creating an emotional and introspective feel. Featured in 'Grenade' by Bruno Mars and 'Africa' by Toto. Perfect for heartfelt ballads and emotional storytelling."
+        description: "A touching progression that starts on the minor vi chord, creating an emotional and introspective feel. Featured in 'Grenade' by Bruno Mars and 'Africa' by Toto. Hip hop: 'Mockingbird' by Eminem. Perfect for heartfelt ballads and emotional storytelling."
     },
     {
         name: "Epic Minor Anthem",
         progression: ["i", "VI", "III", "VII"],
         mood: ["sad", "melancholic"],
         keyMode: "minor",
-        description: "A powerful minor key progression with dramatic movement. Used in 'Stairway to Heaven' by Led Zeppelin and 'Losing My Religion' by R.E.M. Creates an epic, cinematic atmosphere often used in film scores and dramatic rock songs."
+        description: "A powerful minor key progression with dramatic movement. Used in 'Stairway to Heaven' by Led Zeppelin and 'Losing My Religion' by R.E.M. Hip hop: Common in trap production, featured in parts of 'Sicko Mode' by Travis Scott. Creates an epic, cinematic atmosphere often used in film scores and dramatic rock songs."
     },
     {
         name: "Classic '50s Progression",
         progression: ["I", "vi", "IV", "V"],
         mood: ["happy", "uplifting"],
         keyMode: "major",
-        description: "The quintessential doo-wop and early rock 'n' roll progression. Cheerful and nostalgic, used in classics like 'Stand By Me' and 'Every Breath You Take'."
+        description: "The quintessential doo-wop and early rock 'n' roll progression. Cheerful and nostalgic, used in classics like 'Stand By Me' and 'Every Breath You Take'. Hip hop: Variations in 'Still D.R.E.' by Dr. Dre, many Kanye West productions."
     },
     {
         name: "Minor Blues Feel",
         progression: ["i", "iv", "VII", "VI"],
         mood: ["melancholic", "sad"],
         keyMode: "minor",
-        description: "A bluesy minor progression with a walking bassline feel. Creates a somber, reflective mood with hints of blues and soul traditions."
+        description: "A bluesy minor progression with a walking bassline feel. Hip hop: Common in sample-based production, used by producers like The Alchemist and Madlib. Creates a somber, reflective mood with hints of blues and soul traditions."
     },
     {
         name: "Bright and Warm",
         progression: ["I", "IV", "vi", "V"],
         mood: ["happy", "uplifting"],
         keyMode: "major",
-        description: "An optimistic progression with a warm, comfortable feel. Featured in 'I'm Yours' by Jason Mraz and 'She Will Be Loved' by Maroon 5. The IV chord adds brightness while the vi creates gentle emotional depth."
+        description: "An optimistic progression with a warm, comfortable feel. Featured in 'I'm Yours' by Jason Mraz and 'She Will Be Loved' by Maroon 5. Hip hop: 'Hotline Bling' by Drake. The IV chord adds brightness while the vi creates gentle emotional depth."
     },
     {
         name: "Dark Tension",
         progression: ["i", "VII", "VI", "V"],
         mood: ["unsettling"],
         keyMode: "minor",
-        description: "A minor progression with building tension through the descending chords. The major V at the end creates unresolved energy and drama."
+        description: "A minor progression with building tension through the descending chords. Hip hop: Popular in UK drill and dark trap beats by producers like Metro Boomin. The major V at the end creates unresolved energy and drama."
     },
     {
         name: "Dreamy Flow",
         progression: ["I", "iii", "vi", "IV"],
         mood: ["dreamy", "uplifting"],
         keyMode: "major",
-        description: "A smooth, flowing progression that glides through related chords. Creates an ethereal, dreamlike atmosphere perfect for ambient and chill music."
+        description: "A smooth, flowing progression that glides through related chords. Hip hop: Used in chill lo-fi hip hop beats and melodic rap. Creates an ethereal, dreamlike atmosphere perfect for ambient and chill music."
     },
     {
         name: "Jazz Standard Cadence",
         progression: ["ii", "V", "I"],
         mood: ["uplifting"],
         keyMode: "major",
-        description: "The fundamental jazz progression, also called the ii-V-I turnaround. Found in countless jazz standards like 'Autumn Leaves', 'Fly Me to the Moon', and 'Satin Doll'. Sophisticated and smooth, this is the backbone of jazz harmony and creates strong resolution."
+        description: "The fundamental jazz progression, also called the ii-V-I turnaround. Found in countless jazz standards like 'Autumn Leaves', 'Fly Me to the Moon', and 'Satin Doll'. Hip hop: Used extensively by J Dilla, A Tribe Called Quest, and in jazz rap/boom bap productions. Sophisticated and smooth, this is the backbone of jazz harmony and creates strong resolution."
     },
     {
         name: "Cinematic Minor",
@@ -79,7 +79,7 @@ const CHORD_PROGRESSIONS = [
         progression: ["i", "VII", "VI", "V"],
         mood: ["unsettling"],
         keyMode: "minor",
-        description: "An ancient progression with roots in flamenco and baroque music. Featured in 'Sultans of Swing' by Dire Straits and 'Hit the Road Jack' by Ray Charles. Creates a mysterious, exotic feel with strong Spanish and Mediterranean character."
+        description: "An ancient progression with roots in flamenco and baroque music. Featured in 'Sultans of Swing' by Dire Straits and 'Hit the Road Jack' by Ray Charles. Hip hop: Used in 'Stan' by Eminem (sampled from Dido's 'Thank You'). Creates a mysterious, exotic feel with strong Spanish and Mediterranean character."
     },
     {
         name: "Uplifting Major Anthem",
