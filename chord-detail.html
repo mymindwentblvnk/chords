@@ -31,6 +31,29 @@
             margin-bottom: 20px;
         }
 
+        .scale-type-badge {
+            display: inline-block;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+        }
+
+        .scale-type-badge.major {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(16, 185, 129, 0.3));
+            color: var(--accent-happy);
+            border: 2px solid var(--accent-happy);
+        }
+
+        .scale-type-badge.minor {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0.3));
+            color: var(--accent-sad);
+            border: 2px solid var(--accent-sad);
+        }
+
         .detail-card {
             background: var(--surface);
             border-radius: var(--border-radius);
@@ -199,6 +222,7 @@
         </div>
 
         <div class="detail-header">
+            <div id="scale-type-badge"></div>
             <h1 class="detail-name" id="chord-name">Loading...</h1>
             <div id="mood-tags"></div>
         </div>
@@ -278,6 +302,11 @@
         } else {
             // Display the progression details
             document.getElementById('chord-name').textContent = progression.name;
+
+            // Display scale type badge
+            const scaleTypeName = progression.keyMode === 'major' ? 'Major' : 'Minor';
+            const scaleTypeBadge = `<span class="scale-type-badge ${progression.keyMode}">${scaleTypeName} Key</span>`;
+            document.getElementById('scale-type-badge').innerHTML = scaleTypeBadge;
 
             // Display mood tags
             const moodTags = progression.mood.map(mood =>
