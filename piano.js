@@ -81,21 +81,21 @@ class AnimatedPiano {
         // Render white keys for 3 octaves (starting from octave 2)
         for (let octave = 2; octave < 5; octave++) {
             for (const note of notes) {
-                html += `<div class="piano-key white" data-note="${note}${octave}">
+                html += `<div class="piano-key white octave-${octave}" data-note="${note}${octave}">
                     <span class="piano-key-label">${note}</span>
                 </div>`;
             }
         }
 
         // Add the final C from octave 5
-        html += `<div class="piano-key white octave-end" data-note="C5">
+        html += `<div class="piano-key white octave-end octave-5" data-note="C5">
             <span class="piano-key-label">C</span>
         </div>`;
 
         // Render black keys for 3 octaves (starting from octave 2)
         for (let octave = 2; octave < 5; octave++) {
             for (const note of sharps) {
-                html += `<div class="piano-key black" data-note="${note}${octave}">
+                html += `<div class="piano-key black octave-${octave}" data-note="${note}${octave}">
                     <span class="piano-key-label">${note}</span>
                 </div>`;
             }
