@@ -154,8 +154,8 @@ class AnimatedPiano {
                 if (match && this.synth) {
                     const noteName = match[1];
                     const octave = match[2];
-                    // Play the note (using octave 4 for consistent sound)
-                    this.playNote(noteName + '4');
+                    // Play the note with its actual octave
+                    this.playNote(noteName + octave);
 
                     // Visual feedback - briefly flash the key
                     key.classList.add('active');
