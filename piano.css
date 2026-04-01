@@ -363,10 +363,35 @@
     .piano-header {
         flex-direction: column;
         align-items: stretch;
+        gap: 10px;
     }
 
     .piano-controls {
         justify-content: center;
+        flex-wrap: wrap;
+        gap: 6px;
+    }
+
+    .piano-control-btn {
+        padding: 6px 10px;
+        font-size: 0.8rem;
+    }
+
+    .piano-speed-label {
+        font-size: 0.8rem;
+    }
+
+    .piano-speed-select {
+        padding: 4px 8px;
+        font-size: 0.8rem;
+    }
+
+    .piano-title {
+        font-size: 1.1rem;
+    }
+
+    .piano-current-chord {
+        font-size: 1.2rem;
     }
 }
 
@@ -384,6 +409,42 @@
         width: 20px;
         height: 80px;
     }
+
+    .piano-header {
+        gap: 8px;
+    }
+
+    .piano-controls {
+        gap: 4px;
+    }
+
+    .piano-control-btn {
+        padding: 5px 8px;
+        font-size: 0.75rem;
+    }
+
+    .piano-speed-label {
+        font-size: 0.75rem;
+        display: none; /* Hide "Speed:" label on very small screens */
+    }
+
+    .piano-speed-select {
+        padding: 4px 6px;
+        font-size: 0.75rem;
+    }
+
+    .piano-title {
+        font-size: 1rem;
+    }
+
+    .piano-current-chord {
+        font-size: 1.1rem;
+    }
+
+    .piano-container {
+        padding: 20px 15px;
+    }
+}
 
     /* Small mobile - 30px per white key - Octave 3 only (octave 2 and 4 hidden) */
     .piano-key.black[data-note="C#3"],
