@@ -71,34 +71,44 @@ class AnimatedPiano {
     }
 
     renderOctaves() {
-        // Render 3 octaves (octave 2, 3, 4) - highlight only in octave 3
-        // Plus an extra C at the end (C from octave 5)
+        // Render 2 octaves: C2-B2 (left) and C3-C4 (right, with ending C4)
+        // Highlight only in right octave (C3-C4)
         const notes = ['C', 'D', 'E', 'F', 'G', 'A', 'B'];
         const sharps = ['C#', 'D#', 'F#', 'G#', 'A#'];
 
         let html = '<div class="piano-octave">';
 
-        // Render white keys for 3 octaves (starting from octave 2)
-        for (let octave = 2; octave < 5; octave++) {
-            for (const note of notes) {
-                html += `<div class="piano-key white octave-${octave}" data-note="${note}${octave}">
-                    <span class="piano-key-label">${note}</span>
-                </div>`;
-            }
+        // Render white keys for octave 2 (left octave)
+        for (const note of notes) {
+            html += `<div class="piano-key white octave-2" data-note="${note}2">
+                <span class="piano-key-label">${note}</span>
+            </div>`;
         }
 
-        // Add the final C from octave 5
-        html += `<div class="piano-key white octave-end octave-5" data-note="C5">
+        // Render white keys for octave 3 (right octave)
+        for (const note of notes) {
+            html += `<div class="piano-key white octave-3" data-note="${note}3">
+                <span class="piano-key-label">${note}</span>
+            </div>`;
+        }
+
+        // Add the final C4
+        html += `<div class="piano-key white octave-end octave-4" data-note="C4">
             <span class="piano-key-label">C</span>
         </div>`;
 
-        // Render black keys for 3 octaves (starting from octave 2)
-        for (let octave = 2; octave < 5; octave++) {
-            for (const note of sharps) {
-                html += `<div class="piano-key black octave-${octave}" data-note="${note}${octave}">
-                    <span class="piano-key-label">${note}</span>
-                </div>`;
-            }
+        // Render black keys for octave 2 (left octave)
+        for (const note of sharps) {
+            html += `<div class="piano-key black octave-2" data-note="${note}2">
+                <span class="piano-key-label">${note}</span>
+            </div>`;
+        }
+
+        // Render black keys for octave 3 (right octave)
+        for (const note of sharps) {
+            html += `<div class="piano-key black octave-3" data-note="${note}3">
+                <span class="piano-key-label">${note}</span>
+            </div>`;
         }
 
         html += '</div>';
