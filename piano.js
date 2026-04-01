@@ -66,24 +66,28 @@ class AnimatedPiano {
     }
 
     renderOctaves() {
-        // Render 1 octave (C to B)
+        // Render 3 octaves (octave 0, 1, 2) - highlight only in octave 1
         const notes = ['C', 'D', 'E', 'F', 'G', 'A', 'B'];
         const sharps = ['C#', 'D#', 'F#', 'G#', 'A#'];
 
         let html = '<div class="piano-octave">';
 
-        // Render white keys for 1 octave
-        for (const note of notes) {
-            html += `<div class="piano-key white" data-note="${note}0">
-                <span class="piano-key-label">${note}</span>
-            </div>`;
+        // Render white keys for 3 octaves
+        for (let octave = 0; octave < 3; octave++) {
+            for (const note of notes) {
+                html += `<div class="piano-key white" data-note="${note}${octave}">
+                    <span class="piano-key-label">${note}</span>
+                </div>`;
+            }
         }
 
-        // Render black keys for 1 octave
-        for (const note of sharps) {
-            html += `<div class="piano-key black" data-note="${note}0">
-                <span class="piano-key-label">${note}</span>
-            </div>`;
+        // Render black keys for 3 octaves
+        for (let octave = 0; octave < 3; octave++) {
+            for (const note of sharps) {
+                html += `<div class="piano-key black" data-note="${note}${octave}">
+                    <span class="piano-key-label">${note}</span>
+                </div>`;
+            }
         }
 
         html += '</div>';
@@ -123,6 +127,41 @@ class AnimatedPiano {
                 this.startAnimation();
             }
         });
+
+        // Add click handlers to all piano keys
+        const allKeys = this.container.querySelectorAll('.piano-key');
+        allKeys.forEach(key => {
+            key.addEventListener('click', () => {
+                const noteData = key.getAttribute('data-note');
+                // Extract note name and octave
+                const match = noteData.match(/^([A-G]#?)(\d+)$/);
+                if (match && this.synth) {
+                    const noteName = match[1];
+                    const octave = match[2];
+                    // Play the note (using octave 4 for consistent sound)
+                    this.playNote(noteName + '4');
+
+                    // Visual feedback - briefly flash the key
+                    key.classList.add('active');
+                    setTimeout(() => {
+                        // Only remove if it's not part of current chord
+                        const currentNotes = getChordNotes(this.chords[this.currentChordIndex]);
+                        const isInCurrentChord = currentNotes.some(note => {
+                            const normalizedNote = note.replace(/[0-9]/g, '');
+                            return noteData === `${normalizedNote}1`;
+                        });
+                        if (!isInCurrentChord) {
+                            key.classList.remove('active');
+                        }
+                    }, 300);
+                }
+            });
+        });
+    }
+
+    playNote(note) {
+        if (!this.synth) return;
+        this.synth.triggerAttackRelease(note, '0.3');
     }
 
     updateDisplay() {
@@ -142,13 +181,13 @@ class AnimatedPiano {
             key.classList.remove('active');
         });
 
-        // Highlight only the 3 notes in the single octave
+        // Highlight only the 3 notes in the middle octave (octave 1)
         notes.forEach(note => {
             // Normalize the note (remove octave if present)
             const normalizedNote = note.replace(/[0-9]/g, '');
 
-            // Find the key in octave 0
-            const key = this.container.querySelector(`.piano-key[data-note="${normalizedNote}0"]`);
+            // Find the key in octave 1 (middle octave)
+            const key = this.container.querySelector(`.piano-key[data-note="${normalizedNote}1"]`);
             if (key) {
                 key.classList.add('active');
             }
