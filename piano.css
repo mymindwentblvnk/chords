@@ -75,6 +75,52 @@
     font-size: 0.9rem;
 }
 
+.piano-octave-controls {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--surface-light);
+    padding: 4px 8px;
+    border-radius: 6px;
+    border: 2px solid var(--primary-color);
+}
+
+.piano-octave-btn {
+    width: 28px;
+    height: 28px;
+    background: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 1.2rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    line-height: 1;
+}
+
+.piano-octave-btn:hover {
+    background: var(--secondary-color);
+    transform: scale(1.1);
+}
+
+.piano-octave-btn:active {
+    transform: scale(0.95);
+}
+
+.piano-octave-label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    min-width: 50px;
+    text-align: center;
+    font-family: 'Courier New', monospace;
+}
+
 .piano-keyboard {
     position: relative;
     height: 200px;
@@ -144,47 +190,20 @@
     transform: translateY(2px);
 }
 
-/* Position black keys - Octave 3 (left octave) */
-.piano-octave .piano-key.black.octave-3[data-note="C#3"] {
-    left: 26px !important;
-}
+/* Position black keys using data-key-index */
+/* Left octave keys (index 0-6) */
+.piano-octave .piano-key.black[data-key-index="0"] { left: 26px !important; }  /* C# */
+.piano-octave .piano-key.black[data-key-index="1"] { left: 66px !important; }  /* D# */
+.piano-octave .piano-key.black[data-key-index="3"] { left: 146px !important; } /* F# */
+.piano-octave .piano-key.black[data-key-index="4"] { left: 186px !important; } /* G# */
+.piano-octave .piano-key.black[data-key-index="5"] { left: 226px !important; } /* A# */
 
-.piano-octave .piano-key.black.octave-3[data-note="D#3"] {
-    left: 66px !important;
-}
-
-.piano-octave .piano-key.black.octave-3[data-note="F#3"] {
-    left: 146px !important;
-}
-
-.piano-octave .piano-key.black.octave-3[data-note="G#3"] {
-    left: 186px !important;
-}
-
-.piano-octave .piano-key.black.octave-3[data-note="A#3"] {
-    left: 226px !important;
-}
-
-/* Position black keys - Octave 4 (right octave, 280px = 7 white keys * 40px) */
-.piano-octave .piano-key.black.octave-4[data-note="C#4"] {
-    left: 306px !important; /* 280 + 26 */
-}
-
-.piano-octave .piano-key.black.octave-4[data-note="D#4"] {
-    left: 346px !important; /* 280 + 66 */
-}
-
-.piano-octave .piano-key.black.octave-4[data-note="F#4"] {
-    left: 426px !important; /* 280 + 146 */
-}
-
-.piano-octave .piano-key.black.octave-4[data-note="G#4"] {
-    left: 466px !important; /* 280 + 186 */
-}
-
-.piano-octave .piano-key.black.octave-4[data-note="A#4"] {
-    left: 506px !important; /* 280 + 226 */
-}
+/* Right octave keys (index 7-13) - offset by 273px */
+.piano-octave .piano-key.black[data-key-index="7"] { left: 299px !important; }  /* C# (273 + 26) */
+.piano-octave .piano-key.black[data-key-index="8"] { left: 339px !important; }  /* D# (273 + 66) */
+.piano-octave .piano-key.black[data-key-index="10"] { left: 419px !important; } /* F# (273 + 146) */
+.piano-octave .piano-key.black[data-key-index="11"] { left: 459px !important; } /* G# (273 + 186) */
+.piano-octave .piano-key.black[data-key-index="12"] { left: 499px !important; } /* A# (273 + 226) */
 
 .piano-key-label {
     position: absolute;
@@ -231,41 +250,60 @@
     color: var(--primary-color);
     font-family: 'Courier New', monospace;
     font-weight: 700;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    flex-wrap: wrap;
+}
+
+.piano-note-item {
+    display: inline-block;
+    padding: 4px 12px;
+    background: var(--surface);
+    border: 2px solid var(--primary-color);
+    border-radius: 6px;
+    transition: all 0.2s ease;
+}
+
+.piano-note-item.active {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+    color: white;
+    box-shadow: 0 0 15px rgba(99, 102, 241, 0.6);
+    transform: scale(1.1);
+}
+
+.piano-note-item.clicked {
+    background: linear-gradient(135deg, var(--accent-happy) 0%, var(--primary-color) 100%);
+    color: white;
+    box-shadow: 0 0 20px rgba(99, 102, 241, 0.8);
+    transform: scale(1.15);
+}
+
+.piano-note-separator {
+    color: var(--text-secondary);
+    font-weight: 400;
 }
 
 /* Responsive Design */
 @media (max-width: 1100px) {
-    /* Hide left octave on medium screens, show only right octave (C4-C5) */
-    .piano-key.octave-3 {
+    /* Hide left octave on medium screens, show only right octave */
+    .piano-key[data-key-index="0"],
+    .piano-key[data-key-index="1"],
+    .piano-key[data-key-index="2"],
+    .piano-key[data-key-index="3"],
+    .piano-key[data-key-index="4"],
+    .piano-key[data-key-index="5"],
+    .piano-key[data-key-index="6"] {
         display: none !important;
     }
 
-    /* Keep octave 4 and ending C5 visible */
-    .piano-key.octave-4,
-    .piano-key.octave-5 {
-        display: block !important;
-    }
-
-    /* Reposition octave 4 black keys to start from left when octave 3 is hidden */
-    .piano-key.black.octave-4[data-note="C#4"] {
-        left: 26px !important;
-    }
-
-    .piano-key.black.octave-4[data-note="D#4"] {
-        left: 66px !important;
-    }
-
-    .piano-key.black.octave-4[data-note="F#4"] {
-        left: 146px !important;
-    }
-
-    .piano-key.black.octave-4[data-note="G#4"] {
-        left: 186px !important;
-    }
-
-    .piano-key.black.octave-4[data-note="A#4"] {
-        left: 226px !important;
-    }
+    /* Reposition right octave black keys to start from left when left octave is hidden */
+    .piano-octave .piano-key.black[data-key-index="7"] { left: 26px !important; }  /* C# */
+    .piano-octave .piano-key.black[data-key-index="8"] { left: 66px !important; }  /* D# */
+    .piano-octave .piano-key.black[data-key-index="10"] { left: 146px !important; } /* F# */
+    .piano-octave .piano-key.black[data-key-index="11"] { left: 186px !important; } /* G# */
+    .piano-octave .piano-key.black[data-key-index="12"] { left: 226px !important; } /* A# */
 
     /* Single octave width */
     .piano-octave {
@@ -293,26 +331,12 @@
         height: 90px;
     }
 
-    /* Mobile - 35px per white key - Octave 4 only (octave 3 hidden) */
-    .piano-key.black.octave-4[data-note="C#4"] {
-        left: 23px !important;
-    }
-
-    .piano-key.black.octave-4[data-note="D#4"] {
-        left: 58px !important;
-    }
-
-    .piano-key.black.octave-4[data-note="F#4"] {
-        left: 128px !important;
-    }
-
-    .piano-key.black.octave-4[data-note="G#4"] {
-        left: 163px !important;
-    }
-
-    .piano-key.black.octave-4[data-note="A#4"] {
-        left: 198px !important;
-    }
+    /* Mobile - 35px per white key - Right octave only (left octave hidden) */
+    .piano-octave .piano-key.black[data-key-index="7"] { left: 23px !important; }  /* C# */
+    .piano-octave .piano-key.black[data-key-index="8"] { left: 58px !important; }  /* D# */
+    .piano-octave .piano-key.black[data-key-index="10"] { left: 128px !important; } /* F# */
+    .piano-octave .piano-key.black[data-key-index="11"] { left: 163px !important; } /* G# */
+    .piano-octave .piano-key.black[data-key-index="12"] { left: 198px !important; } /* A# */
 
     .piano-header {
         flex-direction: column;
@@ -346,6 +370,27 @@
 
     .piano-current-chord {
         font-size: 1.2rem;
+    }
+
+    .piano-octave-controls {
+        gap: 6px;
+        padding: 3px 6px;
+    }
+
+    .piano-octave-btn {
+        width: 24px;
+        height: 24px;
+        font-size: 1rem;
+    }
+
+    .piano-octave-label {
+        font-size: 0.75rem;
+        min-width: 45px;
+    }
+
+    .piano-note-item {
+        padding: 3px 10px;
+        font-size: 1rem;
     }
 }
 
@@ -398,26 +443,36 @@
     .piano-container {
         padding: 20px 15px;
     }
-}
 
-    /* Small mobile - 30px per white key - Octave 4 only (octave 3 hidden) */
-    .piano-key.black.octave-4[data-note="C#4"] {
-        left: 20px !important;
+    .piano-octave-controls {
+        gap: 4px;
+        padding: 2px 4px;
     }
 
-    .piano-key.black.octave-4[data-note="D#4"] {
-        left: 50px !important;
+    .piano-octave-btn {
+        width: 22px;
+        height: 22px;
+        font-size: 0.9rem;
     }
 
-    .piano-key.black.octave-4[data-note="F#4"] {
-        left: 110px !important;
+    .piano-octave-label {
+        font-size: 0.7rem;
+        min-width: 40px;
     }
 
-    .piano-key.black.octave-4[data-note="G#4"] {
-        left: 140px !important;
+    .piano-note-item {
+        padding: 2px 8px;
+        font-size: 0.9rem;
     }
 
-    .piano-key.black.octave-4[data-note="A#4"] {
-        left: 170px !important;
+    .piano-notes-label {
+        font-size: 0.75rem;
     }
+
+    /* Small mobile - 30px per white key - Right octave only (left octave hidden) */
+    .piano-octave .piano-key.black[data-key-index="7"] { left: 20px !important; }  /* C# */
+    .piano-octave .piano-key.black[data-key-index="8"] { left: 50px !important; }  /* D# */
+    .piano-octave .piano-key.black[data-key-index="10"] { left: 110px !important; } /* F# */
+    .piano-octave .piano-key.black[data-key-index="11"] { left: 140px !important; } /* G# */
+    .piano-octave .piano-key.black[data-key-index="12"] { left: 170px !important; } /* A# */
 }

@@ -102,6 +102,14 @@
             padding: 20px;
             border-radius: 8px;
             border-left: 4px solid var(--primary-color);
+            transition: all 0.3s ease;
+        }
+
+        .chord-item.active-chord {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            border-left: 4px solid var(--accent-happy);
+            box-shadow: 0 0 25px rgba(99, 102, 241, 0.7);
+            transform: scale(1.05);
         }
 
         .chord-item-name {
@@ -109,12 +117,22 @@
             font-weight: 700;
             color: var(--primary-color);
             margin-bottom: 10px;
+            transition: color 0.3s ease;
+        }
+
+        .chord-item.active-chord .chord-item-name {
+            color: white;
         }
 
         .chord-item-notes {
             font-size: 1.1rem;
             color: var(--accent-happy);
             font-family: 'Courier New', monospace;
+            transition: color 0.3s ease;
+        }
+
+        .chord-item.active-chord .chord-item-notes {
+            color: white;
         }
 
         .description-section {
@@ -339,10 +357,10 @@
                 document.getElementById('chord-names').textContent = chords.join(' - ');
 
                 // Display chord breakdown
-                const breakdownHTML = chords.map(chord => {
+                const breakdownHTML = chords.map((chord, index) => {
                     const notes = getChordNotes(chord);
                     return `
-                        <div class="chord-item">
+                        <div class="chord-item" data-chord-index="${index}">
                             <div class="chord-item-name">${chord}</div>
                             <div class="chord-item-notes">${notes.join(' + ')}</div>
                         </div>
