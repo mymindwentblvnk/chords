@@ -118,19 +118,28 @@ class AnimatedPiano {
 
         // Clear all active keys
         const allKeys = this.container.querySelectorAll('.piano-key');
-        allKeys.forEach(key => key.classList.remove('active'));
+        allKeys.forEach(key => {
+            key.classList.remove('active');
+            key.classList.remove('active-secondary');
+        });
 
         // Highlight active keys
+        // First, highlight the main 3 notes in octave 0 strongly
         notes.forEach(note => {
             // Normalize the note (remove octave if present)
             const normalizedNote = note.replace(/[0-9]/g, '');
 
-            // Find keys that match this note (check both octaves)
-            const matchingKeys = this.container.querySelectorAll(
-                `.piano-key[data-note^="${normalizedNote}"]`
-            );
+            // Find the primary key in octave 0
+            const primaryKey = this.container.querySelector(`.piano-key[data-note="${normalizedNote}0"]`);
+            if (primaryKey) {
+                primaryKey.classList.add('active');
+            }
 
-            matchingKeys.forEach(key => key.classList.add('active'));
+            // Find and highlight duplicates in other octaves more lightly
+            const secondaryKey = this.container.querySelector(`.piano-key[data-note="${normalizedNote}1"]`);
+            if (secondaryKey) {
+                secondaryKey.classList.add('active-secondary');
+            }
         });
     }
 

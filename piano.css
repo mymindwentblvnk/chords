@@ -119,6 +119,12 @@
     transform: translateY(2px);
 }
 
+.piano-key.white.active-secondary {
+    background: linear-gradient(to bottom, rgba(99, 102, 241, 0.4) 0%, rgba(139, 92, 246, 0.4) 100%);
+    box-shadow: 0 0 10px rgba(99, 102, 241, 0.3);
+    transform: translateY(1px);
+}
+
 .piano-key.black {
     width: 28px;
     height: 100px;
@@ -140,55 +146,62 @@
     transform: translateY(2px);
 }
 
-/* Position black keys */
-.piano-key.black[data-note$="#0"],
-.piano-key.black[data-note$="b0"] {
-    left: 26px; /* C# */
+.piano-key.black.active-secondary {
+    background: linear-gradient(to bottom, rgba(99, 102, 241, 0.5) 0%, rgba(139, 92, 246, 0.5) 100%);
+    box-shadow: 0 0 10px rgba(99, 102, 241, 0.4);
+    transform: translateY(1px);
 }
 
-.piano-key.black[data-note$="#1"],
-.piano-key.black[data-note$="b1"] {
-    left: 26px; /* C# */
+/* Position black keys - Octave 0 */
+.piano-key.black[data-note="C#0"],
+.piano-key.black[data-note="Db0"] {
+    left: 26px; /* C# octave 0 */
 }
 
 .piano-key.black[data-note="D#0"],
-.piano-key.black[data-note="Db0"] {
-    left: 66px; /* D# */
-}
-
-.piano-key.black[data-note="D#1"],
-.piano-key.black[data-note="Db1"] {
-    left: 66px; /* D# */
+.piano-key.black[data-note="Eb0"] {
+    left: 66px; /* D# octave 0 */
 }
 
 .piano-key.black[data-note="F#0"],
 .piano-key.black[data-note="Gb0"] {
-    left: 146px; /* F# */
-}
-
-.piano-key.black[data-note="F#1"],
-.piano-key.black[data-note="Gb1"] {
-    left: 146px; /* F# */
+    left: 146px; /* F# octave 0 */
 }
 
 .piano-key.black[data-note="G#0"],
 .piano-key.black[data-note="Ab0"] {
-    left: 186px; /* G# */
-}
-
-.piano-key.black[data-note="G#1"],
-.piano-key.black[data-note="Ab1"] {
-    left: 186px; /* G# */
+    left: 186px; /* G# octave 0 */
 }
 
 .piano-key.black[data-note="A#0"],
 .piano-key.black[data-note="Bb0"] {
-    left: 226px; /* A# */
+    left: 226px; /* A# octave 0 */
+}
+
+/* Position black keys - Octave 1 (280px = 7 white keys * 40px) */
+.piano-key.black[data-note="C#1"],
+.piano-key.black[data-note="Db1"] {
+    left: 306px; /* 280 + 26 = C# octave 1 */
+}
+
+.piano-key.black[data-note="D#1"],
+.piano-key.black[data-note="Eb1"] {
+    left: 346px; /* 280 + 66 = D# octave 1 */
+}
+
+.piano-key.black[data-note="F#1"],
+.piano-key.black[data-note="Gb1"] {
+    left: 426px; /* 280 + 146 = F# octave 1 */
+}
+
+.piano-key.black[data-note="G#1"],
+.piano-key.black[data-note="Ab1"] {
+    left: 466px; /* 280 + 186 = G# octave 1 */
 }
 
 .piano-key.black[data-note="A#1"],
 .piano-key.black[data-note="Bb1"] {
-    left: 226px; /* A# */
+    left: 506px; /* 280 + 226 = A# octave 1 */
 }
 
 .piano-key-label {
@@ -259,39 +272,56 @@
         height: 90px;
     }
 
-    .piano-key.black[data-note$="#0"],
-    .piano-key.black[data-note$="b0"],
-    .piano-key.black[data-note$="#1"],
-    .piano-key.black[data-note$="b1"] {
+    /* Octave 0 - mobile (35px per white key) */
+    .piano-key.black[data-note="C#0"],
+    .piano-key.black[data-note="Db0"] {
         left: 23px;
     }
 
     .piano-key.black[data-note="D#0"],
-    .piano-key.black[data-note="Db0"],
-    .piano-key.black[data-note="D#1"],
-    .piano-key.black[data-note="Db1"] {
+    .piano-key.black[data-note="Eb0"] {
         left: 58px;
     }
 
     .piano-key.black[data-note="F#0"],
-    .piano-key.black[data-note="Gb0"],
-    .piano-key.black[data-note="F#1"],
-    .piano-key.black[data-note="Gb1"] {
+    .piano-key.black[data-note="Gb0"] {
         left: 128px;
     }
 
     .piano-key.black[data-note="G#0"],
-    .piano-key.black[data-note="Ab0"],
-    .piano-key.black[data-note="G#1"],
-    .piano-key.black[data-note="Ab1"] {
+    .piano-key.black[data-note="Ab0"] {
         left: 163px;
     }
 
     .piano-key.black[data-note="A#0"],
-    .piano-key.black[data-note="Bb0"],
+    .piano-key.black[data-note="Bb0"] {
+        left: 198px;
+    }
+
+    /* Octave 1 - mobile (245px = 7 white keys * 35px) */
+    .piano-key.black[data-note="C#1"],
+    .piano-key.black[data-note="Db1"] {
+        left: 268px; /* 245 + 23 */
+    }
+
+    .piano-key.black[data-note="D#1"],
+    .piano-key.black[data-note="Eb1"] {
+        left: 303px; /* 245 + 58 */
+    }
+
+    .piano-key.black[data-note="F#1"],
+    .piano-key.black[data-note="Gb1"] {
+        left: 373px; /* 245 + 128 */
+    }
+
+    .piano-key.black[data-note="G#1"],
+    .piano-key.black[data-note="Ab1"] {
+        left: 408px; /* 245 + 163 */
+    }
+
     .piano-key.black[data-note="A#1"],
     .piano-key.black[data-note="Bb1"] {
-        left: 198px;
+        left: 443px; /* 245 + 198 */
     }
 
     .piano-header {
@@ -315,38 +345,55 @@
         height: 80px;
     }
 
-    .piano-key.black[data-note$="#0"],
-    .piano-key.black[data-note$="b0"],
-    .piano-key.black[data-note$="#1"],
-    .piano-key.black[data-note$="b1"] {
+    /* Octave 0 - small mobile (30px per white key) */
+    .piano-key.black[data-note="C#0"],
+    .piano-key.black[data-note="Db0"] {
         left: 20px;
     }
 
     .piano-key.black[data-note="D#0"],
-    .piano-key.black[data-note="Db0"],
-    .piano-key.black[data-note="D#1"],
-    .piano-key.black[data-note="Db1"] {
+    .piano-key.black[data-note="Eb0"] {
         left: 50px;
     }
 
     .piano-key.black[data-note="F#0"],
-    .piano-key.black[data-note="Gb0"],
-    .piano-key.black[data-note="F#1"],
-    .piano-key.black[data-note="Gb1"] {
+    .piano-key.black[data-note="Gb0"] {
         left: 110px;
     }
 
     .piano-key.black[data-note="G#0"],
-    .piano-key.black[data-note="Ab0"],
-    .piano-key.black[data-note="G#1"],
-    .piano-key.black[data-note="Ab1"] {
+    .piano-key.black[data-note="Ab0"] {
         left: 140px;
     }
 
     .piano-key.black[data-note="A#0"],
-    .piano-key.black[data-note="Bb0"],
+    .piano-key.black[data-note="Bb0"] {
+        left: 170px;
+    }
+
+    /* Octave 1 - small mobile (210px = 7 white keys * 30px) */
+    .piano-key.black[data-note="C#1"],
+    .piano-key.black[data-note="Db1"] {
+        left: 230px; /* 210 + 20 */
+    }
+
+    .piano-key.black[data-note="D#1"],
+    .piano-key.black[data-note="Eb1"] {
+        left: 260px; /* 210 + 50 */
+    }
+
+    .piano-key.black[data-note="F#1"],
+    .piano-key.black[data-note="Gb1"] {
+        left: 320px; /* 210 + 110 */
+    }
+
+    .piano-key.black[data-note="G#1"],
+    .piano-key.black[data-note="Ab1"] {
+        left: 350px; /* 210 + 140 */
+    }
+
     .piano-key.black[data-note="A#1"],
     .piano-key.black[data-note="Bb1"] {
-        left: 170px;
+        left: 380px; /* 210 + 170 */
     }
 }
