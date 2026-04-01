@@ -7,7 +7,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Chordz">
-    <title>Chordz - Play Chords</title>
+    <title>Chordz - Calculate Chords</title>
     <link rel="manifest" href="manifest.json">
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="piano.css">
@@ -169,14 +169,14 @@
     <nav class="main-nav">
         <a href="index.html" class="nav-link">🎤 Find Note</a>
         <a href="search-chords.html" class="nav-link">🎵 Search Chords</a>
-        <a href="play-chords.html" class="nav-link active">🎹 Play Chords</a>
+        <a href="calculate-chords.html" class="nav-link active">🎹 Calculate Chords</a>
         <a href="guide.html" class="nav-link">📖 Guide</a>
     </nav>
 
     <div class="builder-container">
         <header style="text-align: center; margin-bottom: 40px;">
             <div class="header-icon">🎹</div>
-            <h1 style="background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">Play Chords</h1>
+            <h1 style="background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">Calculate Chords</h1>
             <p class="subtitle">From Scale to Keyboard: Step-by-Step Breakdown</p>
         </header>
 
@@ -238,7 +238,7 @@
     <script src="music-theory.js"></script>
     <script src="piano.js"></script>
     <script>
-        // Play Chords Logic
+        // Calculate Chords Logic
         const CHROMATIC = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
         const MAJOR_INTERVALS = [0, 2, 4, 5, 7, 9, 11]; // W-W-H-W-W-W-H pattern in semitones
         const MINOR_INTERVALS = [0, 2, 3, 5, 7, 8, 10]; // W-H-W-W-H-W-W pattern in semitones

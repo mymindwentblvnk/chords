@@ -24,7 +24,7 @@ A complete web application for discovering and learning chord progressions. Find
 - **Learn to Play**: Each progression has a "Learn to Play This" button that opens the interactive chord builder
 - **Educational**: Includes Roman numeral notation and detailed descriptions
 
-### 🎹 Play Chords
+### 🎹 Calculate Chords
 - **Interactive Breakdown**: See the complete step-by-step breakdown from scale to keyboard keys
 - **Scale Builder**: Watch how the W-W-H-W-W-W-H pattern builds your major scale
 - **Chord Construction**: Visual explanation of how to build each chord from the scale
@@ -41,7 +41,7 @@ A complete web application for discovering and learning chord progressions. Find
 - **Practical Examples**: Step-by-step walkthroughs with real progressions
 
 ### ✨ Design & UX
-- **Seamless Workflow**: Find Note → Search Chords → Play Chords → Practice!
+- **Seamless Workflow**: Find Note → Search Chords → Calculate Chords → Practice!
 - **Responsive Design**: Optimized for desktop, tablet, and mobile devices
 - **Dark Theme**: Beautiful dark interface with animated floating emoji icons
 - **State Persistence**: App remembers your selected root note across pages
@@ -66,7 +66,7 @@ The app is designed for a seamless learning experience:
    - See exact chord names and notes to play for your key
    - Click "📖 Learn to Play This" on any progression to continue
 
-3. **🎹 Play Chords**
+3. **🎹 Calculate Chords**
    - See the complete breakdown from scale to keyboard keys
    - Watch how the W-W-H-W-W-W-H pattern builds your scale
    - Understand which scale positions create which chords
@@ -84,7 +84,7 @@ The app is designed for a seamless learning experience:
 
 You can also:
 - Jump directly to Search Chords and browse without a key selected
-- Use Play Chords with any custom progression in Roman numerals
+- Use Calculate Chords with any custom progression in Roman numerals
 - Start with the Guide to learn theory first
 
 ## Examples
@@ -149,7 +149,7 @@ Simply open `index.html` in your browser. No build process or dependencies requi
 - `index.html` - Find Note (pitch detector, home page)
 - `search-chords.html` - Search Chords
 - `chord-detail.html` - Chord Detail View
-- `play-chords.html` - Play Chords (interactive builder)
+- `calculate-chords.html` - Calculate Chords (interactive builder)
 - `guide.html` - Guide (music theory)
 
 **Note:** For microphone access, you may need to serve the files over HTTPS or use `localhost`.
@@ -187,7 +187,7 @@ chords/
 ├── index.html              # Find Note (pitch detector, home)
 ├── search-chords.html      # Search Chords
 ├── chord-detail.html       # Chord Detail View
-├── play-chords.html        # Play Chords (interactive builder)
+├── calculate-chords.html        # Calculate Chords (interactive builder)
 ├── guide.html              # Guide (music theory)
 ├── styles.css             # Main styles
 ├── pitch-detector-styles.css  # Find Note specific styles
