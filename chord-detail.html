@@ -10,6 +10,7 @@
     <title>Chordz - Chord Details</title>
     <link rel="manifest" href="manifest.json">
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="piano.css">
     <style>
         .detail-container {
             max-width: 900px;
@@ -262,13 +263,15 @@
                 <h3 style="color: var(--primary-color); margin-bottom: 15px;">About This Progression:</h3>
                 <p id="chord-description">Loading description...</p>
             </div>
+        </div>
 
+        <!-- Piano Animation -->
+        <div id="piano-animation-container"></div>
+
+        <div class="detail-card">
             <div class="action-buttons">
-                <a href="#" id="learn-to-play" class="action-btn primary">
-                    🎹 Play Chords
-                </a>
-                <button id="another-random" class="action-btn secondary" style="border: none; cursor: pointer;">
-                    🎲 Another Random
+                <button id="another-random" class="action-btn secondary" style="border: none; cursor: pointer; min-width: 250px;">
+                    🎲 Another Random Progression
                 </button>
             </div>
         </div>
@@ -276,7 +279,11 @@
 
     <script src="music-theory.js"></script>
     <script src="chord-data.js"></script>
+    <script src="piano.js"></script>
     <script>
+        // Global piano instance
+        let pianoInstance = null;
+
         // Get URL parameters
         const urlParams = new URLSearchParams(window.location.search);
         const progressionIndex = parseInt(urlParams.get('id'));
@@ -340,9 +347,14 @@
                 }).join('');
                 document.getElementById('chord-breakdown').innerHTML = breakdownHTML;
 
-                // Update Learn to Play link
-                const learnLink = `play-chords.html?note=${encodeURIComponent(selectedKey)}&progression=${encodeURIComponent(progression.progression.join('-'))}`;
-                document.getElementById('learn-to-play').href = learnLink;
+                // Update piano visualization
+                const displayNames = chords.map((chord, i) => `${progression.progression[i]} (${chord})`);
+
+                if (pianoInstance) {
+                    pianoInstance.updateChords(chords, displayNames);
+                } else {
+                    pianoInstance = new AnimatedPiano('piano-animation-container', chords, displayNames);
+                }
             }
 
             // Display description

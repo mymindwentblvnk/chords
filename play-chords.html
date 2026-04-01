@@ -10,6 +10,7 @@
     <title>Chordz - Play Chords</title>
     <link rel="manifest" href="manifest.json">
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="piano.css">
     <style>
         .builder-container {
             max-width: 1200px;
@@ -234,11 +235,15 @@
     </div>
 
     <script src="music-theory.js"></script>
+    <script src="piano.js"></script>
     <script>
         // Play Chords Logic
         const CHROMATIC = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
         const MAJOR_INTERVALS = [0, 2, 4, 5, 7, 9, 11]; // W-W-H-W-W-W-H pattern in semitones
         const MINOR_INTERVALS = [0, 2, 3, 5, 7, 8, 10]; // W-H-W-W-H-W-W pattern in semitones
+
+        // Global piano instance
+        let pianoInstance = null;
 
         // Get note at interval
         function getNoteAt(root, semitones) {
@@ -457,7 +462,43 @@
                 </div>
             `;
 
+            // Piano visualization container
+            html += `<div id="piano-animation-container"></div>`;
+
             document.getElementById('interactive-output').innerHTML = html;
+
+            // Build the actual chord names for the piano
+            const actualChords = [];
+            const displayNames = [];
+
+            progression.forEach(romanNumeral => {
+                try {
+                    const parsed = parseRoman(romanNumeral);
+                    const chordNotes = buildChord(scale, parsed.degree, parsed.isMajor, parsed.isDiminished);
+
+                    // Build chord name (e.g., "C", "Am", "Bdim")
+                    const rootNote = chordNotes[0];
+                    let chordName = rootNote;
+                    if (parsed.isDiminished) {
+                        chordName += 'dim';
+                    } else if (!parsed.isMajor) {
+                        chordName += 'm';
+                    }
+                    actualChords.push(chordName);
+                    displayNames.push(`${romanNumeral} (${chordName})`);
+                } catch (e) {
+                    // Skip invalid chords
+                }
+            });
+
+            // Create or update piano instance
+            if (pianoInstance) {
+                pianoInstance.destroy();
+            }
+
+            if (actualChords.length > 0) {
+                pianoInstance = new AnimatedPiano('piano-animation-container', actualChords, displayNames);
+            }
         }
 
         // Initialize
