@@ -10,8 +10,10 @@ class AnimatedPiano {
         this.chordNames = chordNames; // Array of chord names to display
         this.currentChordIndex = 0;
         this.isPlaying = true;
+        this.isMuted = true; // Default to muted
         this.speed = 2000; // milliseconds per chord
         this.intervalId = null;
+        this.synth = null;
 
         this.init();
     }
@@ -35,6 +37,9 @@ class AnimatedPiano {
                     <div class="piano-controls">
                         <button class="piano-control-btn" id="piano-play-pause-${this.container.id}">
                             ⏸ Pause
+                        </button>
+                        <button class="piano-control-btn" id="piano-mute-${this.container.id}">
+                            🔇 Muted
                         </button>
                         <label class="piano-speed-label">Speed:</label>
                         <select class="piano-speed-select" id="piano-speed-${this.container.id}">
@@ -86,9 +91,28 @@ class AnimatedPiano {
     }
 
     attachEventListeners() {
+        // Initialize Tone.js synth
+        if (typeof Tone !== 'undefined') {
+            this.synth = new Tone.PolySynth(Tone.Synth, {
+                oscillator: {
+                    type: 'sine'
+                },
+                envelope: {
+                    attack: 0.005,
+                    decay: 0.1,
+                    sustain: 0.3,
+                    release: 1
+                }
+            }).toDestination();
+        }
+
         // Play/Pause button
         const playPauseBtn = document.getElementById(`piano-play-pause-${this.container.id}`);
         playPauseBtn.addEventListener('click', () => this.togglePlayPause());
+
+        // Mute button
+        const muteBtn = document.getElementById(`piano-mute-${this.container.id}`);
+        muteBtn.addEventListener('click', () => this.toggleMute());
 
         // Speed selector
         const speedSelect = document.getElementById(`piano-speed-${this.container.id}`);
@@ -129,6 +153,24 @@ class AnimatedPiano {
                 key.classList.add('active');
             }
         });
+
+        // Play the chord sound if not muted
+        if (!this.isMuted && this.synth) {
+            this.playChord(notes);
+        }
+    }
+
+    playChord(notes) {
+        if (!this.synth) return;
+
+        // Add octave number to notes for Tone.js (using octave 4 for middle range)
+        const notesWithOctave = notes.map(note => {
+            const normalizedNote = note.replace(/[0-9]/g, '');
+            return normalizedNote + '4';
+        });
+
+        // Play the chord
+        this.synth.triggerAttackRelease(notesWithOctave, '0.5');
     }
 
     startAnimation() {
@@ -159,6 +201,24 @@ class AnimatedPiano {
         }
 
         this.isPlaying = !this.isPlaying;
+    }
+
+    toggleMute() {
+        const btn = document.getElementById(`piano-mute-${this.container.id}`);
+
+        this.isMuted = !this.isMuted;
+
+        if (this.isMuted) {
+            btn.textContent = '🔇 Muted';
+            btn.classList.add('paused');
+        } else {
+            btn.textContent = '🔊 Sound On';
+            btn.classList.remove('paused');
+            // Start Tone.js audio context if needed
+            if (this.synth && Tone.context.state !== 'running') {
+                Tone.start();
+            }
+        }
     }
 
     updateChords(chords, chordNames) {
