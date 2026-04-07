@@ -32,13 +32,15 @@ A complete web application for discovering and learning chord progressions. Find
 - **Keyboard Mapping**: Shows exact keys to press for each chord
 - **Custom Progressions**: Enter any progression in Roman numerals to learn how to play it
 
-### 📖 Guide
-- **Complete Theory**: Learn the W-W-H-W-W-W-H pattern for building major scales
-- **Roman Numerals Explained**: Understand what I, IV, V, vi, etc. actually mean
+### 📚 Wiki
+- **Complete Theory**: Organized knowledge base covering all music theory concepts
+- **Master Pattern**: Learn the W-W-H-W-W-W-H pattern for building major scales
+- **Roman Numerals**: Understand what I, IV, V, vi, etc. actually mean
 - **Chord Building**: Master the skip-pick-skip-pick method for natural chords
+- **Chord Inversions**: Learn root position, first and second inversions (Umkehrungen)
 - **Borrowed Chords**: Learn about ♭VII, ♭VI, iv, and other color chords
 - **Minor Keys**: Understand how to work with progressions in minor keys
-- **Practical Examples**: Step-by-step walkthroughs with real progressions
+- **Individual Topic Pages**: Each concept has its own dedicated page for easy reference
 
 ### ✨ Design & UX
 - **Seamless Workflow**: Find Note → Search Chords → Calculate Chords → Practice!
@@ -73,10 +75,11 @@ The app is designed for a seamless learning experience:
    - View exactly which keys to press for each chord
    - Learn about borrowed chords if your progression uses them
 
-4. **📖 Guide**
+4. **📚 Wiki**
+   - Organized knowledge base with individual topic pages
    - Deep dive into music theory concepts
    - Learn the master W-W-H-W-W-W-H pattern
-   - Understand Roman numeral notation
+   - Understand Roman numeral notation and chord inversions
    - Master the skip-pick method for building chords
    - Explore borrowed chords and minor keys
 
@@ -85,7 +88,7 @@ The app is designed for a seamless learning experience:
 You can also:
 - Jump directly to Search Chords and browse without a key selected
 - Use Calculate Chords with any custom progression in Roman numerals
-- Start with the Guide to learn theory first
+- Start with the Wiki to learn theory first (individual topic pages for easy navigation)
 
 ## Examples
 
@@ -150,7 +153,8 @@ Simply open `index.html` in your browser. No build process or dependencies requi
 - `search-chords.html` - Search Chords
 - `chord-detail.html` - Chord Detail View
 - `calculate-chords.html` - Calculate Chords (interactive builder)
-- `guide.html` - Guide (music theory)
+- `wiki.html` - Wiki index (music theory knowledge base)
+- `wiki-*.html` - Individual wiki topic pages
 
 **Note:** For microphone access, you may need to serve the files over HTTPS or use `localhost`.
 
@@ -188,7 +192,9 @@ chords/
 ├── search-chords.html      # Search Chords
 ├── chord-detail.html       # Chord Detail View
 ├── calculate-chords.html        # Calculate Chords (interactive builder)
-├── guide.html              # Guide (music theory)
+├── wiki.html               # Wiki index (music theory)
+├── wiki-*.html             # Individual wiki pages
+├── guide.html              # Legacy guide (kept for reference)
 ├── styles.css             # Main styles
 ├── pitch-detector-styles.css  # Find Note specific styles
 ├── app.js                 # Search Chords logic
