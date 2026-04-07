@@ -84,12 +84,14 @@
                 this.mediaStream = null;
                 this.animationFrameId = null;
                 this.isRunning = false;
-                this.bufferSize = 2048;
+                this.bufferSize = 4096; // Increased for better low-frequency resolution
                 this.sampleRate = null;
                 this.minFrequency = 80;
                 this.maxFrequency = 1200;
-                this.minConfidence = 0.85;
+                this.minConfidence = 0.90; // Increased threshold for better accuracy
                 this.onPitchDetected = null;
+                this.lastFrequency = null;
+                this.stableCount = 0;
 
                 console.log('PitchDetector initialized');
             }
@@ -118,8 +120,8 @@
                     console.log('Audio context created, sample rate:', this.sampleRate);
 
                     this.analyser = this.audioContext.createAnalyser();
-                    this.analyser.fftSize = this.bufferSize * 2;
-                    this.analyser.smoothingTimeConstant = 0;
+                    this.analyser.fftSize = 8192; // Larger FFT for better resolution
+                    this.analyser.smoothingTimeConstant = 0.3; // Light smoothing to reduce noise
 
                     this.microphone = this.audioContext.createMediaStreamSource(this.mediaStream);
                     this.microphone.connect(this.analyser);
@@ -183,7 +185,8 @@
 
             detectPitch(buffer) {
                 const rms = this.calculateRMS(buffer);
-                if (rms < 0.005) {
+                // Adaptive threshold based on signal strength
+                if (rms < 0.01) {
                     return null;
                 }
 
@@ -192,11 +195,32 @@
                     return null;
                 }
 
-                const { frequency, confidence } = autocorrelation;
+                let { frequency, confidence } = autocorrelation;
 
                 if (frequency < this.minFrequency ||
                     frequency > this.maxFrequency ||
                     confidence < this.minConfidence) {
+                    return null;
+                }
+
+                // Temporal smoothing - only accept stable frequencies
+                if (this.lastFrequency) {
+                    const freqDiff = Math.abs(frequency - this.lastFrequency);
+                    const tolerance = this.lastFrequency * 0.02; // 2% tolerance
+
+                    if (freqDiff < tolerance) {
+                        this.stableCount++;
+                        // Average with last frequency for smoother output
+                        frequency = (frequency + this.lastFrequency) / 2;
+                    } else {
+                        this.stableCount = 0;
+                    }
+                }
+
+                this.lastFrequency = frequency;
+
+                // Only return if frequency has been stable for at least 2 frames
+                if (this.stableCount < 2) {
                     return null;
                 }
 
@@ -225,6 +249,7 @@
                 const maxSamples = Math.floor(size / 2);
                 const correlations = new Array(maxSamples);
 
+                // Calculate autocorrelation
                 for (let lag = 0; lag < maxSamples; lag++) {
                     let sum = 0;
                     for (let i = 0; i < maxSamples; i++) {
@@ -233,6 +258,7 @@
                     correlations[lag] = sum;
                 }
 
+                // Normalize
                 const normalization = correlations[0];
                 if (normalization === 0) return null;
 
@@ -243,31 +269,52 @@
                 const minLag = Math.floor(this.sampleRate / this.maxFrequency);
                 const maxLag = Math.floor(this.sampleRate / this.minFrequency);
 
-                let i = minLag;
-                while (i < maxLag && correlations[i] > 0.5) i++;
-                while (i < maxLag && correlations[i] <= 0.5) i++;
-
-                let peakLag = -1;
-                let peakValue = -1;
-                for (; i < maxLag; i++) {
-                    if (correlations[i] > peakValue) {
-                        peakValue = correlations[i];
-                        peakLag = i;
+                // Find all peaks above threshold
+                const peaks = [];
+                for (let i = minLag + 1; i < maxLag - 1; i++) {
+                    // Check if this is a local maximum
+                    if (correlations[i] > 0.5 &&
+                        correlations[i] > correlations[i - 1] &&
+                        correlations[i] >= correlations[i + 1]) {
+                        peaks.push({ lag: i, value: correlations[i] });
                     }
                 }
 
-                if (peakLag === -1 || peakValue < 0.5) return null;
+                if (peaks.length === 0) return null;
 
+                // Sort peaks by correlation value (highest first)
+                peaks.sort((a, b) => b.value - a.value);
+
+                // Use the highest peak as fundamental
+                let peakLag = peaks[0].lag;
+                let peakValue = peaks[0].value;
+
+                // Check if this might be a harmonic (octave error)
+                // Look for a peak at roughly half the lag (double the frequency)
+                for (let i = 1; i < Math.min(peaks.length, 5); i++) {
+                    const ratio = peakLag / peaks[i].lag;
+                    // If we find a peak at roughly 2x frequency with good correlation
+                    if (ratio > 1.8 && ratio < 2.2 && peaks[i].value > 0.7) {
+                        // This might be the fundamental, use it instead
+                        peakLag = peaks[i].lag;
+                        peakValue = peaks[i].value;
+                        break;
+                    }
+                }
+
+                // Parabolic interpolation for sub-sample accuracy
                 let refinedLag = peakLag;
                 if (peakLag > 0 && peakLag < correlations.length - 1) {
                     const alpha = correlations[peakLag - 1];
                     const beta = correlations[peakLag];
                     const gamma = correlations[peakLag + 1];
-                    refinedLag = peakLag + (alpha - gamma) / (2 * (2 * beta - gamma - alpha));
+                    const divisor = 2 * (2 * beta - gamma - alpha);
+                    if (divisor !== 0) {
+                        refinedLag = peakLag + (alpha - gamma) / divisor;
+                    }
                 }
 
                 const frequency = this.sampleRate / refinedLag;
-                // Clamp confidence to 0-1 range (can exceed due to floating point)
                 const clampedConfidence = Math.min(1.0, Math.max(0.0, peakValue));
                 return { frequency, confidence: clampedConfidence };
             }
