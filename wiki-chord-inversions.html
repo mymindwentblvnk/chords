@@ -168,6 +168,84 @@
             </div>
         </div>
 
+        <!-- Training Mode -->
+        <div class="guide-section" style="background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(139, 92, 246, 0.1)); border: 2px solid var(--primary-color);">
+            <h2 style="text-align: center; color: var(--primary-color);">🎮 Inversion Training Mode</h2>
+            <p style="text-align: center; font-size: 1.1rem; color: var(--text-secondary); margin-bottom: 30px;">
+                Practice playing chord inversions with real-time feedback!
+            </p>
+
+            <div style="max-width: 600px; margin: 0 auto;">
+                <div style="margin-bottom: 20px;">
+                    <label style="display: block; margin-bottom: 10px; font-weight: 600; color: var(--text-primary);">
+                        Select Chord to Practice:
+                    </label>
+                    <select id="training-chord" style="width: 100%; padding: 12px; font-size: 1rem; background: var(--background); color: var(--text-primary); border: 2px solid var(--primary-color); border-radius: 8px; cursor: pointer;">
+                        <option value="C">C Major</option>
+                        <option value="D">D Major</option>
+                        <option value="E">E Major</option>
+                        <option value="F">F Major</option>
+                        <option value="G">G Major</option>
+                        <option value="A">A Major</option>
+                        <option value="B">B Major</option>
+                        <option value="Am">A Minor</option>
+                        <option value="Dm">D Minor</option>
+                        <option value="Em">E Minor</option>
+                    </select>
+                </div>
+
+                <div style="text-align: center; margin: 20px 0;">
+                    <button id="start-training" style="padding: 15px 40px; font-size: 1.1rem; font-weight: 600; background: var(--primary-color); color: white; border: none; border-radius: 10px; cursor: pointer; transition: all 0.3s ease;">
+                        🎤 Start Training
+                    </button>
+                    <button id="stop-training" style="padding: 15px 40px; font-size: 1.1rem; font-weight: 600; background: var(--surface-light); color: var(--text-primary); border: none; border-radius: 10px; cursor: pointer; display: none; margin-left: 10px;">
+                        ⏹ Stop
+                    </button>
+                </div>
+
+                <div id="training-status" style="display: none;">
+                    <div style="background: var(--surface); padding: 20px; border-radius: 10px; margin: 20px 0;">
+                        <h3 style="margin-top: 0; color: var(--primary-color);">Current Challenge:</h3>
+                        <p id="current-sequence" style="font-size: 1.2rem; font-family: 'Courier New', monospace; text-align: center; color: var(--accent-happy); margin: 15px 0;"></p>
+
+                        <div style="margin: 20px 0;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                                <span style="font-weight: 600;">Progress:</span>
+                                <span id="progress-text" style="color: var(--primary-color);">0 / 6</span>
+                            </div>
+                            <div style="background: var(--background); height: 30px; border-radius: 15px; overflow: hidden;">
+                                <div id="progress-bar" style="width: 0%; height: 100%; background: linear-gradient(90deg, var(--primary-color), var(--accent-happy)); transition: width 0.5s ease;"></div>
+                            </div>
+                        </div>
+
+                        <div id="notes-played" style="margin: 20px 0;">
+                            <h4 style="margin-bottom: 10px;">Notes Played:</h4>
+                            <div id="notes-list" style="display: flex; flex-wrap: wrap; gap: 10px; min-height: 50px; align-items: center; justify-content: center;"></div>
+                        </div>
+
+                        <div id="detected-note" style="font-size: 2rem; text-align: center; font-weight: bold; color: var(--text-primary); padding: 20px; background: var(--background); border-radius: 10px; margin: 15px 0;">
+                            🎵 Listening...
+                        </div>
+                    </div>
+                </div>
+
+                <div id="success-message" style="display: none; text-align: center; padding: 30px; background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(5, 150, 105, 0.2)); border-radius: 15px; border: 3px solid var(--accent-happy);">
+                    <div style="font-size: 4rem; margin-bottom: 15px;">🎉</div>
+                    <h2 style="color: var(--accent-happy); margin: 0 0 10px 0;">Perfect!</h2>
+                    <p style="font-size: 1.2rem; color: var(--text-primary); margin: 0;">You've mastered all inversions!</p>
+                </div>
+            </div>
+
+            <div class="tip-box" style="margin-top: 30px;">
+                <strong>📖 How it works:</strong><br>
+                1. Select a chord to practice<br>
+                2. Click "Start Training" and allow microphone access<br>
+                3. Play the inversions in order: CEG → EGC → GCE → ECG → CGE → GEC<br>
+                4. The app will detect each note and track your progress<br>
+                5. Complete all 6 sequences to win! 🏆
+            </div>
+        </div>
+
         <!-- Related Topics -->
         <div class="guide-section">
             <h3 style="text-align: center; color: var(--primary-color);">Related Topics</h3>
@@ -178,5 +256,302 @@
             </div>
         </div>
     </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/tone@14.8.49/build/Tone.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/pitchy@4/dist/pitchy.min.js">
+</script>
+    <script>
+        // Chord definitions (root, third, fifth)
+        const CHORDS = {
+            'C': ['C', 'E', 'G'],
+            'D': ['D', 'F#', 'A'],
+            'E': ['E', 'G#', 'B'],
+            'F': ['F', 'A', 'C'],
+            'G': ['G', 'B', 'D'],
+            'A': ['A', 'C#', 'E'],
+            'B': ['B', 'D#', 'F#'],
+            'Am': ['A', 'C', 'E'],
+            'Dm': ['D', 'F', 'A'],
+            'Em': ['E', 'G', 'B']
+        };
+
+        class InversionTrainer {
+            constructor() {
+                this.audioContext = null;
+                this.analyser = null;
+                this.microphone = null;
+                this.mediaStream = null;
+                this.isRunning = false;
+                this.currentChord = 'C';
+                this.currentSequenceIndex = 0;
+                this.currentNoteIndex = 0;
+                this.sequences = [];
+                this.synth = null;
+                this.lastDetectedNote = null;
+                this.detectionCooldown = false;
+                
+                this.init();
+            }
+
+            init() {
+                const startBtn = document.getElementById('start-training');
+                const stopBtn = document.getElementById('stop-training');
+                const chordSelect = document.getElementById('training-chord');
+
+                startBtn.addEventListener('click', () => this.start());
+                stopBtn.addEventListener('click', () => this.stop());
+                chordSelect.addEventListener('change', (e) => {
+                    this.currentChord = e.target.value;
+                });
+
+                // Initialize Tone.js synth for success sound
+                if (typeof Tone !== 'undefined') {
+                    this.synth = new Tone.PolySynth(Tone.Synth).toDestination();
+                }
+            }
+
+            generateSequences() {
+                const notes = CHORDS[this.currentChord];
+                if (!notes) return [];
+
+                const [root, third, fifth] = notes;
+                
+                // All 6 sequences: up and down for each inversion
+                return [
+                    [root, third, fifth],  // Root position up: CEG
+                    [third, fifth, root],  // 1st inversion up: EGC
+                    [fifth, root, third],  // 2nd inversion up: GCE
+                    [third, root, fifth],  // Root position down: ECG
+                    [root, fifth, third],  // 1st inversion down: CGE
+                    [fifth, third, root]   // 2nd inversion down: GEC
+                ];
+            }
+
+            async start() {
+                try {
+                    this.sequences = this.generateSequences();
+                    this.currentSequenceIndex = 0;
+                    this.currentNoteIndex = 0;
+
+                    // Start Tone.js context
+                    if (this.synth) {
+                        await Tone.start();
+                    }
+
+                    // Request microphone access
+                    this.mediaStream = await navigator.mediaDevices.getUserMedia({
+                        audio: {
+                            echoCancellation: false,
+                            autoGainControl: false,
+                            noiseSuppression: false
+                        }
+                    });
+
+                    this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                    this.analyser = this.audioContext.createAnalyser();
+                    this.analyser.fftSize = 4096;
+                    this.analyser.smoothingTimeConstant = 0.8;
+
+                    this.microphone = this.audioContext.createMediaStreamSource(this.mediaStream);
+                    this.microphone.connect(this.analyser);
+
+                    this.isRunning = true;
+                    this.updateUI();
+                    this.detect();
+
+                    // Update UI
+                    document.getElementById('start-training').style.display = 'none';
+                    document.getElementById('stop-training').style.display = 'inline-block';
+                    document.getElementById('training-status').style.display = 'block';
+                    document.getElementById('success-message').style.display = 'none';
+                } catch (error) {
+                    alert('Error accessing microphone: ' + error.message);
+                }
+            }
+
+            stop() {
+                this.isRunning = false;
+
+                if (this.microphone) {
+                    this.microphone.disconnect();
+                    this.microphone = null;
+                }
+
+                if (this.mediaStream) {
+                    this.mediaStream.getTracks().forEach(track => track.stop());
+                    this.mediaStream = null;
+                }
+
+                if (this.audioContext) {
+                    this.audioContext.close();
+                    this.audioContext = null;
+                }
+
+                document.getElementById('start-training').style.display = 'inline-block';
+                document.getElementById('stop-training').style.display = 'none';
+                document.getElementById('training-status').style.display = 'none';
+            }
+
+            detect() {
+                if (!this.isRunning) return;
+
+                const buffer = new Float32Array(this.analyser.fftSize);
+                this.analyser.getFloatTimeDomainData(buffer);
+
+                const detector = Pitchy.McLeodDetector({ 
+                    sampleRate: this.audioContext.sampleRate,
+                    bufferSize: this.analyser.fftSize 
+                });
+                const [pitch, clarity] = detector.findPitch(buffer, this.audioContext.sampleRate);
+
+                if (pitch && clarity > 0.9) {
+                    const note = this.frequencyToNote(pitch);
+                    if (note) {
+                        this.handleDetectedNote(note);
+                    }
+                }
+
+                requestAnimationFrame(() => this.detect());
+            }
+
+            frequencyToNote(frequency) {
+                const noteNames = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
+                const A4 = 440;
+                const C0 = A4 * Math.pow(2, -4.75);
+                
+                const halfSteps = Math.round(12 * Math.log2(frequency / C0));
+                const octave = Math.floor(halfSteps / 12);
+                const noteIndex = halfSteps % 12;
+                
+                if (octave < 0 || octave > 8) return null;
+                
+                return noteNames[noteIndex];
+            }
+
+            handleDetectedNote(note) {
+                // Cooldown to prevent multiple detections of same note
+                if (this.detectionCooldown || note === this.lastDetectedNote) {
+                    return;
+                }
+
+                const currentSequence = this.sequences[this.currentSequenceIndex];
+                const expectedNote = currentSequence[this.currentNoteIndex];
+
+                // Display detected note
+                document.getElementById('detected-note').textContent = `🎵 ${note}`;
+
+                // Check if it's the correct note
+                if (note === expectedNote) {
+                    this.lastDetectedNote = note;
+                    this.detectionCooldown = true;
+
+                    // Add note to played list
+                    this.addNoteToList(note, true);
+
+                    // Play positive feedback sound
+                    if (this.synth) {
+                        this.synth.triggerAttackRelease(note + '4', '0.2');
+                    }
+
+                    // Move to next note
+                    this.currentNoteIndex++;
+
+                    // Check if sequence is complete
+                    if (this.currentNoteIndex >= currentSequence.length) {
+                        this.currentSequenceIndex++;
+                        this.currentNoteIndex = 0;
+
+                        // Check if all sequences are complete
+                        if (this.currentSequenceIndex >= this.sequences.length) {
+                            this.showSuccess();
+                        } else {
+                            this.updateUI();
+                        }
+                    } else {
+                        this.updateUI();
+                    }
+
+                    // Reset cooldown after delay
+                    setTimeout(() => {
+                        this.detectionCooldown = false;
+                        this.lastDetectedNote = null;
+                    }, 500);
+                } else {
+                    // Wrong note - show briefly
+                    this.addNoteToList(note, false);
+                }
+            }
+
+            addNoteToList(note, correct) {
+                const notesList = document.getElementById('notes-list');
+                const noteEl = document.createElement('div');
+                noteEl.textContent = note;
+                noteEl.style.cssText = `
+                    padding: 8px 16px;
+                    border-radius: 8px;
+                    font-weight: bold;
+                    font-size: 1.1rem;
+                    background: ${correct ? 'var(--accent-happy)' : '#ef4444'};
+                    color: white;
+                    animation: fadeIn 0.3s ease;
+                `;
+                notesList.appendChild(noteEl);
+
+                // Remove wrong notes after a delay
+                if (!correct) {
+                    setTimeout(() => noteEl.remove(), 1000);
+                }
+            }
+
+            updateUI() {
+                const currentSequence = this.sequences[this.currentSequenceIndex];
+                const totalNotes = this.sequences.reduce((sum, seq) => sum + seq.length, 0);
+                const completedNotes = this.sequences.slice(0, this.currentSequenceIndex).reduce((sum, seq) => sum + seq.length, 0) + this.currentNoteIndex;
+                
+                // Update sequence display
+                document.getElementById('current-sequence').textContent = currentSequence.join(' - ');
+                
+                // Update progress
+                const progressPercent = (completedNotes / totalNotes) * 100;
+                document.getElementById('progress-bar').style.width = progressPercent + '%';
+                document.getElementById('progress-text').textContent = `${completedNotes} / ${totalNotes}`;
+            }
+
+            async showSuccess() {
+                this.isRunning = false;
+                
+                document.getElementById('training-status').style.display = 'none';
+                document.getElementById('success-message').style.display = 'block';
+
+                // Play success chord
+                if (this.synth) {
+                    const notes = CHORDS[this.currentChord];
+                    await this.synth.triggerAttackRelease(notes.map(n => n + '4'), '1.5');
+                    
+                    // Play ascending arpeggio
+                    setTimeout(() => this.synth.triggerAttackRelease(notes[0] + '4', '0.2'), 100);
+                    setTimeout(() => this.synth.triggerAttackRelease(notes[1] + '4', '0.2'), 300);
+                    setTimeout(() => this.synth.triggerAttackRelease(notes[2] + '4', '0.2'), 500);
+                    setTimeout(() => this.synth.triggerAttackRelease(notes.map(n => n + '5'), '1'), 700);
+                }
+
+                // Auto-stop after delay
+                setTimeout(() => this.stop(), 5000);
+            }
+        }
+
+        // Initialize trainer
+        const trainer = new InversionTrainer();
+
+        // Add CSS animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes fadeIn {
+                from { opacity: 0; transform: scale(0.8); }
+                to { opacity: 1; transform: scale(1); }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
 </body>
 </html>
