@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#0f172a">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Chordz">
+    <title>Building Natural Chords - Chordz Wiki</title>
+    <link rel="manifest" href="manifest.json">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="guide-styles.css">
+</head>
+<body>
+    <nav class="main-nav">
+        <a href="index.html" class="nav-link">🎤 Find Note</a>
+        <a href="search-chords.html" class="nav-link">🎵 Search Chords</a>
+        <a href="calculate-chords.html" class="nav-link">🎹 Calculate Chords</a>
+        <a href="wiki.html" class="nav-link active">📚 Wiki</a>
+    </nav>
+
+    <div class="guide-container">
+        <div class="back-nav">
+            <a href="wiki.html" class="back-link">← Back to Wiki</a>
+        </div>
+
+        <header style="text-align: center; margin-bottom: 40px;">
+            <div class="header-icon">🎵</div>
+            <h1 style="background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">Building Natural Chords</h1>
+            <p class="subtitle">The Skip-Pick Method</p>
+        </header>
+
+        <!-- Main Content -->
+        <div class="guide-section">
+            <h2>Building Natural Chords from Your Scale</h2>
+            <p><strong>Here's the key insight:</strong> For chords that are natural to the major scale (like I, ii, iii, IV, V, vi, vii°), you use the SAME simple method - just stack every other note from your scale!</p>
+
+            <h3>The Skip-Pick Formula:</h3>
+            <div class="chord-formula">
+                Pick a note → Skip one → Pick a note → Skip one → Pick a note
+            </div>
+
+            <p>The chord quality (major or minor) happens automatically based on which scale degree you start from!</p>
+
+            <div class="tip-box">
+                <strong>💡 Note:</strong> This skip-pick method works for all the natural chords in the key. If you want a chord that's NOT natural to the scale (like VI major instead of vi minor), those are called "borrowed chords" - see the Borrowed Chords wiki page. The Calculate Chords tool handles them automatically!
+            </div>
+
+            <h3>Building Major Chords (I, IV, V)</h3>
+
+            <div class="example-box">
+                <strong>Example: C Major (I)</strong><br>
+                C major scale: C - D - E - F - G - A - B<br><br>
+                Start on C (1st):<br>
+                1. C (start)<br>
+                2. Skip D<br>
+                3. E (pick)<br>
+                4. Skip F<br>
+                5. G (pick)<br>
+                <strong>→ C + E + G</strong>
+            </div>
+
+            <div class="example-box">
+                <strong>Example: F Major (IV)</strong><br>
+                C major scale: C - D - E - F - G - A - B<br><br>
+                Start on F (4th):<br>
+                1. F (start)<br>
+                2. Skip G<br>
+                3. A (pick)<br>
+                4. Skip B<br>
+                5. C (pick - wrap around to start of scale)<br>
+                <strong>→ F + A + C</strong>
+            </div>
+
+            <h3>Building Minor Chords (ii, iii, vi) - Same Method!</h3>
+            <p><strong>You do exactly the same thing!</strong> Start on a different scale degree and skip-pick-skip-pick.</p>
+
+            <div class="example-box">
+                <strong>Example: Am (vi)</strong><br>
+                C major scale: C - D - E - F - G - A - B<br><br>
+                Start on A (6th):<br>
+                1. A (start)<br>
+                2. Skip B<br>
+                3. C (pick - wrap around)<br>
+                4. Skip D<br>
+                5. E (pick)<br>
+                <strong>→ A + C + E</strong><br><br>
+                This automatically makes a minor chord because of the spacing between A-C-E!
+            </div>
+
+            <div class="example-box">
+                <strong>Example: Dm (ii)</strong><br>
+                C major scale: C - D - E - F - G - A - B<br><br>
+                Start on D (2nd):<br>
+                1. D (start)<br>
+                2. Skip E<br>
+                3. F (pick)<br>
+                4. Skip G<br>
+                5. A (pick)<br>
+                <strong>→ D + F + A</strong><br><br>
+                This is automatically minor!
+            </div>
+
+            <div class="tip-box">
+                <strong>💡 The Secret:</strong> You don't need different formulas for major vs minor! Just:
+                <br>1. Use your major scale
+                <br>2. Start on the right note
+                <br>3. Skip-pick-skip-pick
+                <br>The chord quality happens naturally!
+            </div>
+
+            <h3>Why Does This Work?</h3>
+            <p>The skip-pick method works because it creates the intervals that define chord quality:</p>
+
+            <ul class="step-list">
+                <li><strong>Major Chords:</strong> Have a bigger gap between the 1st and 2nd notes (major third)</li>
+                <li><strong>Minor Chords:</strong> Have a smaller gap between the 1st and 2nd notes (minor third)</li>
+                <li><strong>Diminished:</strong> Has small gaps between all notes (happens on vii°)</li>
+            </ul>
+
+            <p>By using the skip-pick method from your scale, these intervals happen automatically!</p>
+
+            <div class="tip-box">
+                <strong>🎹 Practice Tip:</strong> Pick a scale (like C major) and practice building all 7 chords using skip-pick:<br>
+                I (C), ii (Dm), iii (Em), IV (F), V (G), vi (Am), vii° (Bdim)<br>
+                Notice how you use the exact same method for all of them!
+            </div>
+        </div>
+
+        <!-- Related Topics -->
+        <div class="guide-section">
+            <h3 style="text-align: center; color: var(--primary-color);">Related Topics</h3>
+            <div class="wiki-nav-links" style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;">
+                <a href="wiki-building-scales.html" class="wiki-nav-link">← Building Scales</a>
+                <a href="wiki-chord-inversions.html" class="wiki-nav-link">Chord Inversions →</a>
+                <a href="wiki-natural-chords.html" class="wiki-nav-link">Natural Chords →</a>
+                <a href="wiki.html" class="wiki-nav-link">📚 Back to Wiki</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#0f172a">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Chordz">
+    <title>Building Major Scales - Chordz Wiki</title>
+    <link rel="manifest" href="manifest.json">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="guide-styles.css">
+</head>
+<body>
+    <nav class="main-nav">
+        <a href="index.html" class="nav-link">🎤 Find Note</a>
+        <a href="search-chords.html" class="nav-link">🎵 Search Chords</a>
+        <a href="calculate-chords.html" class="nav-link">🎹 Calculate Chords</a>
+        <a href="wiki.html" class="nav-link active">📚 Wiki</a>
+    </nav>
+
+    <div class="guide-container">
+        <div class="back-nav">
+            <a href="wiki.html" class="back-link">← Back to Wiki</a>
+        </div>
+
+        <header style="text-align: center; margin-bottom: 40px;">
+            <div class="header-icon">📐</div>
+            <h1 style="background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">Building Major Scales</h1>
+            <p class="subtitle">Using the W-W-H-W-W-W-H Pattern</p>
+        </header>
+
+        <!-- Main Content -->
+        <div class="guide-section">
+            <h2>Using the W-W-H-W-W-W-H Pattern</h2>
+            <p>Now let's use THE PATTERN to build a major scale from any root note:</p>
+
+            <div style="background: var(--background); padding: 25px; border-radius: 12px; margin: 25px 0; border-left: 5px solid var(--accent-happy);">
+                <div style="font-size: 1.5rem; font-weight: 700; color: var(--accent-happy); font-family: 'Courier New', monospace; margin-bottom: 10px;">
+                    W - W - H - W - W - W - H
+                </div>
+                <p style="color: var(--text-secondary); margin: 0;">Start on any note and follow this pattern to get your major scale!</p>
+            </div>
+
+            <h3>Example: C Major Scale</h3>
+            <p>Starting from <strong>C</strong> and applying W-W-H-W-W-W-H:</p>
+            <ol class="step-list">
+                <li><strong>Start:</strong> C</li>
+                <li><strong>W (Whole):</strong> C → D (skip C#)</li>
+                <li><strong>W (Whole):</strong> D → E (skip D#)</li>
+                <li><strong>H (Half):</strong> E → F (no key to skip)</li>
+                <li><strong>W (Whole):</strong> F → G (skip F#)</li>
+                <li><strong>W (Whole):</strong> G → A (skip G#)</li>
+                <li><strong>W (Whole):</strong> A → B (skip A#)</li>
+                <li><strong>H (Half):</strong> B → C (no key to skip)</li>
+            </ol>
+
+            <div class="example-box">
+                <strong>C Major Scale:</strong> C - D - E - F - G - A - B - C<br>
+                ✓ All white keys! Perfect for beginners!
+            </div>
+
+            <h3>Example: G Major Scale</h3>
+            <p>Starting from <strong>G</strong> and applying the SAME pattern W-W-H-W-W-W-H:</p>
+            <ol class="step-list">
+                <li><strong>Start:</strong> G</li>
+                <li><strong>W:</strong> G → A</li>
+                <li><strong>W:</strong> A → B</li>
+                <li><strong>H:</strong> B → C</li>
+                <li><strong>W:</strong> C → D</li>
+                <li><strong>W:</strong> D → E</li>
+                <li><strong>W:</strong> E → F# (need the black key to maintain the pattern!)</li>
+                <li><strong>H:</strong> F# → G</li>
+            </ol>
+
+            <div class="example-box">
+                <strong>G Major Scale:</strong> G - A - B - C - D - E - F# - G<br>
+                Note: F# is needed because the pattern requires a whole step from E
+            </div>
+
+            <div class="tip-box">
+                <strong>💡 Master This:</strong> The W-W-H-W-W-W-H pattern works from ANY starting note. Try it from D, F, A, or any key on the keyboard!
+            </div>
+
+            <h3>Why This Pattern Works</h3>
+            <p>The W-W-H-W-W-W-H pattern creates the major scale's characteristic sound:</p>
+
+            <ul class="step-list">
+                <li><strong>Bright and Happy:</strong> The specific intervals create a positive emotional quality</li>
+                <li><strong>Stable Foundation:</strong> All major chords in a key are built from this scale</li>
+                <li><strong>Universal:</strong> Every major scale in every key uses this exact pattern</li>
+            </ul>
+
+            <div class="tip-box">
+                <strong>🎹 Practice Tip:</strong> Use the <a href="calculate-chords.html" style="color: var(--accent-happy); font-weight: bold;">Calculate Chords</a> tool to see this pattern in action with any root note. Enter a root note and watch how the W-W-H-W-W-W-H pattern builds the scale!
+            </div>
+        </div>
+
+        <!-- Related Topics -->
+        <div class="guide-section">
+            <h3 style="text-align: center; color: var(--primary-color);">Related Topics</h3>
+            <div class="wiki-nav-links" style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;">
+                <a href="wiki-master-pattern.html" class="wiki-nav-link">← Master Pattern</a>
+                <a href="wiki-chromatic-scale.html" class="wiki-nav-link">← Chromatic Scale</a>
+                <a href="wiki-building-chords.html" class="wiki-nav-link">Building Chords →</a>
+                <a href="wiki.html" class="wiki-nav-link">📚 Back to Wiki</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
