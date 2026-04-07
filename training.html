@@ -58,14 +58,11 @@
         <a href="index.html" class="nav-link">🎤 Find Note</a>
         <a href="search-chords.html" class="nav-link">🎵 Search Chords</a>
         <a href="calculate-chords.html" class="nav-link">🎹 Calculate Chords</a>
+        <a href="training.html" class="nav-link active">🎮 Training</a>
         <a href="wiki.html" class="nav-link">📚 Wiki</a>
     </nav>
 
     <div class="guide-container">
-        <div class="back-nav">
-            <a href="wiki.html" class="back-link">← Back to Wiki</a>
-        </div>
-
         <header style="text-align: center; margin-bottom: 40px;">
             <div class="header-icon">🎮</div>
             <h1 style="background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">Training Mode</h1>
@@ -107,8 +104,12 @@
                             <option value="A">A Major</option>
                             <option value="B">B Major</option>
                             <option value="Am">A Minor</option>
+                            <option value="Bm">B Minor</option>
+                            <option value="Cm">C Minor</option>
                             <option value="Dm">D Minor</option>
                             <option value="Em">E Minor</option>
+                            <option value="Fm">F Minor</option>
+                            <option value="Gm">G Minor</option>
                         </select>
                     </div>
 
@@ -188,7 +189,6 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/tone@14.8.49/build/Tone.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/pitchy@4/dist/pitchy.min.js"></script>
     <script>
         // Tab switching
         document.querySelectorAll('.training-tab').forEach(tab => {
@@ -216,8 +216,12 @@
             'A': ['A', 'C#', 'E'],
             'B': ['B', 'D#', 'F#'],
             'Am': ['A', 'C', 'E'],
+            'Bm': ['B', 'D', 'F#'],
+            'Cm': ['C', 'Eb', 'G'],
             'Dm': ['D', 'F', 'A'],
-            'Em': ['E', 'G', 'B']
+            'Em': ['E', 'G', 'B'],
+            'Fm': ['F', 'Ab', 'C'],
+            'Gm': ['G', 'Bb', 'D']
         };
 
         class InversionTrainer {
@@ -346,20 +350,97 @@
                 const buffer = new Float32Array(this.analyser.fftSize);
                 this.analyser.getFloatTimeDomainData(buffer);
 
-                const detector = Pitchy.McLeodDetector({
-                    sampleRate: this.audioContext.sampleRate,
-                    bufferSize: this.analyser.fftSize
-                });
-                const [pitch, clarity] = detector.findPitch(buffer, this.audioContext.sampleRate);
+                const result = this.detectPitch(buffer);
 
-                if (pitch && clarity > 0.9) {
-                    const note = this.frequencyToNote(pitch);
+                if (result && result.frequency && result.confidence > 0.9) {
+                    const note = this.frequencyToNote(result.frequency);
                     if (note) {
                         this.handleDetectedNote(note);
                     }
                 }
 
                 requestAnimationFrame(() => this.detect());
+            }
+
+            detectPitch(buffer) {
+                const rms = this.calculateRMS(buffer);
+                if (rms < 0.005) {
+                    return null;
+                }
+
+                const autocorrelation = this.autoCorrelate(buffer);
+                if (!autocorrelation) {
+                    return null;
+                }
+
+                const { frequency, confidence } = autocorrelation;
+
+                if (frequency < 80 || frequency > 1200 || confidence < 0.85) {
+                    return null;
+                }
+
+                return { frequency, confidence };
+            }
+
+            calculateRMS(buffer) {
+                let sum = 0;
+                for (let i = 0; i < buffer.length; i++) {
+                    sum += buffer[i] * buffer[i];
+                }
+                return Math.sqrt(sum / buffer.length);
+            }
+
+            autoCorrelate(buffer) {
+                const size = buffer.length;
+                const maxSamples = Math.floor(size / 2);
+                const correlations = new Array(maxSamples);
+
+                for (let lag = 0; lag < maxSamples; lag++) {
+                    let sum = 0;
+                    for (let i = 0; i < maxSamples; i++) {
+                        sum += buffer[i] * buffer[i + lag];
+                    }
+                    correlations[lag] = sum;
+                }
+
+                const normalization = correlations[0];
+                if (normalization === 0) return null;
+
+                for (let i = 0; i < correlations.length; i++) {
+                    correlations[i] /= normalization;
+                }
+
+                const minFreq = 80;
+                const maxFreq = 1200;
+                const minLag = Math.floor(this.audioContext.sampleRate / maxFreq);
+                const maxLag = Math.floor(this.audioContext.sampleRate / minFreq);
+
+                let i = minLag;
+                while (i < maxLag && correlations[i] > 0.5) i++;
+                while (i < maxLag && correlations[i] <= 0.5) i++;
+
+                let peakLag = -1;
+                let peakValue = -1;
+                for (; i < maxLag; i++) {
+                    if (correlations[i] > peakValue) {
+                        peakValue = correlations[i];
+                        peakLag = i;
+                    }
+                }
+
+                if (peakLag === -1 || peakValue < 0.5) return null;
+
+                let refinedLag = peakLag;
+                if (peakLag > 0 && peakLag < correlations.length - 1) {
+                    const alpha = correlations[peakLag - 1];
+                    const beta = correlations[peakLag];
+                    const gamma = correlations[peakLag + 1];
+                    refinedLag = peakLag + (alpha - gamma) / (2 * (2 * beta - gamma - alpha));
+                }
+
+                const frequency = this.audioContext.sampleRate / refinedLag;
+                const clampedConfidence = Math.min(1.0, Math.max(0.0, peakValue));
+                return { frequency, confidence: clampedConfidence };
             }
 
             frequencyToNote(frequency) {
