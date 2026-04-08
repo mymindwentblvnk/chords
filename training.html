@@ -227,6 +227,7 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/tone@14.8.49/build/Tone.js"></script>
+    <script src="settings.js"></script>
     <script src="pitch-detector.js"></script>
     <script>
         // Tab switching
@@ -246,7 +247,7 @@
         });
 
         // Chord definitions (root, third, fifth)
-        const CHORDS = {
+        const CHORDS_BASE = {
             'C': ['C', 'E', 'G'],
             'D': ['D', 'F#', 'A'],
             'E': ['E', 'G#', 'B'],
@@ -262,6 +263,13 @@
             'Fm': ['F', 'Ab', 'C'],
             'Gm': ['G', 'Bb', 'D']
         };
+
+        // Get chord notes with current notation applied
+        function getChordNotes(chordName) {
+            const notes = CHORDS_BASE[chordName];
+            if (!notes) return null;
+            return notes.map(note => settings.formatNote(note));
+        }
 
         class InversionTrainer {
             constructor() {
@@ -303,7 +311,7 @@
             }
 
             generateSequences() {
-                const notes = CHORDS[this.currentChord];
+                const notes = getChordNotes(this.currentChord);
                 if (!notes) return [];
 
                 const [root, third, fifth] = notes;
@@ -586,7 +594,7 @@
 
                 // Play success chord
                 if (this.synth) {
-                    const notes = CHORDS[this.currentChord];
+                    const notes = getChordNotes(this.currentChord);
                     await this.synth.triggerAttackRelease(notes.map(n => n + '4'), '1.5');
 
                     // Play ascending arpeggio
