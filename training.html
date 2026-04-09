@@ -627,8 +627,18 @@
                         this.lastDetectedNote = null;
                     }, 500);
                 } else {
-                    // Wrong note - show in red next to current box
+                    // Wrong note - set cooldown to prevent counting same wrong note multiple times
+                    this.lastDetectedNote = note;
+                    this.detectionCooldown = true;
+
+                    // Show wrong note
                     this.showWrongNote(note);
+
+                    // Reset cooldown after delay
+                    setTimeout(() => {
+                        this.detectionCooldown = false;
+                        this.lastDetectedNote = null;
+                    }, 300);
                 }
             }
 
