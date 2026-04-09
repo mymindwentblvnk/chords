@@ -11,92 +11,6 @@
     <link rel="manifest" href="manifest.json">
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="guide-styles.css">
-    <style>
-        .training-tabs {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 30px;
-            border-bottom: 2px solid var(--surface-light);
-            flex-wrap: wrap;
-        }
-
-        .training-tab {
-            padding: 15px 30px;
-            background: var(--surface);
-            color: var(--text-secondary);
-            border: none;
-            cursor: pointer;
-            font-size: 1rem;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            border-radius: 8px 8px 0 0;
-            border-bottom: 3px solid transparent;
-        }
-
-        .training-tab:hover {
-            background: var(--surface-light);
-            color: var(--text-primary);
-        }
-
-        .training-tab.active {
-            background: var(--primary-color);
-            color: white;
-            border-bottom-color: var(--accent-happy);
-        }
-
-        .training-content {
-            display: none;
-        }
-
-        .training-content.active {
-            display: block;
-        }
-
-        /* Note badge animations */
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: scale(0.8);
-            }
-            to {
-                opacity: 1;
-                transform: scale(1);
-            }
-        }
-
-        @keyframes fadeOut {
-            from {
-                opacity: 1;
-                transform: scale(1);
-            }
-            to {
-                opacity: 0;
-                transform: scale(0.8);
-            }
-        }
-
-        /* Responsive note badges - smaller on mobile */
-        .note-badge {
-            padding: 8px 16px;
-            border-radius: 8px;
-            font-weight: bold;
-            font-size: 1.1rem;
-        }
-
-        @media (max-width: 768px) {
-            .note-badge {
-                padding: 6px 12px;
-                font-size: 0.9rem;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .note-badge {
-                padding: 4px 10px;
-                font-size: 0.85rem;
-            }
-        }
-    </style>
 </head>
 <body>
     <nav class="main-nav">
@@ -107,152 +21,50 @@
     </nav>
 
     <div class="guide-container">
-        <header style="text-align: center; margin-bottom: 40px;">
-            <div class="header-icon">🎮</div>
-            <h1 style="background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">Training Mode</h1>
-            <p class="subtitle">Interactive exercises with real-time feedback</p>
-        </header>
+        <div class="guide-section" style="max-width: 600px; margin: 0 auto; padding: 20px;">
+            <h2 style="text-align: center; color: var(--primary-color); margin-bottom: 30px;">🔄 Chord Inversion Training</h2>
 
-        <!-- Training Tabs -->
-        <div class="training-tabs">
-            <button class="training-tab active" data-tab="inversions">
-                🔄 Chord Inversions
-            </button>
-            <button class="training-tab" data-tab="scales" style="opacity: 0.5; cursor: not-allowed;" disabled>
-                📐 Scales (Coming Soon)
-            </button>
-            <button class="training-tab" data-tab="progressions" style="opacity: 0.5; cursor: not-allowed;" disabled>
-                🎵 Progressions (Coming Soon)
-            </button>
-        </div>
+                <select id="training-chord" style="width: 100%; padding: 15px; font-size: 1.1rem; background: var(--background); color: var(--text-primary); border: 2px solid var(--primary-color); border-radius: 10px; cursor: pointer; margin-bottom: 20px;">
+                    <option value="C">C Major</option>
+                    <option value="D">D Major</option>
+                    <option value="E">E Major</option>
+                    <option value="F">F Major</option>
+                    <option value="G">G Major</option>
+                    <option value="A">A Major</option>
+                    <option value="B">B Major</option>
+                    <option value="Am">A Minor</option>
+                    <option value="Bm">B Minor</option>
+                    <option value="Cm">C Minor</option>
+                    <option value="Dm">D Minor</option>
+                    <option value="Em">E Minor</option>
+                    <option value="Fm">F Minor</option>
+                    <option value="Gm">G Minor</option>
+                </select>
 
-        <!-- Chord Inversions Training -->
-        <div class="training-content active" id="inversions-training">
-            <div class="guide-section" style="background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(139, 92, 246, 0.1)); border: 2px solid var(--primary-color);">
-                <h2 style="text-align: center; color: var(--primary-color);">🔄 Chord Inversion Training</h2>
-                <p style="text-align: center; font-size: 1.1rem; color: var(--text-secondary); margin-bottom: 30px;">
-                    Practice playing chord inversions with real-time pitch detection!
-                </p>
+                <button id="start-training" style="width: 100%; padding: 18px; font-size: 1.2rem; font-weight: 600; background: var(--primary-color); color: white; border: none; border-radius: 10px; cursor: pointer; margin-bottom: 30px;">
+                    🎤 Start Training
+                </button>
 
-                <div style="max-width: 600px; margin: 0 auto;">
-                    <div style="margin-bottom: 20px;">
-                        <label style="display: block; margin-bottom: 10px; font-weight: 600; color: var(--text-primary);">
-                            Select Chord to Practice:
-                        </label>
-                        <select id="training-chord" style="width: 100%; padding: 12px; font-size: 1rem; background: var(--background); color: var(--text-primary); border: 2px solid var(--primary-color); border-radius: 8px; cursor: pointer;">
-                            <option value="C">C Major</option>
-                            <option value="D">D Major</option>
-                            <option value="E">E Major</option>
-                            <option value="F">F Major</option>
-                            <option value="G">G Major</option>
-                            <option value="A">A Major</option>
-                            <option value="B">B Major</option>
-                            <option value="Am">A Minor</option>
-                            <option value="Bm">B Minor</option>
-                            <option value="Cm">C Minor</option>
-                            <option value="Dm">D Minor</option>
-                            <option value="Em">E Minor</option>
-                            <option value="Fm">F Minor</option>
-                            <option value="Gm">G Minor</option>
-                        </select>
-                    </div>
+                <button id="stop-training" style="width: 100%; padding: 18px; font-size: 1.2rem; font-weight: 600; background: #ef4444; color: white; border: none; border-radius: 10px; cursor: pointer; margin-bottom: 30px; display: none;">
+                    ⏹ Stop Training
+                </button>
 
-                    <div style="text-align: center; margin: 20px 0;">
-                        <button id="start-training" style="padding: 15px 40px; font-size: 1.1rem; font-weight: 600; background: var(--primary-color); color: white; border: none; border-radius: 10px; cursor: pointer; transition: all 0.3s ease;">
-                            🎤 Start Training
-                        </button>
-                        <button id="stop-training" style="padding: 15px 40px; font-size: 1.1rem; font-weight: 600; background: var(--surface-light); color: var(--text-primary); border: none; border-radius: 10px; cursor: pointer; display: none; margin-left: 10px;">
-                            ⏹ Stop
-                        </button>
-                    </div>
-
-                    <div id="training-status" style="display: none;">
-                        <div style="background: var(--surface); padding: 20px; border-radius: 10px; margin: 20px 0;">
-                            <h3 style="margin-top: 0; color: var(--primary-color);">Current Challenge:</h3>
-                            <p id="current-sequence" style="font-size: 1.2rem; font-family: 'Courier New', monospace; text-align: center; color: var(--accent-happy); margin: 15px 0;"></p>
-
-                            <div style="margin: 20px 0;">
-                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-                                    <span style="font-weight: 600;">Progress:</span>
-                                    <span id="progress-text" style="color: var(--primary-color);">0 / 18</span>
-                                </div>
-                                <div style="background: var(--background); height: 30px; border-radius: 15px; overflow: hidden;">
-                                    <div id="progress-bar" style="width: 0%; height: 100%; background: linear-gradient(90deg, var(--primary-color), var(--accent-happy)); transition: width 0.5s ease;"></div>
-                                </div>
-                            </div>
-
-                            <div id="notes-played" style="margin: 20px 0;">
-                                <h4 style="margin-bottom: 10px;">Notes Played:</h4>
-                                <div id="notes-list" style="display: flex; flex-wrap: wrap; gap: 10px; min-height: 50px; align-items: center; justify-content: center;"></div>
-                            </div>
-
-                            <div id="detected-note" style="font-size: 2rem; text-align: center; font-weight: bold; color: var(--text-primary); padding: 20px; background: var(--background); border-radius: 10px; margin: 15px 0;">
-                                🎵 Listening...
-                            </div>
-                        </div>
-                    </div>
-
-                    <div id="success-message" style="display: none; text-align: center; padding: 30px; background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(5, 150, 105, 0.2)); border-radius: 15px; border: 3px solid var(--accent-happy);">
-                        <div style="font-size: 4rem; margin-bottom: 15px;">🎉</div>
-                        <h2 style="color: var(--accent-happy); margin: 0 0 10px 0;">Perfect!</h2>
-                        <p style="font-size: 1.2rem; color: var(--text-primary); margin: 0;">You've mastered all inversions!</p>
-                    </div>
+                <!-- Sequence Boxes -->
+                <div id="sequence-boxes" style="display: flex; flex-direction: column; gap: 15px;">
+                    <!-- Boxes will be generated dynamically -->
                 </div>
 
-                <div class="tip-box" style="margin-top: 30px;">
-                    <strong>📖 How it works:</strong><br>
-                    1. Select a chord to practice<br>
-                    2. Click "Start Training" and allow microphone access<br>
-                    3. Play the inversions in order:<br>
-                    <div id="inversion-example" style="font-family: 'Courier New', monospace; font-weight: bold; margin: 10px 0 10px 20px; line-height: 1.6;">
-                        CEG<br>
-                        EGC<br>
-                        GCE<br>
-                        ECG<br>
-                        CGE<br>
-                        GEC
-                    </div>
-                    4. The app will detect each note and track your progress<br>
-                    5. Complete all 6 sequences to win! 🏆
+                <div id="success-message" style="display: none; text-align: center; padding: 30px; background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(5, 150, 105, 0.2)); border-radius: 15px; border: 3px solid var(--accent-happy); margin-top: 30px;">
+                    <div style="font-size: 4rem; margin-bottom: 15px;">🎉</div>
+                    <h2 style="color: var(--accent-happy); margin: 0 0 10px 0;">Perfect!</h2>
+                    <p style="font-size: 1.2rem; color: var(--text-primary); margin: 0;">You've mastered all inversions!</p>
                 </div>
             </div>
-        </div>
-
-        <!-- Placeholder for future trainings -->
-        <div class="training-content" id="scales-training">
-            <div class="guide-section">
-                <h2>🚧 Coming Soon: Scale Practice</h2>
-                <p>This training mode is under development.</p>
-            </div>
-        </div>
-
-        <div class="training-content" id="progressions-training">
-            <div class="guide-section">
-                <h2>🚧 Coming Soon: Progression Practice</h2>
-                <p>This training mode is under development.</p>
-            </div>
-        </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/tone@14.8.49/build/Tone.js"></script>
     <script src="pitch-detector.js"></script>
     <script>
-        // Tab switching
-        document.querySelectorAll('.training-tab').forEach(tab => {
-            tab.addEventListener('click', () => {
-                if (tab.disabled) return;
-
-                // Remove active class from all tabs and contents
-                document.querySelectorAll('.training-tab').forEach(t => t.classList.remove('active'));
-                document.querySelectorAll('.training-content').forEach(c => c.classList.remove('active'));
-
-                // Add active class to clicked tab and corresponding content
-                tab.classList.add('active');
-                const tabId = tab.dataset.tab + '-training';
-                document.getElementById(tabId).classList.add('active');
-            });
-        });
-
         // Chord definitions (root, third, fifth)
         // Using sharp notation to match pitch detector output
         const CHORDS = {
@@ -289,7 +101,7 @@
                 this.lastFrequency = null;
                 this.stableCount = 0;
                 this.wakeLock = null;
-                this.displayedWrongNotes = new Set(); // Track displayed wrong notes
+                this.wrongNoteTimeout = null; // Track timeout for wrong note fade
 
                 this.init();
             }
@@ -303,7 +115,7 @@
                 stopBtn.addEventListener('click', () => this.stop());
                 chordSelect.addEventListener('change', (e) => {
                     this.currentChord = e.target.value;
-                    this.updateExample();
+                    this.updateSequenceBoxes();
                 });
 
                 // Initialize Tone.js synth for success sound
@@ -311,24 +123,78 @@
                     this.synth = new Tone.PolySynth(Tone.Synth).toDestination();
                 }
 
-                // Update example on page load
-                this.updateExample();
+                // Show sequence boxes on page load
+                this.updateSequenceBoxes();
             }
 
-            updateExample() {
-                const notes = CHORDS[this.currentChord];
-                if (!notes) return;
+            updateSequenceBoxes() {
+                this.sequences = this.generateSequences();
+                this.currentSequenceIndex = 0;
+                this.currentNoteIndex = 0;
+                this.createSequenceBoxes();
+            }
 
-                const [root, third, fifth] = notes;
-                const sequences = [
-                    `${root}${third}${fifth}`,
-                    `${third}${fifth}${root}`,
-                    `${fifth}${root}${third}`,
-                    `${third}${root}${fifth}`,
-                    `${root}${fifth}${third}`,
-                    `${fifth}${third}${root}`
-                ];
-                document.getElementById('inversion-example').innerHTML = sequences.join('<br>');
+            createSequenceBoxes() {
+                const container = document.getElementById('sequence-boxes');
+                container.innerHTML = '';
+
+                this.sequences.forEach((sequence, index) => {
+                    const box = document.createElement('div');
+                    box.id = `sequence-box-${index}`;
+                    box.style.cssText = `
+                        padding: 20px;
+                        background: var(--surface);
+                        border: 3px solid var(--surface-light);
+                        border-radius: 10px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        gap: 15px;
+                        position: relative;
+                        min-height: 80px;
+                        transition: all 0.3s ease;
+                    `;
+
+                    // Create note badges
+                    sequence.forEach((note, noteIndex) => {
+                        const noteBadge = document.createElement('div');
+                        noteBadge.id = `note-${index}-${noteIndex}`;
+                        noteBadge.textContent = note;
+                        noteBadge.style.cssText = `
+                            padding: 12px 20px;
+                            background: var(--background);
+                            color: var(--text-primary);
+                            border-radius: 8px;
+                            font-weight: bold;
+                            font-size: 1.3rem;
+                            font-family: 'Courier New', monospace;
+                            transition: all 0.3s ease;
+                        `;
+                        box.appendChild(noteBadge);
+                    });
+
+                    // Create wrong note placeholder
+                    const wrongNoteContainer = document.createElement('div');
+                    wrongNoteContainer.id = `wrong-note-${index}`;
+                    wrongNoteContainer.style.cssText = `
+                        position: absolute;
+                        right: 15px;
+                        top: 50%;
+                        transform: translateY(-50%);
+                        padding: 10px 16px;
+                        background: #ef4444;
+                        color: white;
+                        border-radius: 8px;
+                        font-weight: bold;
+                        font-size: 1.1rem;
+                        font-family: 'Courier New', monospace;
+                        opacity: 0;
+                        transition: opacity 0.3s ease;
+                    `;
+                    box.appendChild(wrongNoteContainer);
+
+                    container.appendChild(box);
+                });
             }
 
             generateSequences() {
@@ -350,9 +216,10 @@
 
             async start() {
                 try {
-                    this.sequences = this.generateSequences();
+                    // Reset progress
                     this.currentSequenceIndex = 0;
                     this.currentNoteIndex = 0;
+                    this.updateSequenceBoxes();
 
                     // Start Tone.js context
                     if (this.synth) {
@@ -370,8 +237,8 @@
 
                     this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
                     this.analyser = this.audioContext.createAnalyser();
-                    this.analyser.fftSize = 8192; // Larger FFT for better resolution
-                    this.analyser.smoothingTimeConstant = 0.3; // Light smoothing to reduce noise
+                    this.analyser.fftSize = 8192;
+                    this.analyser.smoothingTimeConstant = 0.3;
 
                     this.microphone = this.audioContext.createMediaStreamSource(this.mediaStream);
                     this.microphone.connect(this.analyser);
@@ -385,13 +252,8 @@
 
                     // Update UI
                     document.getElementById('start-training').style.display = 'none';
-                    document.getElementById('stop-training').style.display = 'inline-block';
-                    document.getElementById('training-status').style.display = 'block';
+                    document.getElementById('stop-training').style.display = 'block';
                     document.getElementById('success-message').style.display = 'none';
-
-                    // Clear previous notes
-                    document.getElementById('notes-list').innerHTML = '';
-                    this.displayedWrongNotes.clear();
                 } catch (error) {
                     alert('Error accessing microphone: ' + error.message);
                 }
@@ -418,9 +280,11 @@
                     this.audioContext = null;
                 }
 
-                document.getElementById('start-training').style.display = 'inline-block';
+                // Clear boxes
+                document.getElementById('sequence-boxes').innerHTML = '';
+
+                document.getElementById('start-training').style.display = 'block';
                 document.getElementById('stop-training').style.display = 'none';
-                document.getElementById('training-status').style.display = 'none';
             }
 
             detect() {
@@ -526,16 +390,17 @@
                 const currentSequence = this.sequences[this.currentSequenceIndex];
                 const expectedNote = currentSequence[this.currentNoteIndex];
 
-                // Display detected note
-                document.getElementById('detected-note').textContent = `🎵 ${note}`;
-
                 // Check if it's the correct note
                 if (note === expectedNote) {
                     this.lastDetectedNote = note;
                     this.detectionCooldown = true;
 
-                    // Add note to played list
-                    this.addNoteToList(note, true);
+                    // Turn note green
+                    const noteBadge = document.getElementById(`note-${this.currentSequenceIndex}-${this.currentNoteIndex}`);
+                    if (noteBadge) {
+                        noteBadge.style.background = 'var(--accent-happy)';
+                        noteBadge.style.color = 'white';
+                    }
 
                     // Move to next note
                     this.currentNoteIndex++;
@@ -549,8 +414,6 @@
                         if (this.currentSequenceIndex >= this.sequences.length) {
                             this.showSuccess();
                         } else {
-                            // Clear wrong notes when moving to next sequence
-                            this.displayedWrongNotes.clear();
                             this.updateUI();
                         }
                     } else {
@@ -563,54 +426,51 @@
                         this.lastDetectedNote = null;
                     }, 500);
                 } else {
-                    // Wrong note - show only if not already displayed
-                    if (!this.displayedWrongNotes.has(note)) {
-                        this.displayedWrongNotes.add(note);
-                        this.addNoteToList(note, false);
-                    }
+                    // Wrong note - show in red next to current box
+                    this.showWrongNote(note);
                 }
             }
 
-            addNoteToList(note, correct) {
-                const notesList = document.getElementById('notes-list');
-                const noteEl = document.createElement('div');
-                noteEl.textContent = note;
-                noteEl.className = 'note-badge';
-                noteEl.style.background = correct ? 'var(--accent-happy)' : '#ef4444';
-                noteEl.style.color = 'white';
-                noteEl.style.animation = 'fadeIn 0.3s ease';
-                notesList.appendChild(noteEl);
+            showWrongNote(note) {
+                // Clear previous timeout
+                if (this.wrongNoteTimeout) {
+                    clearTimeout(this.wrongNoteTimeout);
+                }
 
-                // Fade out and remove wrong notes after delay
-                if (!correct) {
-                    setTimeout(() => {
-                        noteEl.style.animation = 'fadeOut 0.5s ease';
-                        setTimeout(() => {
-                            noteEl.remove();
-                            this.displayedWrongNotes.delete(note);
-                        }, 500);
-                    }, 4000); // Show for 4 seconds before fading out
+                const wrongNoteEl = document.getElementById(`wrong-note-${this.currentSequenceIndex}`);
+                if (wrongNoteEl) {
+                    wrongNoteEl.textContent = note;
+                    wrongNoteEl.style.opacity = '1';
+
+                    // Fade out after 2 seconds
+                    this.wrongNoteTimeout = setTimeout(() => {
+                        wrongNoteEl.style.opacity = '0';
+                    }, 2000);
                 }
             }
 
             updateUI() {
-                const currentSequence = this.sequences[this.currentSequenceIndex];
-                const totalNotes = this.sequences.reduce((sum, seq) => sum + seq.length, 0);
-                const completedNotes = this.sequences.slice(0, this.currentSequenceIndex).reduce((sum, seq) => sum + seq.length, 0) + this.currentNoteIndex;
-
-                // Update sequence display
-                document.getElementById('current-sequence').textContent = currentSequence.join(' - ');
-
-                // Update progress
-                const progressPercent = (completedNotes / totalNotes) * 100;
-                document.getElementById('progress-bar').style.width = progressPercent + '%';
-                document.getElementById('progress-text').textContent = `${completedNotes} / ${totalNotes}`;
+                // Highlight current sequence box
+                this.sequences.forEach((_, index) => {
+                    const box = document.getElementById(`sequence-box-${index}`);
+                    if (box) {
+                        if (index === this.currentSequenceIndex) {
+                            box.style.borderColor = 'var(--primary-color)';
+                            box.style.background = 'rgba(99, 102, 241, 0.1)';
+                        } else if (index < this.currentSequenceIndex) {
+                            box.style.borderColor = 'var(--accent-happy)';
+                            box.style.background = 'rgba(16, 185, 129, 0.1)';
+                        } else {
+                            box.style.borderColor = 'var(--surface-light)';
+                            box.style.background = 'var(--surface)';
+                        }
+                    }
+                });
             }
 
             async showSuccess() {
                 this.isRunning = false;
 
-                document.getElementById('training-status').style.display = 'none';
                 document.getElementById('success-message').style.display = 'block';
 
                 // Play success chord
