@@ -65,14 +65,10 @@
 
                 <!-- Stats Display -->
                 <div id="current-stats" style="display: none; margin-bottom: 20px; padding: 15px; background: var(--surface); border-radius: 10px; text-align: center;">
-                    <div style="display: flex; justify-content: space-around; gap: 20px;">
+                    <div style="display: flex; justify-content: center;">
                         <div>
                             <div style="font-size: 0.9rem; color: var(--text-secondary);">Time</div>
                             <div id="timer-display" style="font-size: 1.5rem; font-weight: bold; color: var(--primary-color); font-family: 'Courier New', monospace;">0:00</div>
-                        </div>
-                        <div>
-                            <div style="font-size: 0.9rem; color: var(--text-secondary);">Mistakes</div>
-                            <div id="mistakes-display" style="font-size: 1.5rem; font-weight: bold; color: #ef4444; font-family: 'Courier New', monospace;">0</div>
                         </div>
                     </div>
                 </div>
@@ -114,10 +110,6 @@
                         <div>
                             <div style="font-size: 0.9rem; color: var(--text-secondary);">Score</div>
                             <div id="speed-score" style="font-size: 1.5rem; font-weight: bold; color: var(--accent-happy); font-family: 'Courier New', monospace;">0</div>
-                        </div>
-                        <div>
-                            <div style="font-size: 0.9rem; color: var(--text-secondary);">Mistakes</div>
-                            <div id="speed-mistakes" style="font-size: 1.5rem; font-weight: bold; color: #ef4444; font-family: 'Courier New', monospace;">0</div>
                         </div>
                     </div>
                 </div>
@@ -235,7 +227,6 @@
 
                 // Performance tracking
                 this.startTime = null;
-                this.mistakeCount = 0;
                 this.timerInterval = null;
 
                 this.init();
@@ -272,7 +263,7 @@
                 }
             }
 
-            saveRecord(chord, time, mistakes) {
+            saveRecord(chord, time) {
                 const records = this.loadRecords();
                 if (!records[chord]) {
                     records[chord] = [];
@@ -280,17 +271,11 @@
 
                 records[chord].push({
                     time: time,
-                    mistakes: mistakes,
                     date: new Date().toISOString()
                 });
 
-                // Keep only the best 10 records per chord
-                records[chord].sort((a, b) => {
-                    if (a.mistakes !== b.mistakes) {
-                        return a.mistakes - b.mistakes; // Fewer mistakes first
-                    }
-                    return a.time - b.time; // Faster time as tiebreaker
-                });
+                // Keep only the best 10 records per chord (sorted by fastest time)
+                records[chord].sort((a, b) => a.time - b.time);
                 records[chord] = records[chord].slice(0, 10);
 
                 try {
@@ -398,7 +383,6 @@
                     this.updateSequenceBoxes();
 
                     // Reset performance tracking
-                    this.mistakeCount = 0;
                     this.startTime = Date.now();
                     this.updateStatsDisplay();
 
@@ -451,7 +435,6 @@
                 const secs = elapsedSeconds % 60;
 
                 document.getElementById('timer-display').textContent = `${mins}:${secs.toString().padStart(2, '0')}`;
-                document.getElementById('mistakes-display').textContent = this.mistakeCount;
             }
 
             stop() {
@@ -643,10 +626,6 @@
             }
 
             showWrongNote(note) {
-                // Increment mistake counter
-                this.mistakeCount++;
-                this.updateStatsDisplay();
-
                 // Clear previous timeout
                 if (this.wrongNoteTimeout) {
                     clearTimeout(this.wrongNoteTimeout);
@@ -698,7 +677,7 @@
                 const secs = finalTime % 60;
 
                 // Save record
-                this.saveRecord(this.currentChord, finalTime, this.mistakeCount);
+                this.saveRecord(this.currentChord, finalTime);
 
                 // Update success message
                 const successMsg = document.getElementById('success-message');
@@ -706,14 +685,10 @@
                     <div style="font-size: 4rem; margin-bottom: 15px;">🎉</div>
                     <h2 style="color: var(--accent-happy); margin: 0 0 10px 0;">Perfect!</h2>
                     <p style="font-size: 1.2rem; color: var(--text-primary); margin: 0 0 20px 0;">You've mastered all inversions!</p>
-                    <div style="display: flex; justify-content: space-around; padding: 20px; background: rgba(255,255,255,0.1); border-radius: 10px;">
+                    <div style="display: flex; justify-content: center; padding: 20px; background: rgba(255,255,255,0.1); border-radius: 10px;">
                         <div>
                             <div style="font-size: 0.9rem; color: var(--text-secondary);">Time</div>
                             <div style="font-size: 1.8rem; font-weight: bold; font-family: 'Courier New', monospace;">${mins}:${secs.toString().padStart(2, '0')}</div>
-                        </div>
-                        <div>
-                            <div style="font-size: 0.9rem; color: var(--text-secondary);">Mistakes</div>
-                            <div style="font-size: 1.8rem; font-weight: bold; font-family: 'Courier New', monospace;">${this.mistakeCount}</div>
                         </div>
                     </div>
                 `;
@@ -750,7 +725,6 @@
                 // Speed training specific
                 this.targetNote = null;
                 this.score = 0;
-                this.mistakes = 0;
                 this.timeLeft = 60;
                 this.timerInterval = null;
                 this.allNotes = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
@@ -785,21 +759,15 @@
                 }
             }
 
-            saveRecord(score, mistakes) {
+            saveRecord(score) {
                 const records = this.loadRecords();
                 records.push({
                     score: score,
-                    mistakes: mistakes,
                     date: new Date().toISOString()
                 });
 
-                // Sort by highest score first, then by fewest mistakes
-                records.sort((a, b) => {
-                    if (a.score !== b.score) {
-                        return b.score - a.score; // Higher score first
-                    }
-                    return a.mistakes - b.mistakes; // Fewer mistakes as tiebreaker
-                });
+                // Sort by highest score first
+                records.sort((a, b) => b.score - a.score);
 
                 // Keep only top 10
                 const topRecords = records.slice(0, 10);
@@ -851,7 +819,6 @@
                     // Start training
                     this.isRunning = true;
                     this.score = 0;
-                    this.mistakes = 0;
                     this.timeLeft = 60;
 
                     document.getElementById('countdown-display').style.display = 'none';
@@ -900,7 +867,6 @@
             updateStats() {
                 document.getElementById('speed-timer').textContent = this.timeLeft;
                 document.getElementById('speed-score').textContent = this.score;
-                document.getElementById('speed-mistakes').textContent = this.mistakes;
             }
 
             detect() {
@@ -978,17 +944,8 @@
                         this.detectionCooldown = false;
                         this.lastDetectedNote = null;
                     }, 300);
-                } else {
-                    // Wrong note
-                    this.mistakes++;
-                    this.updateStats();
-
-                    // Reset cooldown after delay
-                    setTimeout(() => {
-                        this.detectionCooldown = false;
-                        this.lastDetectedNote = null;
-                    }, 300);
                 }
+                // Ignore wrong notes - no penalty
             }
 
             async requestWakeLock() {
@@ -1045,7 +1002,7 @@
 
             endTraining() {
                 // Save record
-                this.saveRecord(this.score, this.mistakes);
+                this.saveRecord(this.score);
 
                 // Show results
                 document.getElementById('speed-stats').style.display = 'none';
@@ -1055,14 +1012,10 @@
                 const finalStats = document.getElementById('speed-final-stats');
                 finalStats.innerHTML = `
                     <p style="font-size: 1.2rem; color: var(--text-primary); margin: 0 0 20px 0;">Great job!</p>
-                    <div style="display: flex; justify-content: space-around; padding: 20px; background: rgba(255,255,255,0.1); border-radius: 10px;">
+                    <div style="display: flex; justify-content: center; padding: 20px; background: rgba(255,255,255,0.1); border-radius: 10px;">
                         <div>
                             <div style="font-size: 0.9rem; color: var(--text-secondary);">Score</div>
                             <div style="font-size: 1.8rem; font-weight: bold; font-family: 'Courier New', monospace;">${this.score}</div>
-                        </div>
-                        <div>
-                            <div style="font-size: 0.9rem; color: var(--text-secondary);">Mistakes</div>
-                            <div style="font-size: 1.8rem; font-weight: bold; font-family: 'Courier New', monospace;">${this.mistakes}</div>
                         </div>
                     </div>
                 `;
@@ -1154,7 +1107,6 @@
                     <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px; ${bgStyle} border-radius: 6px; margin-bottom: 8px;">
                         <span style="font-weight: ${isTop ? 'bold' : 'normal'}; color: var(--text-primary); min-width: 30px;">${isTop ? '🥇' : '#' + (index + 1)}</span>
                         <span style="font-family: 'Courier New', monospace; font-weight: ${isTop ? 'bold' : 'normal'};">${formatTime(record.time)}</span>
-                        <span style="font-family: 'Courier New', monospace; color: #ef4444; font-weight: ${isTop ? 'bold' : 'normal'};">${record.mistakes} mistakes</span>
                         <span style="font-size: 0.85rem; color: var(--text-secondary);">${new Date(record.date).toLocaleDateString()}</span>
                     </div>
                 `;
@@ -1184,7 +1136,6 @@
                     <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px; ${bgStyle} border-radius: 6px; margin-bottom: 8px;">
                         <span style="font-weight: ${isTop ? 'bold' : 'normal'}; color: var(--text-primary); min-width: 30px;">${isTop ? '🥇' : '#' + (index + 1)}</span>
                         <span style="font-family: 'Courier New', monospace; font-weight: ${isTop ? 'bold' : 'normal'};">Score: ${record.score}</span>
-                        <span style="font-family: 'Courier New', monospace; color: #ef4444; font-weight: ${isTop ? 'bold' : 'normal'};">${record.mistakes} mistakes</span>
                         <span style="font-size: 0.85rem; color: var(--text-secondary);">${new Date(record.date).toLocaleDateString()}</span>
                     </div>
                 `;
