@@ -206,26 +206,121 @@
             'Gm': ['G', 'A#', 'D']
         };
 
-        class InversionTrainer {
+        // Base class for shared pitch detection logic
+        class BaseTrainer {
             constructor() {
                 this.audioContext = null;
                 this.analyser = null;
                 this.microphone = null;
                 this.mediaStream = null;
                 this.isRunning = false;
-                this.currentChord = 'C';
-                this.currentSequenceIndex = 0;
-                this.currentNoteIndex = 0;
-                this.sequences = [];
-                this.synth = null;
                 this.lastDetectedNote = null;
                 this.detectionCooldown = false;
                 this.lastFrequency = null;
                 this.stableCount = 0;
                 this.wakeLock = null;
-                this.wrongNoteTimeout = null;
+            }
 
-                // Performance tracking
+            detect() {
+                if (!this.isRunning) return;
+
+                const buffer = new Float32Array(this.analyser.fftSize);
+                this.analyser.getFloatTimeDomainData(buffer);
+
+                const result = this.detectPitch(buffer);
+
+                if (result && result.frequency && result.confidence > 0.9) {
+                    const note = this.frequencyToNote(result.frequency);
+                    if (note) {
+                        this.handleDetectedNote(note);
+                    }
+                }
+
+                requestAnimationFrame(() => this.detect());
+            }
+
+            detectPitch(buffer) {
+                const rms = PitchDetector.calculateRMS(buffer);
+                if (rms < 0.01) return null;
+
+                const autocorrelation = PitchDetector.autoCorrelate(buffer, this.audioContext.sampleRate);
+                if (!autocorrelation) return null;
+
+                let { frequency, confidence } = autocorrelation;
+
+                if (frequency < 80 || frequency > 1200 || confidence < 0.90) return null;
+
+                // Temporal smoothing - only accept stable frequencies
+                if (this.lastFrequency) {
+                    const freqDiff = Math.abs(frequency - this.lastFrequency);
+                    const tolerance = this.lastFrequency * 0.02;
+
+                    if (freqDiff < tolerance) {
+                        this.stableCount++;
+                        frequency = (frequency + this.lastFrequency) / 2;
+                    } else {
+                        this.stableCount = 0;
+                    }
+                }
+
+                this.lastFrequency = frequency;
+
+                if (this.stableCount < 2) return null;
+
+                return { frequency, confidence };
+            }
+
+            frequencyToNote(frequency) {
+                return PitchDetector.frequencyToNote(frequency);
+            }
+
+            async requestWakeLock() {
+                if (!('wakeLock' in navigator)) {
+                    console.warn('Screen Wake Lock API not supported');
+                    return;
+                }
+
+                try {
+                    this.wakeLock = await navigator.wakeLock.request('screen');
+                    console.log('Wake Lock activated');
+
+                    this.wakeLock.addEventListener('release', () => {
+                        console.log('Wake Lock released');
+                    });
+                } catch (err) {
+                    console.error('Wake Lock request failed:', err);
+                }
+            }
+
+            async releaseWakeLock() {
+                if (this.wakeLock !== null) {
+                    try {
+                        await this.wakeLock.release();
+                        this.wakeLock = null;
+                        console.log('Wake Lock manually released');
+                    } catch (err) {
+                        console.error('Wake Lock release failed:', err);
+                    }
+                }
+            }
+
+            // To be implemented by child classes
+            handleDetectedNote(note) {
+                throw new Error('handleDetectedNote must be implemented by child class');
+            }
+        }
+
+        class InversionTrainer extends BaseTrainer {
+            constructor() {
+                super();
+
+                // InversionTrainer-specific properties
+                this.currentChord = 'C';
+                this.currentSequenceIndex = 0;
+                this.currentNoteIndex = 0;
+                this.sequences = [];
+                this.synth = null;
+                this.wrongNoteTimeout = null;
                 this.startTime = null;
                 this.timerInterval = null;
 
@@ -471,100 +566,6 @@
                 // Don't hide success message - keep it visible
             }
 
-            detect() {
-                if (!this.isRunning) return;
-
-                const buffer = new Float32Array(this.analyser.fftSize);
-                this.analyser.getFloatTimeDomainData(buffer);
-
-                const result = this.detectPitch(buffer);
-
-                if (result && result.frequency && result.confidence > 0.9) {
-                    const note = this.frequencyToNote(result.frequency);
-                    if (note) {
-                        this.handleDetectedNote(note);
-                    }
-                }
-
-                requestAnimationFrame(() => this.detect());
-            }
-
-            detectPitch(buffer) {
-                const rms = PitchDetector.calculateRMS(buffer);
-                // Adaptive threshold based on signal strength
-                if (rms < 0.01) {
-                    return null;
-                }
-
-                const autocorrelation = PitchDetector.autoCorrelate(buffer, this.audioContext.sampleRate);
-                if (!autocorrelation) {
-                    return null;
-                }
-
-                let { frequency, confidence } = autocorrelation;
-
-                if (frequency < 80 || frequency > 1200 || confidence < 0.90) {
-                    return null;
-                }
-
-                // Temporal smoothing - only accept stable frequencies
-                if (this.lastFrequency) {
-                    const freqDiff = Math.abs(frequency - this.lastFrequency);
-                    const tolerance = this.lastFrequency * 0.02; // 2% tolerance
-
-                    if (freqDiff < tolerance) {
-                        this.stableCount++;
-                        // Average with last frequency for smoother output
-                        frequency = (frequency + this.lastFrequency) / 2;
-                    } else {
-                        this.stableCount = 0;
-                    }
-                }
-
-                this.lastFrequency = frequency;
-
-                // Only return if frequency has been stable for at least 2 frames
-                if (this.stableCount < 2) {
-                    return null;
-                }
-
-                return { frequency, confidence };
-            }
-
-            frequencyToNote(frequency) {
-                return PitchDetector.frequencyToNote(frequency);
-            }
-
-            async requestWakeLock() {
-                if (!('wakeLock' in navigator)) {
-                    console.warn('Screen Wake Lock API not supported');
-                    return;
-                }
-
-                try {
-                    this.wakeLock = await navigator.wakeLock.request('screen');
-                    console.log('Wake Lock activated');
-
-                    this.wakeLock.addEventListener('release', () => {
-                        console.log('Wake Lock released');
-                    });
-                } catch (err) {
-                    console.error('Wake Lock request failed:', err);
-                }
-            }
-
-            async releaseWakeLock() {
-                if (this.wakeLock !== null) {
-                    try {
-                        await this.wakeLock.release();
-                        this.wakeLock = null;
-                        console.log('Wake Lock manually released');
-                    } catch (err) {
-                        console.error('Wake Lock release failed:', err);
-                    }
-                }
-            }
-
             handleDetectedNote(note) {
                 const currentSequence = this.sequences[this.currentSequenceIndex];
                 const expectedNote = currentSequence[this.currentNoteIndex];
@@ -702,26 +703,17 @@
         }
 
         // Speed Training Class
-        class SpeedTrainer {
+        class SpeedTrainer extends BaseTrainer {
             constructor() {
-                this.audioContext = null;
-                this.analyser = null;
-                this.microphone = null;
-                this.mediaStream = null;
-                this.isRunning = false;
-                this.synth = null;
-                this.wakeLock = null;
+                super();
 
-                // Speed training specific
+                // SpeedTrainer-specific properties
+                this.synth = null;
                 this.targetNote = null;
                 this.score = 0;
                 this.timeLeft = 60;
                 this.timerInterval = null;
                 this.allNotes = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
-                this.lastDetectedNote = null;
-                this.detectionCooldown = false;
-                this.lastFrequency = null;
-                this.stableCount = 0;
 
                 this.init();
             }
@@ -859,59 +851,6 @@
                 document.getElementById('speed-score').textContent = this.score;
             }
 
-            detect() {
-                if (!this.isRunning) return;
-
-                const buffer = new Float32Array(this.analyser.fftSize);
-                this.analyser.getFloatTimeDomainData(buffer);
-
-                const result = this.detectPitch(buffer);
-
-                if (result && result.frequency && result.confidence > 0.9) {
-                    const note = this.frequencyToNote(result.frequency);
-                    if (note) {
-                        this.handleDetectedNote(note);
-                    }
-                }
-
-                requestAnimationFrame(() => this.detect());
-            }
-
-            detectPitch(buffer) {
-                const rms = PitchDetector.calculateRMS(buffer);
-                if (rms < 0.01) return null;
-
-                const autocorrelation = PitchDetector.autoCorrelate(buffer, this.audioContext.sampleRate);
-                if (!autocorrelation) return null;
-
-                let { frequency, confidence } = autocorrelation;
-
-                if (frequency < 80 || frequency > 1200 || confidence < 0.90) return null;
-
-                // Temporal smoothing
-                if (this.lastFrequency) {
-                    const freqDiff = Math.abs(frequency - this.lastFrequency);
-                    const tolerance = this.lastFrequency * 0.02;
-
-                    if (freqDiff < tolerance) {
-                        this.stableCount++;
-                        frequency = (frequency + this.lastFrequency) / 2;
-                    } else {
-                        this.stableCount = 0;
-                    }
-                }
-
-                this.lastFrequency = frequency;
-
-                if (this.stableCount < 2) return null;
-
-                return { frequency, confidence };
-            }
-
-            frequencyToNote(frequency) {
-                return PitchDetector.frequencyToNote(frequency);
-            }
-
             handleDetectedNote(note) {
                 if (note === this.targetNote) {
                     // Cooldown to prevent multiple detections of same correct note
@@ -938,26 +877,6 @@
                     }, 300);
                 }
                 // Ignore wrong notes - no penalty
-            }
-
-            async requestWakeLock() {
-                if (!('wakeLock' in navigator)) return;
-                try {
-                    this.wakeLock = await navigator.wakeLock.request('screen');
-                } catch (err) {
-                    console.error('Wake Lock request failed:', err);
-                }
-            }
-
-            async releaseWakeLock() {
-                if (this.wakeLock !== null) {
-                    try {
-                        await this.wakeLock.release();
-                        this.wakeLock = null;
-                    } catch (err) {
-                        console.error('Wake Lock release failed:', err);
-                    }
-                }
             }
 
             stop() {
