@@ -462,7 +462,15 @@
 
             nextNote() {
                 const randomIndex = Math.floor(Math.random() * this.allNotes.length);
-                this.targetNote = this.allNotes[randomIndex];
+                let selectedNote = this.allNotes[randomIndex];
+
+                // For black keys, randomly choose between sharp or flat notation
+                // This forces the user to learn enharmonic equivalents
+                if (ENHARMONIC_MAP[selectedNote] && Math.random() < 0.5) {
+                    selectedNote = ENHARMONIC_MAP[selectedNote];
+                }
+
+                this.targetNote = selectedNote;
                 this.updateTargetNoteDisplay();
             }
 
