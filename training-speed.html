@@ -533,13 +533,12 @@
 
             flashWrong() {
                 const targetBox = document.getElementById('target-note');
-                const originalBorder = targetBox.style.border;
 
                 // Flash red border
                 targetBox.style.border = '3px solid #ef4444';
 
                 setTimeout(() => {
-                    targetBox.style.border = originalBorder;
+                    targetBox.style.border = '3px solid var(--primary-color)';
                 }, 300);
             }
 
