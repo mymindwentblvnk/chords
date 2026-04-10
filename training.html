@@ -547,16 +547,16 @@
             }
 
             handleDetectedNote(note) {
+                // Ignore all notes during cooldown period or if it's the same note we just detected
+                if (this.detectionCooldown || note === this.lastDetectedNote) {
+                    return;
+                }
+
                 const currentSequence = this.sequences[this.currentSequenceIndex];
                 const expectedNote = currentSequence[this.currentNoteIndex];
 
                 // Check if it's the correct note
                 if (note === expectedNote) {
-                    // Cooldown to prevent multiple detections of same correct note
-                    if (this.detectionCooldown || note === this.lastDetectedNote) {
-                        return;
-                    }
-
                     this.lastDetectedNote = note;
                     this.detectionCooldown = true;
 
@@ -592,7 +592,7 @@
                         this.lastDetectedNote = null;
                     }, 500);
                 } else {
-                    // Wrong note - just show it (no cooldown)
+                    // Wrong note - show red flash
                     this.showWrongNote(note);
                 }
             }
