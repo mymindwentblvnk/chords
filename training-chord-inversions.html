@@ -110,32 +110,60 @@
             'english': {
                 'C': 'C',
                 'C#': 'C#',
+                'Db': 'Db',
                 'D': 'D',
                 'D#': 'D#',
+                'Eb': 'Eb',
                 'E': 'E',
                 'F': 'F',
                 'F#': 'F#',
+                'Gb': 'Gb',
                 'G': 'G',
                 'G#': 'G#',
+                'Ab': 'Ab',
                 'A': 'A',
                 'A#': 'A#',
+                'Bb': 'Bb',
                 'B': 'B'
             },
             'german': {
                 'C': 'C',
                 'C#': 'Cis',
+                'Db': 'Des',
                 'D': 'D',
                 'D#': 'Dis',
+                'Eb': 'Es',
                 'E': 'E',
                 'F': 'F',
                 'F#': 'Fis',
+                'Gb': 'Ges',
                 'G': 'G',
                 'G#': 'Gis',
+                'Ab': 'As',
                 'A': 'A',
                 'A#': 'Ais',
+                'Bb': 'B',
                 'B': 'H'
             }
         };
+
+        // Enharmonic equivalence map (notes that sound the same)
+        const ENHARMONIC_MAP = {
+            'C#': 'Db',
+            'Db': 'C#',
+            'D#': 'Eb',
+            'Eb': 'D#',
+            'F#': 'Gb',
+            'Gb': 'F#',
+            'G#': 'Ab',
+            'Ab': 'G#',
+            'A#': 'Bb',
+            'Bb': 'A#'
+        };
+
+        function areEnharmonic(note1, note2) {
+            return note1 === note2 || ENHARMONIC_MAP[note1] === note2;
+        }
 
         function loadNotationPreference() {
             try {
@@ -597,8 +625,8 @@
                 const currentSequence = this.sequences[this.currentSequenceIndex];
                 const expectedNote = currentSequence[this.currentNoteIndex];
 
-                // Check if it's the correct note
-                if (note === expectedNote) {
+                // Check if it's the correct note (accounting for enharmonic equivalents)
+                if (areEnharmonic(note, expectedNote)) {
                     this.lastDetectedNote = note;
                     this.detectionCooldown = true;
 

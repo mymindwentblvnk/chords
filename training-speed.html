@@ -101,32 +101,60 @@
             'english': {
                 'C': 'C',
                 'C#': 'C#',
+                'Db': 'Db',
                 'D': 'D',
                 'D#': 'D#',
+                'Eb': 'Eb',
                 'E': 'E',
                 'F': 'F',
                 'F#': 'F#',
+                'Gb': 'Gb',
                 'G': 'G',
                 'G#': 'G#',
+                'Ab': 'Ab',
                 'A': 'A',
                 'A#': 'A#',
+                'Bb': 'Bb',
                 'B': 'B'
             },
             'german': {
                 'C': 'C',
                 'C#': 'Cis',
+                'Db': 'Des',
                 'D': 'D',
                 'D#': 'Dis',
+                'Eb': 'Es',
                 'E': 'E',
                 'F': 'F',
                 'F#': 'Fis',
+                'Gb': 'Ges',
                 'G': 'G',
                 'G#': 'Gis',
+                'Ab': 'As',
                 'A': 'A',
                 'A#': 'Ais',
+                'Bb': 'B',
                 'B': 'H'
             }
         };
+
+        // Enharmonic equivalence map (notes that sound the same)
+        const ENHARMONIC_MAP = {
+            'C#': 'Db',
+            'Db': 'C#',
+            'D#': 'Eb',
+            'Eb': 'D#',
+            'F#': 'Gb',
+            'Gb': 'F#',
+            'G#': 'Ab',
+            'Ab': 'G#',
+            'A#': 'Bb',
+            'Bb': 'A#'
+        };
+
+        function areEnharmonic(note1, note2) {
+            return note1 === note2 || ENHARMONIC_MAP[note1] === note2;
+        }
 
         function loadNotationPreference() {
             try {
@@ -263,7 +291,8 @@
                 this.score = 0;
                 this.timeLeft = 60;
                 this.timerInterval = null;
-                this.allNotes = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
+                // Include all 12 chromatic notes (using both sharps and flats for variety)
+                this.allNotes = ['C', 'Db', 'D', 'Eb', 'E', 'F', 'Gb', 'G', 'Ab', 'A', 'Bb', 'B'];
                 this.notation = loadNotationPreference();
 
                 this.init();
@@ -455,9 +484,10 @@
             }
 
             handleDetectedNote(note) {
-                console.log('Detected:', note, 'Target:', this.targetNote, 'Match:', note === this.targetNote);
+                const isMatch = areEnharmonic(note, this.targetNote);
+                console.log('Detected:', note, 'Target:', this.targetNote, 'Match:', isMatch);
 
-                if (note === this.targetNote) {
+                if (isMatch) {
                     // Cooldown to prevent multiple detections of same correct note
                     if (this.detectionCooldown || note === this.lastDetectedNote) {
                         return;
