@@ -516,8 +516,6 @@
 
             flashCorrect() {
                 const targetBox = document.getElementById('target-note');
-                const originalBg = targetBox.style.background;
-                const originalBorder = targetBox.style.border;
 
                 // Flash green
                 targetBox.style.background = 'var(--accent-happy)';
@@ -525,8 +523,8 @@
                 targetBox.style.color = 'white';
 
                 setTimeout(() => {
-                    targetBox.style.background = originalBg;
-                    targetBox.style.border = originalBorder;
+                    targetBox.style.background = 'var(--surface)';
+                    targetBox.style.border = '3px solid var(--primary-color)';
                     targetBox.style.color = 'var(--primary-color)';
                 }, 200);
             }
