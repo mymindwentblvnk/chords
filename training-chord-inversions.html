@@ -566,6 +566,14 @@
                     document.getElementById('countdown-display').style.display = 'none';
                     document.getElementById('stop-training').style.display = 'block';
                     document.getElementById('current-stats').style.display = 'block';
+
+                    // Scroll to sequence boxes so they're visible
+                    setTimeout(() => {
+                        document.getElementById('sequence-boxes').scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'center'
+                        });
+                    }, 100);
                 } catch (error) {
                     alert('Error accessing microphone: ' + error.message);
                 }
@@ -698,6 +706,15 @@
                         }
                     }
                 });
+
+                // Scroll to current sequence box
+                const currentBox = document.getElementById(`sequence-box-${this.currentSequenceIndex}`);
+                if (currentBox) {
+                    currentBox.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'center'
+                    });
+                }
             }
 
             async showSuccess() {

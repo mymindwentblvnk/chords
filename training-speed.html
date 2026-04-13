@@ -443,6 +443,14 @@
                     this.startTimer();
                     this.detect();
 
+                    // Scroll to target note so it's always visible
+                    setTimeout(() => {
+                        document.getElementById('target-note-display').scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'center'
+                        });
+                    }, 100);
+
                 } catch (error) {
                     alert('Error accessing microphone: ' + error.message);
                     this.cleanup();
