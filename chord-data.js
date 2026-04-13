@@ -47,14 +47,6 @@ const CHORD_PROGRESSIONS = [
         description: "An optimistic progression with a warm, comfortable feel. Featured in 'I'm Yours' by Jason Mraz and 'She Will Be Loved' by Maroon 5. Hip hop: 'Hotline Bling' by Drake. The IV chord adds brightness while the vi creates gentle emotional depth."
     },
     {
-        name: "Dark Tension",
-        progression: ["i", "VII", "VI", "V"],
-        mood: ["unsettling"],
-        keyMode: "minor",
-        hasBorrowedChords: true,
-        description: "A minor progression with building tension through the descending chords. Hip hop: Popular in UK drill and dark trap beats by producers like Metro Boomin. The major V at the end creates unresolved energy and drama."
-    },
-    {
         name: "Dreamy Flow",
         progression: ["I", "iii", "vi", "IV"],
         mood: ["dreamy", "uplifting"],
