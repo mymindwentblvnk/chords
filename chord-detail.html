@@ -417,6 +417,13 @@
             // Initial display
             updateDisplay();
         }
+
+        // Cleanup Tone.js when leaving the page to prevent hanging notes
+        window.addEventListener('beforeunload', () => {
+            if (pianoInstance) {
+                pianoInstance.destroy();
+            }
+        });
     </script>
 </body>
 </html>

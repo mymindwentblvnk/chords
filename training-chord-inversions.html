@@ -800,6 +800,13 @@
 
         // Initialize trainer
         const trainer = new InversionTrainer();
+
+        // Cleanup Tone.js when leaving the page to prevent hanging notes
+        window.addEventListener('beforeunload', () => {
+            if (trainer.synth) {
+                trainer.synth.dispose();
+            }
+        });
     </script>
 </body>
 </html>

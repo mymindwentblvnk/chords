@@ -656,6 +656,13 @@
 
         // Initialize trainer
         const speedTrainer = new SpeedTrainer();
+
+        // Cleanup Tone.js when leaving the page to prevent hanging notes
+        window.addEventListener('beforeunload', () => {
+            if (speedTrainer.synth) {
+                speedTrainer.synth.dispose();
+            }
+        });
     </script>
 </body>
 </html>
