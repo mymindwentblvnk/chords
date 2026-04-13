@@ -523,18 +523,24 @@
 
             async start() {
                 try {
+                    console.log('Start training clicked');
+
                     // If "random" is selected, pick a random chord
                     const chordSelect = document.getElementById('training-chord');
+                    console.log('Current selector value:', chordSelect.value);
+
                     if (chordSelect.value === 'random') {
                         const availableChords = ['C', 'D', 'E', 'F', 'G', 'A', 'B', 'Am', 'Bm', 'Cm', 'Dm', 'Em', 'Fm', 'Gm'];
                         const randomChord = availableChords[Math.floor(Math.random() * availableChords.length)];
                         this.currentChord = randomChord;
+                        console.log('Random chord selected:', randomChord);
                         // Update the selector to show which chord was picked
                         chordSelect.value = randomChord;
                         // Show best time for this chord
                         this.displayBestTime();
                     } else {
                         this.currentChord = chordSelect.value;
+                        console.log('Manual chord selected:', this.currentChord);
                     }
 
                     // Reset UI from previous training
