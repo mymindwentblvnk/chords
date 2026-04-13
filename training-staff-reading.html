@@ -358,16 +358,34 @@
                 const noteY = staffY + (4 - noteData.line) * (lineSpacing / 2);
 
                 // Draw ledger lines if needed
-                if (noteData.ledger) {
-                    const ledgerY = noteY;
-                    const ledger = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-                    ledger.setAttribute('x1', noteX - 15);
-                    ledger.setAttribute('y1', ledgerY);
-                    ledger.setAttribute('x2', noteX + 15);
-                    ledger.setAttribute('y2', ledgerY);
-                    ledger.setAttribute('stroke', '#000');
-                    ledger.setAttribute('stroke-width', '1.5');
-                    this.svg.appendChild(ledger);
+                // Staff goes from line 0 (F5, top) to line 8 (E4, bottom)
+                // Ledger lines are at even positions: -2, -4 above; 10, 12 below
+                if (noteData.line < 0) {
+                    // Note above staff - draw ledger lines at -2, -4, etc.
+                    for (let ledgerLine = -2; ledgerLine >= noteData.line; ledgerLine -= 2) {
+                        const ledgerY = staffY + (4 - ledgerLine) * (lineSpacing / 2);
+                        const ledger = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                        ledger.setAttribute('x1', noteX - 15);
+                        ledger.setAttribute('y1', ledgerY);
+                        ledger.setAttribute('x2', noteX + 15);
+                        ledger.setAttribute('y2', ledgerY);
+                        ledger.setAttribute('stroke', '#000');
+                        ledger.setAttribute('stroke-width', '1.5');
+                        this.svg.appendChild(ledger);
+                    }
+                } else if (noteData.line > 8) {
+                    // Note below staff - draw ledger lines at 10, 12, etc.
+                    for (let ledgerLine = 10; ledgerLine <= noteData.line; ledgerLine += 2) {
+                        const ledgerY = staffY + (4 - ledgerLine) * (lineSpacing / 2);
+                        const ledger = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                        ledger.setAttribute('x1', noteX - 15);
+                        ledger.setAttribute('y1', ledgerY);
+                        ledger.setAttribute('x2', noteX + 15);
+                        ledger.setAttribute('y2', ledgerY);
+                        ledger.setAttribute('stroke', '#000');
+                        ledger.setAttribute('stroke-width', '1.5');
+                        this.svg.appendChild(ledger);
+                    }
                 }
 
                 // Draw accidental (sharp or flat) if needed
