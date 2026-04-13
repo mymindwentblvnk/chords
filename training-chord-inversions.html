@@ -48,6 +48,7 @@
             </div>
 
             <select id="training-chord" style="width: 100%; padding: 12px; font-size: 1rem; background: var(--background); color: var(--text-primary); border: 2px solid var(--primary-color); border-radius: 10px; cursor: pointer; margin-bottom: 12px;">
+                <option value="random" selected>🎲 Random Chord</option>
                 <option value="C">C Major</option>
                 <option value="D">D Major</option>
                 <option value="E">E Major</option>
@@ -334,9 +335,16 @@
                 startBtn.addEventListener('click', () => this.start());
                 stopBtn.addEventListener('click', () => this.stop());
                 chordSelect.addEventListener('change', (e) => {
-                    this.currentChord = e.target.value;
-                    this.updateSequenceBoxes();
-                    this.displayBestTime();
+                    if (e.target.value === 'random') {
+                        // Clear sequences when random is selected
+                        this.currentChord = 'C'; // Default for best time display
+                        document.getElementById('sequence-boxes').innerHTML = '<div style="text-align: center; padding: 40px; color: var(--text-secondary); font-size: 1.1rem;">🎲 A random chord will be selected when you start</div>';
+                        document.getElementById('best-time-display').style.display = 'none';
+                    } else {
+                        this.currentChord = e.target.value;
+                        this.updateSequenceBoxes();
+                        this.displayBestTime();
+                    }
                 });
                 notationToggle.addEventListener('click', () => this.toggleNotation());
 
@@ -348,11 +356,15 @@
                 // Update notation toggle display
                 this.updateNotationToggle();
 
-                // Show sequence boxes on page load
-                this.updateSequenceBoxes();
-
-                // Display best time
-                this.displayBestTime();
+                // Show sequence boxes on page load (or placeholder if random)
+                const chordSelect = document.getElementById('training-chord');
+                if (chordSelect.value === 'random') {
+                    document.getElementById('sequence-boxes').innerHTML = '<div style="text-align: center; padding: 40px; color: var(--text-secondary); font-size: 1.1rem;">🎲 A random chord will be selected when you start</div>';
+                    document.getElementById('best-time-display').style.display = 'none';
+                } else {
+                    this.updateSequenceBoxes();
+                    this.displayBestTime();
+                }
             }
 
             toggleNotation() {
@@ -511,6 +523,20 @@
 
             async start() {
                 try {
+                    // If "random" is selected, pick a random chord
+                    const chordSelect = document.getElementById('training-chord');
+                    if (chordSelect.value === 'random') {
+                        const availableChords = ['C', 'D', 'E', 'F', 'G', 'A', 'B', 'Am', 'Bm', 'Cm', 'Dm', 'Em', 'Fm', 'Gm'];
+                        const randomChord = availableChords[Math.floor(Math.random() * availableChords.length)];
+                        this.currentChord = randomChord;
+                        // Update the selector to show which chord was picked
+                        chordSelect.value = randomChord;
+                        // Show best time for this chord
+                        this.displayBestTime();
+                    } else {
+                        this.currentChord = chordSelect.value;
+                    }
+
                     // Reset UI from previous training
                     document.getElementById('success-message').style.display = 'none';
 
