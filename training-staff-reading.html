@@ -83,22 +83,57 @@
     <script>
         // Musical staff note positions (C4 to C6 range)
         const STAFF_NOTES = {
-            'C4': { line: 10, ledger: true },  // Below staff
-            'D4': { line: 9, ledger: false },  // Below first line
-            'E4': { line: 8, ledger: false },  // First line
-            'F4': { line: 7, ledger: false },  // First space
-            'G4': { line: 6, ledger: false },  // Second line
-            'A4': { line: 5, ledger: false },  // Second space
-            'B4': { line: 4, ledger: false },  // Third line (middle)
-            'C5': { line: 3, ledger: false },  // Third space
-            'D5': { line: 2, ledger: false },  // Fourth line
-            'E5': { line: 1, ledger: false },  // Fourth space
-            'F5': { line: 0, ledger: false },  // Fifth line (top)
-            'G5': { line: -1, ledger: false }, // Above fifth line
-            'A5': { line: -2, ledger: true },  // Above staff
-            'B5': { line: -3, ledger: true },  // Above staff
-            'C6': { line: -4, ledger: true }   // Above staff
+            'C4': { line: 10, ledger: true, accidental: null },
+            'C#4': { line: 10, ledger: true, accidental: 'sharp' },
+            'Db4': { line: 9, ledger: false, accidental: 'flat' },
+            'D4': { line: 9, ledger: false, accidental: null },
+            'D#4': { line: 9, ledger: false, accidental: 'sharp' },
+            'Eb4': { line: 8, ledger: false, accidental: 'flat' },
+            'E4': { line: 8, ledger: false, accidental: null },
+            'F4': { line: 7, ledger: false, accidental: null },
+            'F#4': { line: 7, ledger: false, accidental: 'sharp' },
+            'Gb4': { line: 6, ledger: false, accidental: 'flat' },
+            'G4': { line: 6, ledger: false, accidental: null },
+            'G#4': { line: 6, ledger: false, accidental: 'sharp' },
+            'Ab4': { line: 5, ledger: false, accidental: 'flat' },
+            'A4': { line: 5, ledger: false, accidental: null },
+            'A#4': { line: 5, ledger: false, accidental: 'sharp' },
+            'Bb4': { line: 4, ledger: false, accidental: 'flat' },
+            'B4': { line: 4, ledger: false, accidental: null },
+            'C5': { line: 3, ledger: false, accidental: null },
+            'C#5': { line: 3, ledger: false, accidental: 'sharp' },
+            'Db5': { line: 2, ledger: false, accidental: 'flat' },
+            'D5': { line: 2, ledger: false, accidental: null },
+            'D#5': { line: 2, ledger: false, accidental: 'sharp' },
+            'Eb5': { line: 1, ledger: false, accidental: 'flat' },
+            'E5': { line: 1, ledger: false, accidental: null },
+            'F5': { line: 0, ledger: false, accidental: null },
+            'F#5': { line: 0, ledger: false, accidental: 'sharp' },
+            'Gb5': { line: -1, ledger: false, accidental: 'flat' },
+            'G5': { line: -1, ledger: false, accidental: null },
+            'G#5': { line: -1, ledger: false, accidental: 'sharp' },
+            'Ab5': { line: -2, ledger: true, accidental: 'flat' },
+            'A5': { line: -2, ledger: true, accidental: null },
+            'A#5': { line: -2, ledger: true, accidental: 'sharp' },
+            'Bb5': { line: -3, ledger: true, accidental: 'flat' },
+            'B5': { line: -3, ledger: true, accidental: null },
+            'C6': { line: -4, ledger: true, accidental: null }
         };
+
+        // Enharmonic equivalents for matching
+        const ENHARMONIC_MAP = {
+            'C#': 'Db', 'Db': 'C#',
+            'D#': 'Eb', 'Eb': 'D#',
+            'F#': 'Gb', 'Gb': 'F#',
+            'G#': 'Ab', 'Ab': 'G#',
+            'A#': 'Bb', 'Bb': 'A#'
+        };
+
+        function areEnharmonic(note1, note2) {
+            const name1 = note1.replace(/[0-9]/g, '');
+            const name2 = note2.replace(/[0-9]/g, '');
+            return name1 === name2 || ENHARMONIC_MAP[name1] === name2;
+        }
 
         const TRAINING_NOTES = Object.keys(STAFF_NOTES);
         const TRAINING_DURATION = 60; // seconds
@@ -335,6 +370,18 @@
                     this.svg.appendChild(ledger);
                 }
 
+                // Draw accidental (sharp or flat) if needed
+                if (noteData.accidental) {
+                    const accidental = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+                    accidental.setAttribute('x', noteX - 25);
+                    accidental.setAttribute('y', noteY + 5);
+                    accidental.setAttribute('font-size', '30');
+                    accidental.setAttribute('font-family', 'serif');
+                    accidental.setAttribute('fill', '#000');
+                    accidental.textContent = noteData.accidental === 'sharp' ? '♯' : '♭';
+                    this.svg.appendChild(accidental);
+                }
+
                 // Draw note head (filled circle)
                 const noteHead = document.createElementNS('http://www.w3.org/2000/svg', 'ellipse');
                 noteHead.setAttribute('cx', noteX);
@@ -493,11 +540,8 @@
                     return;
                 }
 
-                // Extract note name without octave for comparison
-                const detectedNoteName = detectedNote.replace(/[0-9]/g, '');
-                const targetNoteName = this.targetNote.replace(/[0-9]/g, '');
-
-                if (detectedNoteName === targetNoteName) {
+                // Check if detected note matches target (including enharmonic equivalents)
+                if (areEnharmonic(detectedNote, this.targetNote)) {
                     // Correct note!
                     this.score++;
                     this.updateDisplay();
