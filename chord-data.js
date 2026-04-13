@@ -302,5 +302,27 @@ const CHORD_PROGRESSIONS = [
         keyMode: "major",
         hasBorrowedChords: true,
         description: "Made famous by Radiohead's 'Creep', also used in David Bowie's 'Space Oddity' and 'True' by Spandau Ballet. The borrowed iv from parallel minor creates emotional whiplash - sudden darkness invading brightness. Hip hop: Variations in The Weeknd's production. Creates the feeling of hope being crushed, optimism turning to despair in an instant. The major-minor contrast is psychologically jarring."
+    },
+    {
+        name: "Three Chord Rock",
+        progression: ["I", "IV", "V"],
+        mood: ["happy", "uplifting"],
+        keyMode: "major",
+        description: "The most fundamental progression in rock and roll - just three chords that built entire genres. Used in 'La Bamba' by Ritchie Valens, 'Good Golly Miss Molly' by Little Richard, and countless punk, rock, and pop songs. Hip hop: Sampled in early hip hop breaks. The simplicity is its power - direct, energetic, and impossible to forget. This is the backbone of rock music."
+    },
+    {
+        name: "Aeolian Vamp",
+        progression: ["i", "VII", "VI", "VII"],
+        mood: ["melancholic", "dreamy"],
+        keyMode: "minor",
+        description: "A natural minor progression that oscillates between VI and VII, creating a hypnotic, modal sound. The lack of the leading tone (V) keeps it dark and unresolved. Common in progressive rock, metal, and atmospheric music. Creates a timeless, floating quality that avoids traditional resolution, perfect for building tension or creating ambient soundscapes."
+    },
+    {
+        name: "Mixolydian Vamp",
+        progression: ["I", "VII", "IV", "I"],
+        mood: ["uplifting", "dreamy"],
+        keyMode: "major",
+        hasBorrowedChords: true,
+        description: "Uses the flatted seventh (♭VII) borrowed from the Mixolydian mode, creating a modal rock sound. Used in 'Sweet Home Alabama' by Lynyrd Skynyrd, 'Dreams' by Fleetwood Mac, and much of The Beatles' work. Hip hop: Sampled extensively in classic boom bap. The ♭VII gives a bluesy, laid-back feel that's neither fully major nor minor - quintessentially rock and roll."
     }
 ];
