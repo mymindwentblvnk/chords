@@ -300,15 +300,7 @@
 
             const pattern = currentMode === 'Major' ? MAJOR_PATTERN : MINOR_PATTERN;
 
-            // Generic placeholders that rotate to avoid giving away answers
-            const chordPlaceholders = ['C', 'Dm', 'F#m', 'Bdim', 'G', 'Am', 'E'];
-            const romanPlaceholders = ['I', 'ii', 'iii', 'IV', 'V', 'vi', 'vii°'];
-            const notesPlaceholders = ['C - E - G', 'D - F - A', 'E - G# - B', 'F - A - C', 'G - B - D', 'A - C - E', 'B - D - F'];
-
             for (let i = 0; i < 7; i++) {
-                // Use different placeholders than the actual answer position
-                const placeholderIndex = (i + 3) % 7; // Offset to avoid matching actual answers
-
                 const row = document.createElement('tr');
                 row.innerHTML = `
                     <td style="padding: 10px; border: 1px solid var(--surface); font-weight: bold;">${i + 1}</td>
@@ -316,7 +308,7 @@
                         <input type="text"
                                class="answer-input chord-input"
                                data-row="${i}"
-                               placeholder="${chordPlaceholders[placeholderIndex]}"
+                               placeholder=""
                                style="width: 100%; padding: 8px; background: var(--background); color: var(--text-primary); border: 2px solid var(--surface); border-radius: 6px;">
                         <div class="correct-answer" data-row="${i}" data-field="chord" style="display: none; margin-top: 5px; padding: 5px 8px; background: rgba(99, 102, 241, 0.1); border-radius: 4px; font-size: 0.85rem; color: var(--primary-color);"></div>
                     </td>
@@ -324,7 +316,7 @@
                         <input type="text"
                                class="answer-input roman-input"
                                data-row="${i}"
-                               placeholder="${romanPlaceholders[placeholderIndex]}"
+                               placeholder=""
                                style="width: 100%; padding: 8px; background: var(--background); color: var(--text-primary); border: 2px solid var(--surface); border-radius: 6px; font-family: monospace;">
                         <div class="correct-answer" data-row="${i}" data-field="roman" style="display: none; margin-top: 5px; padding: 5px 8px; background: rgba(99, 102, 241, 0.1); border-radius: 4px; font-size: 0.85rem; color: var(--primary-color);"></div>
                     </td>
@@ -332,7 +324,7 @@
                         <input type="text"
                                class="answer-input notes-input"
                                data-row="${i}"
-                               placeholder="${notesPlaceholders[placeholderIndex]}"
+                               placeholder=""
                                style="width: 100%; padding: 8px; background: var(--background); color: var(--text-primary); border: 2px solid var(--surface); border-radius: 6px;">
                         <div class="correct-answer" data-row="${i}" data-field="notes" style="display: none; margin-top: 5px; padding: 5px 8px; background: rgba(99, 102, 241, 0.1); border-radius: 4px; font-size: 0.85rem; color: var(--primary-color);"></div>
                     </td>
