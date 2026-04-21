@@ -100,9 +100,8 @@
                     <thead>
                         <tr style="background: var(--surface-light);">
                             <th style="padding: 12px; text-align: left; border: 1px solid var(--surface);">Degree</th>
-                            <th style="padding: 12px; text-align: left; border: 1px solid var(--surface);">Roman</th>
-                            <th style="padding: 12px; text-align: left; border: 1px solid var(--surface);">Quality</th>
                             <th style="padding: 12px; text-align: left; border: 1px solid var(--surface);">Chord</th>
+                            <th style="padding: 12px; text-align: left; border: 1px solid var(--surface);">Roman</th>
                             <th style="padding: 12px; text-align: left; border: 1px solid var(--surface);">Notes</th>
                         </tr>
                     </thead>
@@ -237,9 +236,8 @@
 
                 correctAnswers.push({
                     degree: i + 1,
-                    roman: roman,
-                    quality: quality,
                     chord: chord,
+                    roman: roman,
                     notes: notes.join(' - ')
                 });
             }
@@ -273,27 +271,17 @@
                     <td style="padding: 10px; border: 1px solid var(--surface); font-weight: bold;">${i + 1}</td>
                     <td style="padding: 10px; border: 1px solid var(--surface);">
                         <input type="text"
-                               class="answer-input roman-input"
-                               data-row="${i}"
-                               placeholder="e.g., ${pattern.romans[i]}"
-                               style="width: 100%; padding: 8px; background: var(--background); color: var(--text-primary); border: 2px solid var(--surface); border-radius: 6px; font-family: monospace;">
-                    </td>
-                    <td style="padding: 10px; border: 1px solid var(--surface);">
-                        <select class="answer-input quality-input"
-                                data-row="${i}"
-                                style="width: 100%; padding: 8px; background: var(--background); color: var(--text-primary); border: 2px solid var(--surface); border-radius: 6px;">
-                            <option value="">Select...</option>
-                            <option value="Major">Major</option>
-                            <option value="minor">minor</option>
-                            <option value="diminished">diminished</option>
-                        </select>
-                    </td>
-                    <td style="padding: 10px; border: 1px solid var(--surface);">
-                        <input type="text"
                                class="answer-input chord-input"
                                data-row="${i}"
                                placeholder="e.g., C or Dm"
                                style="width: 100%; padding: 8px; background: var(--background); color: var(--text-primary); border: 2px solid var(--surface); border-radius: 6px;">
+                    </td>
+                    <td style="padding: 10px; border: 1px solid var(--surface);">
+                        <input type="text"
+                               class="answer-input roman-input"
+                               data-row="${i}"
+                               placeholder="e.g., ${pattern.romans[i]}"
+                               style="width: 100%; padding: 8px; background: var(--background); color: var(--text-primary); border: 2px solid var(--surface); border-radius: 6px; font-family: monospace;">
                     </td>
                     <td style="padding: 10px; border: 1px solid var(--surface);">
                         <input type="text"
@@ -315,7 +303,7 @@
         // Check answers
         function checkAnswers() {
             let correct = 0;
-            let total = 7 * 4; // 7 rows, 4 fields each
+            let total = 7 * 3; // 7 rows, 3 fields each (Chord, Roman, Notes)
 
             document.querySelectorAll('.answer-input').forEach(input => {
                 const row = parseInt(input.dataset.row);
@@ -328,9 +316,6 @@
                 if (input.classList.contains('roman-input')) {
                     expectedAnswer = correctAnswer.roman;
                     isCorrect = normalizeInput(userAnswer) === normalizeInput(expectedAnswer);
-                } else if (input.classList.contains('quality-input')) {
-                    expectedAnswer = correctAnswer.quality;
-                    isCorrect = userAnswer === expectedAnswer;
                 } else if (input.classList.contains('chord-input')) {
                     expectedAnswer = correctAnswer.chord;
                     isCorrect = normalizeInput(userAnswer) === normalizeInput(expectedAnswer);
@@ -376,8 +361,6 @@
 
                 if (input.classList.contains('roman-input')) {
                     input.value = correctAnswer.roman;
-                } else if (input.classList.contains('quality-input')) {
-                    input.value = correctAnswer.quality;
                 } else if (input.classList.contains('chord-input')) {
                     input.value = correctAnswer.chord;
                 } else if (input.classList.contains('notes-input')) {
