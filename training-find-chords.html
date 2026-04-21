@@ -13,6 +13,42 @@
     <link rel="stylesheet" href="guide-styles.css">
     <script src="page-memory.js"></script>
     <script src="music-theory.js"></script>
+    <style>
+        /* Keyboard styles (from piano.css) */
+        .kb-key {
+            position: relative;
+            cursor: default;
+            user-select: none;
+        }
+
+        .kb-key.white {
+            width: 50px;
+            height: 200px;
+            background: linear-gradient(to bottom, #ffffff 0%, #f0f0f0 100%);
+            border: 2px solid #333;
+            border-radius: 0 0 5px 5px;
+            margin-right: -1px;
+            z-index: 1;
+        }
+
+        .kb-key.black {
+            width: 35px;
+            height: 120px;
+            background: linear-gradient(to bottom, #1a1a1a 0%, #000000 100%);
+            border: 1px solid #000;
+            border-radius: 0 0 4px 4px;
+            position: absolute;
+            z-index: 2;
+            box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Position black keys using data-key-index - scaled up from 40px to 50px white keys */
+        #keyboard .kb-key.black[data-key-index="0"] { left: 32px; }  /* C# */
+        #keyboard .kb-key.black[data-key-index="1"] { left: 82px; }  /* D# */
+        #keyboard .kb-key.black[data-key-index="3"] { left: 182px; } /* F# */
+        #keyboard .kb-key.black[data-key-index="4"] { left: 232px; } /* G# */
+        #keyboard .kb-key.black[data-key-index="5"] { left: 282px; } /* A# */
+    </style>
 </head>
 <body>
     <nav class="main-nav">
@@ -51,8 +87,10 @@
             <!-- Keyboard Reference -->
             <div id="keyboard-container" style="display: none; margin-bottom: 25px;">
                 <div style="text-align: center; margin-bottom: 10px; font-size: 0.9rem; color: var(--text-secondary);">Reference Keyboard</div>
-                <div style="background: white; padding: 20px; border-radius: 12px; overflow-x: auto;">
-                    <div id="keyboard" style="display: flex; justify-content: center; position: relative; height: 150px; min-width: 700px;"></div>
+                <div style="background: var(--background); padding: 30px; border-radius: 12px; overflow-x: auto;">
+                    <div style="display: flex; justify-content: center;">
+                        <div id="keyboard" style="position: relative; display: flex; height: 200px;"></div>
+                    </div>
                 </div>
             </div>
 
@@ -109,61 +147,37 @@
         let currentScale = null;
         let correctAnswers = null;
 
-        // Draw keyboard
+        // Draw keyboard (simplified version from piano.js)
         function drawKeyboard() {
             const keyboard = document.getElementById('keyboard');
             keyboard.innerHTML = '';
 
-            const whiteKeys = ['C', 'D', 'E', 'F', 'G', 'A', 'B'];
-            const blackKeyPositions = {
-                'C#': 1, 'D#': 2, 'F#': 4, 'G#': 5, 'A#': 6
+            // Render key group helper
+            const renderKeyGroup = (noteName, hasSharp, index) => {
+                // White key
+                const whiteKey = document.createElement('div');
+                whiteKey.className = 'kb-key white';
+                whiteKey.setAttribute('data-key-index', index);
+                keyboard.appendChild(whiteKey);
+
+                // Black key (if exists)
+                if (hasSharp) {
+                    const blackKey = document.createElement('div');
+                    blackKey.className = 'kb-key black';
+                    blackKey.setAttribute('data-key-index', index);
+                    keyboard.appendChild(blackKey);
+                }
             };
 
-            // Draw white keys
-            whiteKeys.forEach((note, index) => {
-                const key = document.createElement('div');
-                key.style.cssText = `
-                    width: 60px;
-                    height: 150px;
-                    background: white;
-                    border: 2px solid #333;
-                    border-radius: 0 0 4px 4px;
-                    position: relative;
-                    display: flex;
-                    align-items: flex-end;
-                    justify-content: center;
-                    padding-bottom: 10px;
-                    font-weight: bold;
-                    color: #333;
-                `;
-                key.textContent = note;
-                keyboard.appendChild(key);
-            });
-
-            // Draw black keys
-            Object.entries(blackKeyPositions).forEach(([note, position]) => {
-                const key = document.createElement('div');
-                key.style.cssText = `
-                    width: 40px;
-                    height: 90px;
-                    background: #333;
-                    border: 2px solid #000;
-                    border-radius: 0 0 4px 4px;
-                    position: absolute;
-                    left: ${position * 60 - 20}px;
-                    top: 0;
-                    display: flex;
-                    align-items: flex-end;
-                    justify-content: center;
-                    padding-bottom: 8px;
-                    font-weight: bold;
-                    color: white;
-                    font-size: 0.8rem;
-                    z-index: 1;
-                `;
-                key.textContent = note;
-                keyboard.appendChild(key);
-            });
+            let keyIndex = 0;
+            renderKeyGroup('C', true, keyIndex++);
+            renderKeyGroup('D', true, keyIndex++);
+            renderKeyGroup('E', false, keyIndex++);
+            renderKeyGroup('F', true, keyIndex++);
+            renderKeyGroup('G', true, keyIndex++);
+            renderKeyGroup('A', true, keyIndex++);
+            renderKeyGroup('B', false, keyIndex++);
+            renderKeyGroup('C', false, keyIndex);
         }
 
         // Build scale
