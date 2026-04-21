@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#0f172a">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Chordz">
+    <title>Find All Chords - Chordz</title>
+    <link rel="manifest" href="manifest.json">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="guide-styles.css">
+    <script src="page-memory.js"></script>
+    <script src="music-theory.js"></script>
+</head>
+<body>
+    <nav class="main-nav">
+        <a href="training.html" class="nav-link active">🎮 Training</a>
+        <a href="chord-progressions.html" class="nav-link">🎵 Chord Progressions</a>
+        <a href="find-note.html" class="nav-link">🎤 Find Note</a>
+        <a href="wiki.html" class="nav-link">📚 Wiki</a>
+    </nav>
+
+    <div class="guide-container">
+        <div class="back-nav">
+            <a href="training.html" class="back-link">← Back to Training</a>
+        </div>
+
+        <div class="guide-section" style="max-width: 900px; margin: 0 auto; padding: 10px 20px 20px 20px;">
+            <header style="text-align: center; margin-bottom: 15px;">
+                <div style="font-size: 2rem; margin-bottom: 5px;">🎹</div>
+                <h1 style="background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin: 0 0 5px 0; font-size: 1.5rem;">Find All Chords</h1>
+                <p class="subtitle" style="font-size: 0.85rem; margin: 0;">Build all 7 natural chords in a given key</p>
+            </header>
+
+            <button id="start-btn" style="width: 100%; padding: 15px; font-size: 1.1rem; font-weight: 600; background: var(--primary-color); color: white; border: none; border-radius: 10px; cursor: pointer; margin-bottom: 15px;">
+                🎲 Start New Challenge
+            </button>
+
+            <!-- Challenge Display -->
+            <div id="challenge-display" style="display: none; margin-bottom: 20px;">
+                <div style="background: linear-gradient(135deg, rgba(99, 102, 241, 0.2), rgba(139, 92, 246, 0.2)); padding: 20px; border-radius: 12px; text-align: center; border: 2px solid var(--primary-color);">
+                    <div style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 5px;">Find all chords in:</div>
+                    <div style="font-size: 2rem; font-weight: bold; color: var(--primary-color);">
+                        <span id="root-note"></span> <span id="mode"></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Keyboard Reference -->
+            <div id="keyboard-container" style="display: none; margin-bottom: 25px;">
+                <div style="text-align: center; margin-bottom: 10px; font-size: 0.9rem; color: var(--text-secondary);">Reference Keyboard</div>
+                <div style="background: white; padding: 20px; border-radius: 12px; overflow-x: auto;">
+                    <div id="keyboard" style="display: flex; justify-content: center; position: relative; height: 150px; min-width: 700px;"></div>
+                </div>
+            </div>
+
+            <!-- Answer Table -->
+            <div id="answer-table" style="display: none; margin-bottom: 20px;">
+                <table style="width: 100%; border-collapse: collapse;">
+                    <thead>
+                        <tr style="background: var(--surface-light);">
+                            <th style="padding: 12px; text-align: left; border: 1px solid var(--surface);">Degree</th>
+                            <th style="padding: 12px; text-align: left; border: 1px solid var(--surface);">Roman</th>
+                            <th style="padding: 12px; text-align: left; border: 1px solid var(--surface);">Quality</th>
+                            <th style="padding: 12px; text-align: left; border: 1px solid var(--surface);">Chord</th>
+                            <th style="padding: 12px; text-align: left; border: 1px solid var(--surface);">Notes</th>
+                        </tr>
+                    </thead>
+                    <tbody id="answer-rows">
+                        <!-- Will be filled by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+
+            <div id="button-container" style="display: none; gap: 10px;">
+                <button id="check-btn" style="flex: 1; padding: 15px; font-size: 1.1rem; font-weight: 600; background: var(--accent-happy); color: white; border: none; border-radius: 10px; cursor: pointer;">
+                    ✓ Check Answers
+                </button>
+                <button id="show-answers-btn" style="flex: 1; padding: 15px; font-size: 1.1rem; font-weight: 600; background: var(--surface); color: var(--text-primary); border: 2px solid var(--primary-color); border-radius: 10px; cursor: pointer;">
+                    💡 Show Answers
+                </button>
+            </div>
+
+            <!-- Results -->
+            <div id="results" style="display: none; margin-top: 20px; padding: 20px; background: var(--surface-light); border-radius: 12px; text-align: center;">
+                <div id="score-display" style="font-size: 1.5rem; font-weight: bold; margin-bottom: 10px;"></div>
+                <div id="feedback" style="color: var(--text-secondary);"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const CHROMATIC_SCALE = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
+
+        const MAJOR_PATTERN = {
+            qualities: ['Major', 'minor', 'minor', 'Major', 'Major', 'minor', 'diminished'],
+            romans: ['I', 'ii', 'iii', 'IV', 'V', 'vi', 'vii°']
+        };
+
+        const MINOR_PATTERN = {
+            qualities: ['minor', 'diminished', 'Major', 'minor', 'minor', 'Major', 'Major'],
+            romans: ['i', 'ii°', 'III', 'iv', 'v', 'VI', 'VII']
+        };
+
+        let currentKey = null;
+        let currentMode = null;
+        let currentScale = null;
+        let correctAnswers = null;
+
+        // Draw keyboard
+        function drawKeyboard() {
+            const keyboard = document.getElementById('keyboard');
+            keyboard.innerHTML = '';
+
+            const whiteKeys = ['C', 'D', 'E', 'F', 'G', 'A', 'B'];
+            const blackKeyPositions = {
+                'C#': 1, 'D#': 2, 'F#': 4, 'G#': 5, 'A#': 6
+            };
+
+            // Draw white keys
+            whiteKeys.forEach((note, index) => {
+                const key = document.createElement('div');
+                key.style.cssText = `
+                    width: 60px;
+                    height: 150px;
+                    background: white;
+                    border: 2px solid #333;
+                    border-radius: 0 0 4px 4px;
+                    position: relative;
+                    display: flex;
+                    align-items: flex-end;
+                    justify-content: center;
+                    padding-bottom: 10px;
+                    font-weight: bold;
+                    color: #333;
+                `;
+                key.textContent = note;
+                keyboard.appendChild(key);
+            });
+
+            // Draw black keys
+            Object.entries(blackKeyPositions).forEach(([note, position]) => {
+                const key = document.createElement('div');
+                key.style.cssText = `
+                    width: 40px;
+                    height: 90px;
+                    background: #333;
+                    border: 2px solid #000;
+                    border-radius: 0 0 4px 4px;
+                    position: absolute;
+                    left: ${position * 60 - 20}px;
+                    top: 0;
+                    display: flex;
+                    align-items: flex-end;
+                    justify-content: center;
+                    padding-bottom: 8px;
+                    font-weight: bold;
+                    color: white;
+                    font-size: 0.8rem;
+                    z-index: 1;
+                `;
+                key.textContent = note;
+                keyboard.appendChild(key);
+            });
+        }
+
+        // Build scale
+        function buildScale(root, mode) {
+            const pattern = mode === 'Major'
+                ? [2, 2, 1, 2, 2, 2, 1]  // W-W-H-W-W-W-H
+                : [2, 1, 2, 2, 1, 2, 2]; // W-H-W-W-H-W-W
+
+            const scale = [root];
+            let currentIndex = CHROMATIC_SCALE.indexOf(root);
+
+            for (let step of pattern) {
+                currentIndex = (currentIndex + step) % 12;
+                scale.push(CHROMATIC_SCALE[currentIndex]);
+            }
+
+            return scale.slice(0, 7); // Remove the octave
+        }
+
+        // Build chord from scale
+        function buildChordFromScale(scale, degree) {
+            const root = scale[degree];
+            const third = scale[(degree + 2) % 7];
+            const fifth = scale[(degree + 4) % 7];
+            return [root, third, fifth];
+        }
+
+        // Get chord name
+        function getChordName(notes, quality) {
+            const root = notes[0];
+            if (quality === 'Major') return root;
+            if (quality === 'minor') return root + 'm';
+            if (quality === 'diminished') return root + 'dim';
+            return root;
+        }
+
+        // Start new challenge
+        function startChallenge() {
+            // Random root note
+            currentKey = CHROMATIC_SCALE[Math.floor(Math.random() * CHROMATIC_SCALE.length)];
+
+            // Random mode
+            currentMode = Math.random() > 0.5 ? 'Major' : 'Minor';
+
+            // Build scale
+            currentScale = buildScale(currentKey, currentMode);
+
+            // Build correct answers
+            const pattern = currentMode === 'Major' ? MAJOR_PATTERN : MINOR_PATTERN;
+            correctAnswers = [];
+
+            for (let i = 0; i < 7; i++) {
+                const notes = buildChordFromScale(currentScale, i);
+                const quality = pattern.qualities[i];
+                const roman = pattern.romans[i];
+                const chord = getChordName(notes, quality);
+
+                correctAnswers.push({
+                    degree: i + 1,
+                    roman: roman,
+                    quality: quality,
+                    chord: chord,
+                    notes: notes.join(' - ')
+                });
+            }
+
+            // Update UI
+            document.getElementById('root-note').textContent = currentKey;
+            document.getElementById('mode').textContent = currentMode;
+            document.getElementById('challenge-display').style.display = 'block';
+            document.getElementById('keyboard-container').style.display = 'block';
+            document.getElementById('answer-table').style.display = 'block';
+            document.getElementById('button-container').style.display = 'flex';
+            document.getElementById('results').style.display = 'none';
+
+            // Draw keyboard
+            drawKeyboard();
+
+            // Build answer table
+            buildAnswerTable();
+        }
+
+        // Build answer table
+        function buildAnswerTable() {
+            const tbody = document.getElementById('answer-rows');
+            tbody.innerHTML = '';
+
+            const pattern = currentMode === 'Major' ? MAJOR_PATTERN : MINOR_PATTERN;
+
+            for (let i = 0; i < 7; i++) {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td style="padding: 10px; border: 1px solid var(--surface); font-weight: bold;">${i + 1}</td>
+                    <td style="padding: 10px; border: 1px solid var(--surface);">
+                        <input type="text"
+                               class="answer-input roman-input"
+                               data-row="${i}"
+                               placeholder="e.g., ${pattern.romans[i]}"
+                               style="width: 100%; padding: 8px; background: var(--background); color: var(--text-primary); border: 2px solid var(--surface); border-radius: 6px; font-family: monospace;">
+                    </td>
+                    <td style="padding: 10px; border: 1px solid var(--surface);">
+                        <select class="answer-input quality-input"
+                                data-row="${i}"
+                                style="width: 100%; padding: 8px; background: var(--background); color: var(--text-primary); border: 2px solid var(--surface); border-radius: 6px;">
+                            <option value="">Select...</option>
+                            <option value="Major">Major</option>
+                            <option value="minor">minor</option>
+                            <option value="diminished">diminished</option>
+                        </select>
+                    </td>
+                    <td style="padding: 10px; border: 1px solid var(--surface);">
+                        <input type="text"
+                               class="answer-input chord-input"
+                               data-row="${i}"
+                               placeholder="e.g., C or Dm"
+                               style="width: 100%; padding: 8px; background: var(--background); color: var(--text-primary); border: 2px solid var(--surface); border-radius: 6px;">
+                    </td>
+                    <td style="padding: 10px; border: 1px solid var(--surface);">
+                        <input type="text"
+                               class="answer-input notes-input"
+                               data-row="${i}"
+                               placeholder="e.g., C - E - G"
+                               style="width: 100%; padding: 8px; background: var(--background); color: var(--text-primary); border: 2px solid var(--surface); border-radius: 6px;">
+                    </td>
+                `;
+                tbody.appendChild(row);
+            }
+        }
+
+        // Normalize input for comparison
+        function normalizeInput(input) {
+            return input.trim().toLowerCase().replace(/\s+/g, '');
+        }
+
+        // Check answers
+        function checkAnswers() {
+            let correct = 0;
+            let total = 7 * 4; // 7 rows, 4 fields each
+
+            document.querySelectorAll('.answer-input').forEach(input => {
+                const row = parseInt(input.dataset.row);
+                const correctAnswer = correctAnswers[row];
+
+                let userAnswer = input.value.trim();
+                let expectedAnswer = '';
+                let isCorrect = false;
+
+                if (input.classList.contains('roman-input')) {
+                    expectedAnswer = correctAnswer.roman;
+                    isCorrect = normalizeInput(userAnswer) === normalizeInput(expectedAnswer);
+                } else if (input.classList.contains('quality-input')) {
+                    expectedAnswer = correctAnswer.quality;
+                    isCorrect = userAnswer === expectedAnswer;
+                } else if (input.classList.contains('chord-input')) {
+                    expectedAnswer = correctAnswer.chord;
+                    isCorrect = normalizeInput(userAnswer) === normalizeInput(expectedAnswer);
+                } else if (input.classList.contains('notes-input')) {
+                    expectedAnswer = correctAnswer.notes;
+                    isCorrect = normalizeInput(userAnswer) === normalizeInput(expectedAnswer);
+                }
+
+                if (isCorrect) {
+                    correct++;
+                    input.style.borderColor = 'var(--accent-happy)';
+                    input.style.background = 'rgba(16, 185, 129, 0.1)';
+                } else {
+                    input.style.borderColor = '#ef4444';
+                    input.style.background = 'rgba(239, 68, 68, 0.1)';
+                }
+            });
+
+            // Show results
+            const percentage = Math.round((correct / total) * 100);
+            document.getElementById('score-display').textContent = `Score: ${correct}/${total} (${percentage}%)`;
+
+            let feedback = '';
+            if (percentage === 100) {
+                feedback = '🎉 Perfect! You got everything right!';
+            } else if (percentage >= 80) {
+                feedback = '🌟 Great job! Almost there!';
+            } else if (percentage >= 60) {
+                feedback = '👍 Good effort! Keep practicing!';
+            } else {
+                feedback = '💪 Keep going! Check the wiki for help with building chords.';
+            }
+
+            document.getElementById('feedback').textContent = feedback;
+            document.getElementById('results').style.display = 'block';
+        }
+
+        // Show answers
+        function showAnswers() {
+            document.querySelectorAll('.answer-input').forEach(input => {
+                const row = parseInt(input.dataset.row);
+                const correctAnswer = correctAnswers[row];
+
+                if (input.classList.contains('roman-input')) {
+                    input.value = correctAnswer.roman;
+                } else if (input.classList.contains('quality-input')) {
+                    input.value = correctAnswer.quality;
+                } else if (input.classList.contains('chord-input')) {
+                    input.value = correctAnswer.chord;
+                } else if (input.classList.contains('notes-input')) {
+                    input.value = correctAnswer.notes;
+                }
+
+                input.style.borderColor = 'var(--primary-color)';
+                input.style.background = 'rgba(99, 102, 241, 0.1)';
+            });
+
+            document.getElementById('results').style.display = 'block';
+            document.getElementById('score-display').textContent = 'Answers Shown';
+            document.getElementById('feedback').textContent = 'Study these answers and try a new challenge!';
+        }
+
+        // Event listeners
+        document.getElementById('start-btn').addEventListener('click', startChallenge);
+        document.getElementById('check-btn').addEventListener('click', checkAnswers);
+        document.getElementById('show-answers-btn').addEventListener('click', showAnswers);
+    </script>
+</body>
+</html>
