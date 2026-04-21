@@ -255,6 +255,13 @@
             document.getElementById('button-container').style.display = 'flex';
             document.getElementById('results').style.display = 'none';
 
+            // Clear all previous inputs and answers
+            document.querySelectorAll('.answer-input').forEach(input => {
+                input.value = '';
+                input.style.borderColor = '';
+                input.style.background = '';
+            });
+
             // Hide any previously shown correct answers
             document.querySelectorAll('.correct-answer').forEach(div => {
                 div.style.display = 'none';
