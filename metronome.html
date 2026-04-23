@@ -40,13 +40,16 @@
 
             <!-- BPM Control -->
             <div style="margin-bottom: 15px;">
-                <label style="display: block; margin-bottom: 6px; font-weight: 600; color: var(--text-primary); text-align: center; font-size: 0.9rem;">
-                    Tempo: <span id="bpm-display" style="color: var(--primary-color); font-size: 1.2rem;">120</span> BPM
+                <label style="display: block; margin-bottom: 8px; font-weight: 600; color: var(--text-primary); text-align: center; font-size: 0.9rem;">
+                    Tempo
                 </label>
-                <input type="range" id="bpm-slider" min="40" max="240" value="120" step="1" style="width: 100%; height: 6px; border-radius: 5px; outline: none; -webkit-appearance: none; background: var(--surface);">
-                <div style="display: flex; justify-content: space-between; margin-top: 3px; color: var(--text-secondary); font-size: 0.75rem;">
-                    <span>40</span>
-                    <span>240</span>
+                <div style="position: relative; display: flex; align-items: center; justify-content: center; background: var(--surface); border: 2px solid var(--primary-color); border-radius: 10px; padding: 15px 20px;">
+                    <button id="bpm-decrease" style="position: absolute; left: 15px; background: none; border: none; color: var(--text-secondary); font-size: 1.2rem; cursor: pointer; padding: 5px 10px; opacity: 0.4; transition: opacity 0.2s;">▼</button>
+                    <div style="text-align: center;">
+                        <div id="bpm-display" style="color: var(--primary-color); font-size: 2.5rem; font-weight: bold; font-family: 'Courier New', monospace; line-height: 1;">120</div>
+                        <div style="color: var(--text-secondary); font-size: 0.75rem; margin-top: 2px;">BPM</div>
+                    </div>
+                    <button id="bpm-increase" style="position: absolute; right: 15px; background: none; border: none; color: var(--text-secondary); font-size: 1.2rem; cursor: pointer; padding: 5px 10px; opacity: 0.4; transition: opacity 0.2s;">▲</button>
                 </div>
             </div>
 
@@ -94,23 +97,14 @@
     </div>
 
     <style>
-        #bpm-slider::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            appearance: none;
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            background: var(--primary-color);
-            cursor: pointer;
+        #bpm-increase:hover,
+        #bpm-decrease:hover {
+            opacity: 1 !important;
         }
 
-        #bpm-slider::-moz-range-thumb {
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            background: var(--primary-color);
-            cursor: pointer;
-            border: none;
+        #bpm-increase:active,
+        #bpm-decrease:active {
+            opacity: 0.6 !important;
         }
 
         #start-stop-btn:hover {
@@ -147,11 +141,21 @@
             }
 
             init() {
-                // BPM slider
-                document.getElementById('bpm-slider').addEventListener('input', (e) => {
-                    this.bpm = parseInt(e.target.value);
-                    document.getElementById('bpm-display').textContent = this.bpm;
-                    this.saveSettings();
+                // BPM buttons
+                document.getElementById('bpm-increase').addEventListener('click', () => {
+                    if (this.bpm < 240) {
+                        this.bpm++;
+                        document.getElementById('bpm-display').textContent = this.bpm;
+                        this.saveSettings();
+                    }
+                });
+
+                document.getElementById('bpm-decrease').addEventListener('click', () => {
+                    if (this.bpm > 40) {
+                        this.bpm--;
+                        document.getElementById('bpm-display').textContent = this.bpm;
+                        this.saveSettings();
+                    }
                 });
 
                 // Beats per measure
@@ -183,7 +187,6 @@
                 });
 
                 // Set initial values
-                document.getElementById('bpm-slider').value = this.bpm;
                 document.getElementById('bpm-display').textContent = this.bpm;
                 document.getElementById('beats-per-measure').value = this.beatsPerMeasure;
                 document.getElementById('sound-select').value = this.soundType;
@@ -343,7 +346,6 @@
 
                     if (calculatedBpm >= 40 && calculatedBpm <= 240) {
                         this.bpm = calculatedBpm;
-                        document.getElementById('bpm-slider').value = this.bpm;
                         document.getElementById('bpm-display').textContent = this.bpm;
                         this.saveSettings();
                     }
