@@ -45,7 +45,7 @@
                 </label>
                 <div style="position: relative; display: flex; align-items: center; justify-content: center; background: var(--surface); border: 2px solid var(--primary-color); border-radius: 10px; padding: 15px 20px;">
                     <button id="bpm-decrease" style="position: absolute; left: 15px; background: none; border: none; color: var(--text-secondary); font-size: 1.2rem; cursor: pointer; padding: 5px 10px; opacity: 0.4; transition: opacity 0.2s;">▼</button>
-                    <div id="bpm-display-container" style="text-align: center; cursor: pointer;">
+                    <div id="bpm-display-container" style="text-align: center; cursor: pointer; touch-action: none;">
                         <div id="bpm-display" style="color: var(--primary-color); font-size: 2.5rem; font-weight: bold; font-family: 'Courier New', monospace; line-height: 1;">120</div>
                         <input type="number" id="bpm-input" min="40" max="240" value="120" style="display: none; width: 100px; color: var(--primary-color); font-size: 2.5rem; font-weight: bold; font-family: 'Courier New', monospace; line-height: 1; text-align: center; background: transparent; border: none; outline: none; -moz-appearance: textfield;">
                         <div style="color: var(--text-secondary); font-size: 0.75rem; margin-top: 2px;">BPM</div>
@@ -200,6 +200,8 @@
                 container.addEventListener('touchmove', (e) => {
                     if (this.touchStartY === null) return;
 
+                    e.preventDefault(); // Prevent scrolling
+
                     const currentY = e.touches[0].clientY;
                     const deltaY = this.touchStartY - currentY; // Inverted: up = positive
                     const sensitivity = 2; // Pixels per BPM
@@ -221,7 +223,7 @@
                             document.getElementById('bpm-input').value = this.bpm;
                         }
                     }
-                }, { passive: true });
+                });
 
                 container.addEventListener('touchend', () => {
                     if (this.touchStartY !== null) {
