@@ -45,8 +45,9 @@
                 </label>
                 <div style="position: relative; display: flex; align-items: center; justify-content: center; background: var(--surface); border: 2px solid var(--primary-color); border-radius: 10px; padding: 15px 20px;">
                     <button id="bpm-decrease" style="position: absolute; left: 15px; background: none; border: none; color: var(--text-secondary); font-size: 1.2rem; cursor: pointer; padding: 5px 10px; opacity: 0.4; transition: opacity 0.2s;">▼</button>
-                    <div style="text-align: center;">
+                    <div id="bpm-display-container" style="text-align: center; cursor: pointer;">
                         <div id="bpm-display" style="color: var(--primary-color); font-size: 2.5rem; font-weight: bold; font-family: 'Courier New', monospace; line-height: 1;">120</div>
+                        <input type="number" id="bpm-input" min="40" max="240" value="120" style="display: none; width: 100px; color: var(--primary-color); font-size: 2.5rem; font-weight: bold; font-family: 'Courier New', monospace; line-height: 1; text-align: center; background: transparent; border: none; outline: none; -moz-appearance: textfield;">
                         <div style="color: var(--text-secondary); font-size: 0.75rem; margin-top: 2px;">BPM</div>
                     </div>
                     <button id="bpm-increase" style="position: absolute; right: 15px; background: none; border: none; color: var(--text-secondary); font-size: 1.2rem; cursor: pointer; padding: 5px 10px; opacity: 0.4; transition: opacity 0.2s;">▲</button>
@@ -107,6 +108,13 @@
             opacity: 0.6 !important;
         }
 
+        /* Hide number input spinners */
+        #bpm-input::-webkit-outer-spin-button,
+        #bpm-input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
         #start-stop-btn:hover {
             opacity: 0.9;
         }
@@ -146,6 +154,7 @@
                     if (this.bpm < 240) {
                         this.bpm++;
                         document.getElementById('bpm-display').textContent = this.bpm;
+                        document.getElementById('bpm-input').value = this.bpm;
                         this.saveSettings();
                     }
                 });
@@ -154,8 +163,59 @@
                     if (this.bpm > 40) {
                         this.bpm--;
                         document.getElementById('bpm-display').textContent = this.bpm;
+                        document.getElementById('bpm-input').value = this.bpm;
                         this.saveSettings();
                     }
+                });
+
+                // BPM display click to edit
+                document.getElementById('bpm-display-container').addEventListener('click', () => {
+                    const display = document.getElementById('bpm-display');
+                    const input = document.getElementById('bpm-input');
+
+                    display.style.display = 'none';
+                    input.style.display = 'block';
+                    input.value = this.bpm;
+                    input.focus();
+                    input.select();
+                });
+
+                // BPM input handlers
+                const saveBpmInput = () => {
+                    const input = document.getElementById('bpm-input');
+                    const display = document.getElementById('bpm-display');
+
+                    let value = parseInt(input.value);
+
+                    // Validate
+                    if (isNaN(value) || value < 40) value = 40;
+                    if (value > 240) value = 240;
+
+                    this.bpm = value;
+                    display.textContent = this.bpm;
+                    input.value = this.bpm;
+
+                    // Switch back to display
+                    input.style.display = 'none';
+                    display.style.display = 'block';
+
+                    this.saveSettings();
+                };
+
+                document.getElementById('bpm-input').addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter') {
+                        saveBpmInput();
+                    } else if (e.key === 'Escape') {
+                        // Cancel editing
+                        const input = document.getElementById('bpm-input');
+                        const display = document.getElementById('bpm-display');
+                        input.style.display = 'none';
+                        display.style.display = 'block';
+                    }
+                });
+
+                document.getElementById('bpm-input').addEventListener('blur', () => {
+                    saveBpmInput();
                 });
 
                 // Beats per measure
@@ -188,6 +248,7 @@
 
                 // Set initial values
                 document.getElementById('bpm-display').textContent = this.bpm;
+                document.getElementById('bpm-input').value = this.bpm;
                 document.getElementById('beats-per-measure').value = this.beatsPerMeasure;
                 document.getElementById('sound-select').value = this.soundType;
             }
