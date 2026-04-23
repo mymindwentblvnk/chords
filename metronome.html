@@ -144,6 +144,11 @@
                 this.tapTimes = [];
                 this.tapTimeoutId = null;
 
+                // Touch drag
+                this.touchStartY = null;
+                this.touchStartBpm = null;
+                this.isDragging = false;
+
                 this.loadSettings();
                 this.init();
             }
@@ -169,7 +174,10 @@
                 });
 
                 // BPM display click to edit
-                document.getElementById('bpm-display-container').addEventListener('click', () => {
+                document.getElementById('bpm-display-container').addEventListener('click', (e) => {
+                    // Don't trigger edit mode if user was dragging
+                    if (this.isDragging) return;
+
                     const display = document.getElementById('bpm-display');
                     const input = document.getElementById('bpm-input');
 
@@ -178,6 +186,54 @@
                     input.value = this.bpm;
                     input.focus();
                     input.select();
+                });
+
+                // BPM display touch drag to change
+                const container = document.getElementById('bpm-display-container');
+
+                container.addEventListener('touchstart', (e) => {
+                    this.touchStartY = e.touches[0].clientY;
+                    this.touchStartBpm = this.bpm;
+                    this.isDragging = false;
+                }, { passive: true });
+
+                container.addEventListener('touchmove', (e) => {
+                    if (this.touchStartY === null) return;
+
+                    const currentY = e.touches[0].clientY;
+                    const deltaY = this.touchStartY - currentY; // Inverted: up = positive
+                    const sensitivity = 2; // Pixels per BPM
+
+                    const bpmChange = Math.round(deltaY / sensitivity);
+
+                    if (Math.abs(bpmChange) > 0) {
+                        this.isDragging = true;
+
+                        let newBpm = this.touchStartBpm + bpmChange;
+
+                        // Clamp to valid range
+                        if (newBpm < 40) newBpm = 40;
+                        if (newBpm > 240) newBpm = 240;
+
+                        if (newBpm !== this.bpm) {
+                            this.bpm = newBpm;
+                            document.getElementById('bpm-display').textContent = this.bpm;
+                            document.getElementById('bpm-input').value = this.bpm;
+                        }
+                    }
+                }, { passive: true });
+
+                container.addEventListener('touchend', () => {
+                    if (this.touchStartY !== null) {
+                        this.saveSettings();
+                        this.touchStartY = null;
+                        this.touchStartBpm = null;
+
+                        // Reset isDragging after a short delay to prevent click from firing
+                        setTimeout(() => {
+                            this.isDragging = false;
+                        }, 100);
+                    }
                 });
 
                 // BPM input handlers
