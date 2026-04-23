@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#0f172a">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Chordz">
+    <title>Metronome - Chordz</title>
+    <link rel="manifest" href="manifest.json">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="guide-styles.css">
+    <script src="page-memory.js"></script>
+</head>
+<body>
+    <nav class="main-nav">
+        <a href="training.html" class="nav-link">🎮 Training</a>
+        <a href="chord-progressions.html" class="nav-link">📖 Chord Progressions</a>
+        <a href="metronome.html" class="nav-link active">⏱️ Metronome</a>
+        <a href="find-note.html" class="nav-link">🎤 Find Note</a>
+        <a href="find-scale.html" class="nav-link">🎼 Find Scale</a>
+        <a href="wiki.html" class="nav-link">📚 Wiki</a>
+    </nav>
+
+    <div class="guide-container">
+        <header style="text-align: center; margin-bottom: 30px;">
+            <div class="header-icon" style="font-size: 2.5rem; margin-bottom: 5px;">⏱️</div>
+            <h1 style="background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin: 0 0 5px 0; font-size: 1.8rem;">Metronome</h1>
+            <p class="subtitle" style="margin: 0; font-size: 0.95rem;">Keep your rhythm steady</p>
+        </header>
+
+        <div class="guide-section" style="max-width: 500px; margin: 0 auto;">
+            <!-- Visual Indicator -->
+            <div id="beat-indicator" style="margin-bottom: 30px; text-align: center;">
+                <div id="beat-circle" style="width: 120px; height: 120px; border-radius: 50%; background: var(--surface); border: 4px solid var(--surface); margin: 0 auto; display: flex; align-items: center; justify-content: center; transition: all 0.1s ease;">
+                    <div id="beat-number" style="font-size: 3rem; font-weight: bold; color: var(--text-secondary); font-family: 'Courier New', monospace;">-</div>
+                </div>
+            </div>
+
+            <!-- BPM Control -->
+            <div style="margin-bottom: 30px;">
+                <label style="display: block; margin-bottom: 10px; font-weight: 600; color: var(--text-primary); text-align: center;">
+                    Tempo: <span id="bpm-display" style="color: var(--primary-color); font-size: 1.3rem;">120</span> BPM
+                </label>
+                <input type="range" id="bpm-slider" min="40" max="240" value="120" step="1" style="width: 100%; height: 8px; border-radius: 5px; outline: none; -webkit-appearance: none; background: var(--surface);">
+                <div style="display: flex; justify-content: space-between; margin-top: 5px; color: var(--text-secondary); font-size: 0.85rem;">
+                    <span>40</span>
+                    <span>240</span>
+                </div>
+            </div>
+
+            <!-- Time Signature -->
+            <div style="margin-bottom: 30px;">
+                <label style="display: block; margin-bottom: 10px; font-weight: 600; color: var(--text-primary); text-align: center;">
+                    Beats per Measure
+                </label>
+                <select id="beats-per-measure" style="width: 100%; padding: 12px; font-size: 1rem; background: var(--background); color: var(--text-primary); border: 2px solid var(--primary-color); border-radius: 8px; cursor: pointer;">
+                    <option value="2">2/4</option>
+                    <option value="3">3/4</option>
+                    <option value="4" selected>4/4</option>
+                    <option value="5">5/4</option>
+                    <option value="6">6/8</option>
+                    <option value="7">7/8</option>
+                </select>
+            </div>
+
+            <!-- Sound Selection -->
+            <div style="margin-bottom: 30px;">
+                <label style="display: block; margin-bottom: 10px; font-weight: 600; color: var(--text-primary); text-align: center;">
+                    Sound
+                </label>
+                <select id="sound-select" style="width: 100%; padding: 12px; font-size: 1rem; background: var(--background); color: var(--text-primary); border: 2px solid var(--primary-color); border-radius: 8px; cursor: pointer;">
+                    <option value="click">Click</option>
+                    <option value="woodblock">Woodblock</option>
+                    <option value="beep">Beep</option>
+                    <option value="cowbell">Cowbell</option>
+                </select>
+            </div>
+
+            <!-- Start/Stop Button -->
+            <button id="start-stop-btn" style="width: 100%; padding: 20px; font-size: 1.3rem; font-weight: 600; background: var(--primary-color); color: white; border: none; border-radius: 10px; cursor: pointer; margin-bottom: 20px;">
+                ▶️ Start
+            </button>
+
+            <!-- Tap Tempo -->
+            <button id="tap-tempo-btn" style="width: 100%; padding: 15px; font-size: 1.1rem; font-weight: 600; background: var(--surface); color: var(--text-primary); border: 2px solid var(--primary-color); border-radius: 10px; cursor: pointer;">
+                👆 Tap Tempo
+            </button>
+        </div>
+    </div>
+
+    <style>
+        #bpm-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            cursor: pointer;
+        }
+
+        #bpm-slider::-moz-range-thumb {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            cursor: pointer;
+            border: none;
+        }
+
+        #start-stop-btn:hover {
+            opacity: 0.9;
+        }
+
+        #tap-tempo-btn:hover {
+            background: var(--surface-light);
+        }
+    </style>
+
+    <script src="https://cdn.jsdelivr.net/npm/tone@14.8.49/build/Tone.js"></script>
+    <script>
+        const STORAGE_KEY = 'chordz-metronome-settings';
+
+        class Metronome {
+            constructor() {
+                this.isPlaying = false;
+                this.bpm = 120;
+                this.beatsPerMeasure = 4;
+                this.currentBeat = 0;
+                this.soundType = 'click';
+                this.nextNoteTime = 0;
+                this.scheduleAheadTime = 0.1; // Schedule notes 100ms ahead
+                this.timerID = null;
+                this.audioContext = null;
+
+                // Tap tempo
+                this.tapTimes = [];
+                this.tapTimeoutId = null;
+
+                this.loadSettings();
+                this.init();
+            }
+
+            init() {
+                // BPM slider
+                document.getElementById('bpm-slider').addEventListener('input', (e) => {
+                    this.bpm = parseInt(e.target.value);
+                    document.getElementById('bpm-display').textContent = this.bpm;
+                    this.saveSettings();
+                });
+
+                // Beats per measure
+                document.getElementById('beats-per-measure').addEventListener('change', (e) => {
+                    this.beatsPerMeasure = parseInt(e.target.value);
+                    this.currentBeat = 0;
+                    this.updateBeatDisplay();
+                    this.saveSettings();
+                });
+
+                // Sound selection
+                document.getElementById('sound-select').addEventListener('change', (e) => {
+                    this.soundType = e.target.value;
+                    this.saveSettings();
+                });
+
+                // Start/Stop button
+                document.getElementById('start-stop-btn').addEventListener('click', () => {
+                    if (this.isPlaying) {
+                        this.stop();
+                    } else {
+                        this.start();
+                    }
+                });
+
+                // Tap tempo
+                document.getElementById('tap-tempo-btn').addEventListener('click', () => {
+                    this.handleTap();
+                });
+
+                // Set initial values
+                document.getElementById('bpm-slider').value = this.bpm;
+                document.getElementById('bpm-display').textContent = this.bpm;
+                document.getElementById('beats-per-measure').value = this.beatsPerMeasure;
+                document.getElementById('sound-select').value = this.soundType;
+            }
+
+            async start() {
+                if (!this.audioContext) {
+                    this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                }
+
+                if (this.audioContext.state === 'suspended') {
+                    await this.audioContext.resume();
+                }
+
+                if (typeof Tone !== 'undefined' && Tone.context.state !== 'running') {
+                    await Tone.start();
+                }
+
+                this.isPlaying = true;
+                this.currentBeat = 0;
+                this.nextNoteTime = this.audioContext.currentTime;
+                this.scheduler();
+
+                document.getElementById('start-stop-btn').innerHTML = '⏸️ Stop';
+                document.getElementById('start-stop-btn').style.background = '#ef4444';
+            }
+
+            stop() {
+                this.isPlaying = false;
+                if (this.timerID) {
+                    clearTimeout(this.timerID);
+                }
+
+                this.currentBeat = 0;
+                this.updateBeatDisplay();
+                document.getElementById('beat-circle').style.background = 'var(--surface)';
+                document.getElementById('beat-circle').style.borderColor = 'var(--surface)';
+                document.getElementById('beat-number').textContent = '-';
+
+                document.getElementById('start-stop-btn').innerHTML = '▶️ Start';
+                document.getElementById('start-stop-btn').style.background = 'var(--primary-color)';
+            }
+
+            scheduler() {
+                while (this.nextNoteTime < this.audioContext.currentTime + this.scheduleAheadTime) {
+                    this.scheduleNote(this.currentBeat, this.nextNoteTime);
+                    this.nextNote();
+                }
+
+                if (this.isPlaying) {
+                    this.timerID = setTimeout(() => this.scheduler(), 25);
+                }
+            }
+
+            nextNote() {
+                const secondsPerBeat = 60.0 / this.bpm;
+                this.nextNoteTime += secondsPerBeat;
+
+                this.currentBeat++;
+                if (this.currentBeat >= this.beatsPerMeasure) {
+                    this.currentBeat = 0;
+                }
+            }
+
+            scheduleNote(beatNumber, time) {
+                const isFirstBeat = (beatNumber === 0);
+                this.playSound(isFirstBeat, time);
+
+                // Schedule visual update
+                const delay = (time - this.audioContext.currentTime) * 1000;
+                setTimeout(() => {
+                    if (this.isPlaying) {
+                        this.updateBeatDisplay(beatNumber, isFirstBeat);
+                    }
+                }, delay);
+            }
+
+            playSound(isFirstBeat, time) {
+                const osc = this.audioContext.createOscillator();
+                const gainNode = this.audioContext.createGain();
+
+                switch(this.soundType) {
+                    case 'click':
+                        osc.frequency.value = isFirstBeat ? 1200 : 800;
+                        gainNode.gain.value = isFirstBeat ? 0.5 : 0.3;
+                        osc.type = 'sine';
+                        break;
+
+                    case 'woodblock':
+                        osc.frequency.value = isFirstBeat ? 1500 : 1000;
+                        gainNode.gain.value = isFirstBeat ? 0.6 : 0.4;
+                        osc.type = 'triangle';
+                        break;
+
+                    case 'beep':
+                        osc.frequency.value = isFirstBeat ? 880 : 440;
+                        gainNode.gain.value = isFirstBeat ? 0.4 : 0.2;
+                        osc.type = 'square';
+                        break;
+
+                    case 'cowbell':
+                        osc.frequency.value = isFirstBeat ? 800 : 540;
+                        gainNode.gain.value = isFirstBeat ? 0.5 : 0.35;
+                        osc.type = 'square';
+                        break;
+                }
+
+                osc.connect(gainNode);
+                gainNode.connect(this.audioContext.destination);
+
+                osc.start(time);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, time + 0.05);
+                osc.stop(time + 0.05);
+            }
+
+            updateBeatDisplay(beatNumber = null, isFirstBeat = false) {
+                const circle = document.getElementById('beat-circle');
+                const numberEl = document.getElementById('beat-number');
+
+                if (beatNumber !== null) {
+                    numberEl.textContent = beatNumber + 1;
+
+                    if (isFirstBeat) {
+                        circle.style.background = 'var(--primary-color)';
+                        circle.style.borderColor = 'var(--primary-color)';
+                        numberEl.style.color = 'white';
+                    } else {
+                        circle.style.background = 'var(--secondary-color)';
+                        circle.style.borderColor = 'var(--secondary-color)';
+                        numberEl.style.color = 'white';
+                    }
+
+                    // Reset after flash
+                    setTimeout(() => {
+                        circle.style.background = 'var(--surface)';
+                        circle.style.borderColor = 'var(--surface)';
+                        numberEl.style.color = 'var(--text-secondary)';
+                    }, 100);
+                }
+            }
+
+            handleTap() {
+                const now = Date.now();
+                this.tapTimes.push(now);
+
+                // Clear old taps (older than 3 seconds)
+                this.tapTimes = this.tapTimes.filter(time => now - time < 3000);
+
+                // Calculate BPM from taps
+                if (this.tapTimes.length >= 2) {
+                    const intervals = [];
+                    for (let i = 1; i < this.tapTimes.length; i++) {
+                        intervals.push(this.tapTimes[i] - this.tapTimes[i - 1]);
+                    }
+                    const avgInterval = intervals.reduce((a, b) => a + b, 0) / intervals.length;
+                    const calculatedBpm = Math.round(60000 / avgInterval);
+
+                    if (calculatedBpm >= 40 && calculatedBpm <= 240) {
+                        this.bpm = calculatedBpm;
+                        document.getElementById('bpm-slider').value = this.bpm;
+                        document.getElementById('bpm-display').textContent = this.bpm;
+                        this.saveSettings();
+                    }
+                }
+
+                // Reset tap times after 3 seconds of inactivity
+                clearTimeout(this.tapTimeoutId);
+                this.tapTimeoutId = setTimeout(() => {
+                    this.tapTimes = [];
+                }, 3000);
+
+                // Visual feedback
+                const btn = document.getElementById('tap-tempo-btn');
+                btn.style.background = 'var(--primary-color)';
+                btn.style.color = 'white';
+                setTimeout(() => {
+                    btn.style.background = 'var(--surface)';
+                    btn.style.color = 'var(--text-primary)';
+                }, 100);
+            }
+
+            saveSettings() {
+                try {
+                    localStorage.setItem(STORAGE_KEY, JSON.stringify({
+                        bpm: this.bpm,
+                        beatsPerMeasure: this.beatsPerMeasure,
+                        soundType: this.soundType
+                    }));
+                } catch (e) {
+                    console.error('Failed to save settings:', e);
+                }
+            }
+
+            loadSettings() {
+                try {
+                    const stored = localStorage.getItem(STORAGE_KEY);
+                    if (stored) {
+                        const settings = JSON.parse(stored);
+                        this.bpm = settings.bpm || 120;
+                        this.beatsPerMeasure = settings.beatsPerMeasure || 4;
+                        this.soundType = settings.soundType || 'click';
+                    }
+                } catch (e) {
+                    console.error('Failed to load settings:', e);
+                }
+            }
+        }
+
+        const metronome = new Metronome();
+    </script>
+</body>
+</html>
