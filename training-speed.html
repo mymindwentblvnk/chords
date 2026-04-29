@@ -321,7 +321,13 @@
             }
 
             toggleNotation() {
-                this.notation = this.notation === 'english' ? 'german' : 'english';
+                if (this.notation === 'english') {
+                    this.notation = 'german';
+                } else if (this.notation === 'german') {
+                    this.notation = 'staff';
+                } else {
+                    this.notation = 'english';
+                }
                 saveNotationPreference(this.notation);
                 this.updateNotationToggle();
                 // Update displayed note if training is active
@@ -332,12 +338,44 @@
 
             updateNotationToggle() {
                 const toggleBtn = document.getElementById('notation-toggle');
-                toggleBtn.textContent = this.notation === 'english' ? 'English' : 'German';
+                if (this.notation === 'english') {
+                    toggleBtn.textContent = 'English';
+                } else if (this.notation === 'german') {
+                    toggleBtn.textContent = 'German';
+                } else {
+                    toggleBtn.textContent = 'Staff';
+                }
             }
 
             updateTargetNoteDisplay() {
-                const displayNote = convertNote(this.targetNote, this.notation);
-                document.getElementById('target-note').textContent = displayNote;
+                const targetElement = document.getElementById('target-note');
+
+                if (this.notation === 'staff') {
+                    // Show staff notation image
+                    targetElement.innerHTML = '';
+                    targetElement.style.padding = '20px';
+
+                    const img = document.createElement('img');
+                    const noteBase = this.targetNote.replace(/[0-9]/g, ''); // Remove octave
+
+                    img.src = `images/${noteBase}.png`;
+                    img.alt = noteBase;
+                    img.style.maxWidth = '300px';
+                    img.style.height = 'auto';
+                    img.style.display = 'block';
+                    img.style.margin = '0 auto';
+                    img.onerror = () => {
+                        // Fallback to text if image fails to load
+                        targetElement.innerHTML = noteBase;
+                        targetElement.style.padding = '30px';
+                    };
+                    targetElement.appendChild(img);
+                } else {
+                    // Show letter notation
+                    targetElement.style.padding = '30px';
+                    const displayNote = convertNote(this.targetNote, this.notation);
+                    targetElement.innerHTML = displayNote;
+                }
             }
 
             displayBestScore() {
